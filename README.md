@@ -1,0 +1,149 @@
+# JobSkill - Personalized Job Recommendation System
+
+A web-based intelligent career alignment platform that matches students' academic profiles with job opportunities through skill analysis and personalized recommendations.
+
+## Overview
+
+JobSkill analyzes academic transcripts, resumes, and job postings to provide personalized job recommendations. The system uses natural language processing to extract skills from documents and calculates alignment scores between candidate profiles and job requirements, helping students identify career opportunities and skill gaps.
+
+## Key Features
+
+- **Profile Analysis**: Upload and parse academic transcripts and resumes to build comprehensive skill profiles
+- **Job Matching**: Intelligent matching algorithm that compares candidate skills with job requirements
+- **Skill Gap Analysis**: Identify missing skills and receive recommendations for courses to bridge gaps
+- **Match Visualization**: Interactive matrix showing alignment between your skills and job requirements
+- **Job Discovery**: Browse and filter job opportunities based on match scores
+- **Detailed Breakdowns**: View skill-by-skill comparison for each job posting
+
+## System Architecture
+
+### Frontend (Client)
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Routing**: React Router v6
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **State Management**: Tanstack Query
+- **UI Components**: Radix UI primitives
+
+### Data Processing
+- Natural Language Processing for skill extraction
+- Transcript and resume parsing
+- Job posting analysis
+- Skill matching algorithms
+
+## Project Structure
+
+```
+.
+├── client/                 # Frontend application
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Page components
+│   │   │   ├── Index.tsx          # Landing page
+│   │   │   ├── Upload.tsx         # Profile upload
+│   │   │   ├── JobDiscovery.tsx   # Job browsing
+│   │   │   ├── MatchResults.tsx   # Match visualization
+│   │   │   ├── JobBreakdown.tsx   # Detailed analysis
+│   │   │   └── Profile.tsx        # User profile
+│   │   ├── data/          # Mock data and types
+│   │   ├── lib/           # Utility functions
+│   │   └── hooks/         # Custom React hooks
+│   └── public/            # Static assets
+├── data/                  # Job data and samples
+└── PPM-personalized job recommendation.pdf  # Project documentation
+
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18 or higher
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/YuvrajGupta1808/CSC-699.git
+cd CSC-699
+```
+
+2. Install dependencies:
+```bash
+cd client
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and navigate to:
+```
+http://localhost:5173
+```
+
+### Available Scripts
+
+```bash
+npm run dev          # Start development server on port 5173
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm test             # Run tests
+npm run test:watch   # Run tests in watch mode
+```
+
+## Usage
+
+1. **Upload Your Profile**: Navigate to the Upload page and submit your academic transcript and resume
+2. **Browse Jobs**: Explore available job postings in the Job Discovery section
+3. **View Matches**: See your match scores and alignment with different positions
+4. **Analyze Skills**: Review detailed skill breakdowns to understand requirements
+5. **Identify Gaps**: Discover which skills you need to develop for target roles
+
+## Technology Stack
+
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- React Router
+- Tailwind CSS
+- shadcn/ui
+- Radix UI
+- Tanstack Query
+- Lucide Icons
+
+### Development Tools
+- ESLint for code linting
+- Vitest for testing
+- TypeScript for type safety
+
+## Features in Detail
+
+### Skill Extraction
+The system analyzes uploaded documents to extract:
+- Technical skills from coursework
+- Programming languages and frameworks
+- Soft skills and competencies
+- Academic achievements
+
+### Matching Algorithm
+Calculates alignment scores based on:
+- Skill overlap between profile and job requirements
+- Skill proficiency levels
+- Required vs. preferred qualifications
+- Experience and education requirements
+
+### Visualization
+- Interactive skill matrix showing match percentages
+- Skill bar charts for individual competencies
+- Color-coded match indicators
+- Gap analysis visualizations
+
+## Contact
+
+For more information, refer to the project documentation in `PPM-personalized job recommendation.pdf`.
