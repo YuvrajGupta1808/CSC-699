@@ -8,12 +8,14 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 
 ## Key Features
 
+- **Premium Upload Experience**: Modern, interactive document upload interface with visual feedback and drag-and-drop support
 - **Profile Analysis**: Upload and parse academic transcripts and resumes to build comprehensive skill profiles
 - **Job Matching**: Intelligent matching algorithm that compares candidate skills with job requirements
 - **Skill Gap Analysis**: Identify missing skills and receive recommendations for courses to bridge gaps
 - **Match Visualization**: Interactive matrix showing alignment between your skills and job requirements
 - **Job Discovery**: Browse and filter job opportunities based on match scores
 - **Detailed Breakdowns**: View skill-by-skill comparison for each job posting
+- **Career Assistant Chat**: Interactive AI-powered chat for personalized career guidance and matching advice
 
 ## System Architecture
 

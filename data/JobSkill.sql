@@ -5,7 +5,7 @@ CREATE TABLE "jobs" (
   "company" text,
   "location" text,
   "description" text,
-  "skills_json" jsonb,
+  "skills_jobs_json" jsonb,
   "posted_at" timestamptz,
   "ingested_at" timestamptz
 );
@@ -25,6 +25,6 @@ CREATE TABLE "courses" (
   "course_code" text UNIQUE,
   "title" text,
   "description" text,
-  "skills_json" jsonb,
+  "skills_courses_json" jsonb,
   "updated_at" timestamptz
 );
