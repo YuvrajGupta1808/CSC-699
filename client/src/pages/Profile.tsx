@@ -1,9 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { studentProfile } from "@/data/mock-data";
-import { BookOpen, CheckCircle2, FileText, GraduationCap, Sparkles, Upload, User } from "lucide-react";
+import { BookOpen, CheckCircle2, FileText, MessageSquare, Send, Sparkles, Upload, User } from "lucide-react";
+import { useState } from "react";
 
 const skillCategories = [
   { label: "Languages", skills: ["Python", "Java", "JavaScript", "SQL", "C++"] },
@@ -18,6 +20,29 @@ export default function Profile() {
     { label: "Courses", done: studentProfile.completedCourses.length > 0 },
     { label: "Skills", done: studentProfile.skills.length > 0 },
   ];
+  const [messages, setMessages] = useState([
+    { role: "assistant", content: "Hi! I'm your career assistant. How can I help you today?" }
+  ]);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+    
+    // Add user message
+    const newMessages = [...messages, { role: "user", content: inputValue }];
+    setMessages(newMessages);
+    setInputValue("");
+    
+    // Simple bot response demo
+    setTimeout(() => {
+      setMessages(prev => [...prev, { 
+        role: "assistant", 
+        content: "That's a great question! Based on your profile, I recommend looking into Data Science and Machine Learning roles." 
+      }]);
+    }, 1000);
+  };
+
   const completionPct = Math.round(
     (completionItems.filter((i) => i.done).length / completionItems.length) * 100
   );
@@ -108,25 +133,41 @@ export default function Profile() {
         </div>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="flex flex-col h-[400px] border-primary/10 shadow-sm">
             <CardHeader className="flex flex-row items-center gap-3 space-y-0 pb-4">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
-                <GraduationCap className="h-4 w-4 text-accent-foreground" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <MessageSquare className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-lg">Academic Info</CardTitle>
+              <CardTitle className="text-lg">Career Assistant</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {[
-                { label: "Major", value: studentProfile.major },
-                { label: "Year", value: studentProfile.year },
-                { label: "GPA", value: studentProfile.gpa.toString() },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between rounded-lg border border-border/50 bg-background px-3 py-2.5">
-                  <span className="text-sm text-muted-foreground">{item.label}</span>
-                  <span className="text-sm font-medium text-foreground">{item.value}</span>
-                </div>
-              ))}
+            <CardContent className="flex-1 overflow-y-auto space-y-4 min-h-0 px-6">
+              <div className="flex flex-col gap-3">
+                {messages.map((m, i) => (
+                  <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm ${
+                      m.role === 'user' 
+                        ? 'bg-primary text-primary-foreground rounded-tr-none' 
+                        : 'bg-accent text-accent-foreground rounded-tl-none'
+                    }`}>
+                      {m.content}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </CardContent>
+            <CardFooter className="border-t p-4">
+              <form onSubmit={handleSendMessage} className="flex w-full items-center gap-2">
+                <Input 
+                  placeholder="Type your message..." 
+                  value={inputValue} 
+                  onChange={(e) => setInputValue(e.target.value)}
+                  className="flex-1 bg-background"
+                />
+                <Button type="submit" size="icon" className="shrink-0" disabled={!inputValue.trim()}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </CardFooter>
           </Card>
 
           <Card>
