@@ -27,6 +27,11 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 - **State Management**: Tanstack Query
 - **UI Components**: Radix UI primitives
 
+### Backend & Retrieval (`server/`)
+- **Python** pipeline: ingest jobs and courses into Supabase, embed with Ollama (`nomic-embed-text`), and index vectors in **Qdrant**
+- **Streamlit** chat UI for a grounded student advisor (retrieval + local LLM via Ollama)
+- See **`PLAN.md`** for the GenAI retrieval design, graph flow, and implementation notes
+
 ### Data Processing
 - Natural Language Processing for skill extraction
 - Transcript and resume parsing
@@ -51,7 +56,17 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 │   │   ├── lib/           # Utility functions
 │   │   └── hooks/         # Custom React hooks
 │   └── public/            # Static assets
-├── data/                  # Job data and samples
+├── server/                # Python: Supabase, Qdrant, ingest, Streamlit chat
+│   ├── ingest.py
+│   ├── db/                # Supabase & Qdrant clients
+│   ├── retrieval/         # Embeddings, search, context, planner
+│   ├── streamlit_app/     # Advisor UI
+│   └── requirements.txt
+├── data/                  # Job postings, course skills, SQL schema
+│   ├── jobs.csv
+│   ├── sfsu_csc_courses_clean_skills.csv
+│   └── JobSkill.sql
+├── PLAN.md                # Retrieval-layer implementation plan
 └── PPM-personalized job recommendation.pdf  # Project documentation
 
 ```
@@ -62,6 +77,8 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 
 - Node.js 18 or higher
 - npm or yarn package manager
+
+**Backend / retrieval (optional):** Python 3.10+, [Ollama](https://ollama.com/) (embeddings + chat), Qdrant on `localhost:6333`, and a Supabase project. Copy `.env` in the repo root with `SUPABASE_URL` and `SUPABASE_KEY` (see `PLAN.md`).
 
 ### Installation
 
@@ -85,6 +102,24 @@ npm run dev
 4. Open your browser and navigate to:
 ```
 http://localhost:5173
+```
+
+### Backend (server)
+
+From the repository root:
+
+```bash
+cd server
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Configure `.env` at the repo root, run Qdrant and Ollama, then seed and start the advisor UI:
+
+```bash
+python ingest.py
+streamlit run streamlit_app/app.py
 ```
 
 ### Available Scripts
@@ -118,6 +153,10 @@ npm run test:watch   # Run tests in watch mode
 - Radix UI
 - Tanstack Query
 - Lucide Icons
+
+### Backend & data
+- Python, Supabase, Qdrant, Streamlit, pandas
+- Ollama for embeddings and chat models
 
 ### Development Tools
 - ESLint for code linting
