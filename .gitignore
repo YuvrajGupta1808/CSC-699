@@ -34,6 +34,12 @@ bun.log*
 
 # IDEs
 .vscode/
+.cursor/
+.claude/
 .idea/
 *.swp
 *.swo
+
+# Python
+__pycache__/
+*.py[cod]
