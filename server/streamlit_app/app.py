@@ -36,8 +36,13 @@ OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "llama3.2")
 
 SYSTEM_PROMPT = """You are a personalized career advisor for CS students.
+You are the advisor, not the student.
+Always address the student as "you" and never role-play as the student.
+Never use first-person student statements such as "I completed..." or "my skills are...".
 Answer only using the evidence provided in the context below.
 Be specific: reference exact job titles, skill names, and course codes.
+Never invent job titles, companies, course codes, or skills that are not present in the evidence.
+When listing roles, only use exact job titles from the retrieved evidence.
 If the context does not contain enough information to answer, say so clearly."""
 
 
@@ -199,6 +204,14 @@ if user_input:
 
         st.write("Planning retrieval strategy...")
         plan = plan_retrieval(user_input)
+        # If the user explicitly selects a job in the filter, always retrieve that job.
+        # This prevents planner mistakes from skipping retrieval for "why this job..." questions.
+        if selected_job_id:
+            plan["top_k_jobs"] = max(1, int(plan.get("top_k_jobs", 0)))
+            if not plan.get("reason"):
+                plan["reason"] = "job filter selected"
+            elif "job filter selected" not in plan["reason"].lower():
+                plan["reason"] = f"{plan['reason']}; job filter selected"
         st.write(
             f"Strategy: `{plan['top_k_jobs']}` jobs, `{plan['top_k_courses']}` courses "
             f"— _{plan['reason']}_"
@@ -210,9 +223,43 @@ if user_input:
         else:
             if plan["top_k_jobs"] > 0:
                 st.write(f"Embedding query + searching `jobs_collection` (top {plan['top_k_jobs']})...")
-                job_hits = search_jobs(user_input, top_k=plan["top_k_jobs"], job_id_filter=selected_job_id)
-                for j in job_hits:
-                    st.write(f"  • **{j['title']}** @ {j['company']} (score: `{j['score']}`)")
+                student_skill_names = [s["skill"] for s in (profile.get("skill_profile_json") or []) if s.get("skill")]
+                job_hits = search_jobs(
+                    user_input,
+                    top_k=plan["top_k_jobs"],
+                    job_id_filter=selected_job_id,
+                    student_skills=student_skill_names,
+                )
+                if job_hits:
+                    for j in job_hits:
+                        st.write(
+                            f"  • **{j['title']}** @ {j['company']} "
+                            f"(score: `{j['score']}`, semantic: `{j.get('semantic_score', j['score'])}`, "
+                            f"skill-overlap: `{j.get('skill_overlap', 0)}`)"
+                        )
+                else:
+                    st.write("No semantic job hits found; using fallback catalog retrieval...")
+                    all_jobs = st.session_state.get("jobs_list") or []
+                    if selected_job_id:
+                        fallback_jobs = [j for j in all_jobs if j.get("job_id") == selected_job_id]
+                    else:
+                        fallback_jobs = all_jobs[: max(3, plan["top_k_jobs"])]
+
+                    job_hits = [
+                        {
+                            "job_id": j["job_id"],
+                            "title": j["title"],
+                            "company": j["company"],
+                            "skills": [],
+                            "score": 0.0,
+                        }
+                        for j in fallback_jobs
+                    ]
+
+                    if job_hits:
+                        st.write(f"Fallback returned `{len(job_hits)}` job posting(s) from Supabase.")
+                    else:
+                        st.write("No jobs found in Supabase. Run `python ingest.py` to seed job postings.")
             else:
                 st.write("Skipping job search (not needed).")
                 job_hits = []

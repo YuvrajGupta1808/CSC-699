@@ -53,34 +53,11 @@ def build_candidate_views(bundle: dict) -> list[dict]:
         })
 
     # ------------------------------------------------------------------
-    # View B: Job cluster — aggregate all jobs into a summary
+    # View B: Job cluster — keep top jobs explicit to avoid hallucinated titles
     # ------------------------------------------------------------------
-    all_required = []
-    all_gaps = []
-    all_covered = []
-    for j in jobs:
-        all_required.extend(j.get("required_skills", []))
-        all_gaps.extend(j.get("gaps", []))
-        all_covered.extend(j.get("covered", []))
-
-    # Deduplicate and count frequency
-    def top_n(items, n=8):
-        from collections import Counter
-        return [s for s, _ in Counter(items).most_common(n)]
-
-    cluster_job = {
-        "job_id": "cluster",
-        "title": f"Job Cluster ({len(jobs)} roles)",
-        "company": ", ".join(set(j["company"] for j in jobs)),
-        "required_skills": top_n(all_required),
-        "covered": list(set(all_covered)),
-        "gaps": top_n(all_gaps),
-        "score": round(sum(j["score"] for j in jobs) / max(len(jobs), 1), 4),
-    }
-
     view_b_bundle = {
         "student": student,
-        "jobs": [cluster_job],
+        "jobs": jobs[:7],
         "courses": courses,
     }
     views.append({
@@ -93,7 +70,11 @@ def build_candidate_views(bundle: dict) -> list[dict]:
     # View C: Course path — course-first, jobs used only as gap signal
     # ------------------------------------------------------------------
     # Compute overall gap from all jobs combined
-    all_gap_skills = set(top_n(all_gaps, 10))
+    all_gaps = []
+    for j in jobs:
+        all_gaps.extend(j.get("gaps", []))
+    from collections import Counter
+    all_gap_skills = set([s for s, _ in Counter(all_gaps).most_common(10)])
     # Sort courses by how many gaps they cover
     scored_courses = sorted(
         courses,

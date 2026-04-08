@@ -25,6 +25,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
+
+# Repo root `.env` (SUPABASE_URL, SUPABASE_KEY, etc.) — load before db imports
+REPO_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(REPO_ROOT / ".env")
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
@@ -32,15 +37,22 @@ from db.supabase_client import get_supabase
 from db.qdrant_client import get_qdrant
 from retrieval.embedder import embed
 
-load_dotenv()
-
-DATA_DIR = Path(__file__).parent / "data"
+# CSV/SQL live at repo root `data/` (not under `server/`)
+DATA_DIR = REPO_ROOT / "data"
 JOBS_CSV = DATA_DIR / "jobs.csv"
 COURSES_CSV = DATA_DIR / "sfsu_csc_courses_clean_skills.csv"
 
 JOBS_COLLECTION = "jobs_collection"
 COURSES_COLLECTION = "courses_collection"
 VECTOR_SIZE = 768  # nomic-embed-text output dimension
+
+JOB_SKILL_KEYWORDS = [
+    "Python", "Java", "JavaScript", "TypeScript", "Rust", "C++", "C#", "SQL",
+    "React", "Node.js", "Django", "Flask", ".NET", "Spring", "FastAPI",
+    "Machine Learning", "Deep Learning", "Data Structures", "Algorithms",
+    "Distributed Systems", "Cloud", "AWS", "GCP", "Azure", "Docker", "Kubernetes",
+    "CI/CD", "Git", "Testing", "Agile", "Scrum", "Jira", "API", "REST",
+]
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -58,6 +70,21 @@ def parse_course_skills(raw: str) -> list[dict]:
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def extract_job_skills(description: str) -> list[dict]:
+    """
+    Lightweight keyword extraction for job skills from raw descriptions.
+    Returns: [{"skill": "<name>", "weight": <int>}]
+    """
+    text = (description or "").lower()
+    hits = []
+    for skill in JOB_SKILL_KEYWORDS:
+        if skill.lower() in text:
+            hits.append(skill)
+    # De-duplicate while preserving order
+    ordered = list(dict.fromkeys(hits))
+    return [{"skill": s, "weight": 100} for s in ordered]
 
 
 # ---------------------------------------------------------------------------
@@ -103,6 +130,7 @@ def seed_jobs() -> list[dict]:
         for row in reader:
             job_id = row.get("job_id") or str(uuid.uuid4())
             description = row.get("job_description_raw", "").strip()
+            parsed_skills = extract_job_skills(description)
             rows.append({
                 "job_id": job_id,
                 "source": row.get("source", ""),
@@ -110,7 +138,7 @@ def seed_jobs() -> list[dict]:
                 "company": row.get("company", "").strip(),
                 "location": row.get("location", "").strip(),
                 "description": description,
-                "skills_jobs_json": None,  # populated later if needed
+                "skills_jobs_json": parsed_skills,
                 "posted_at": None,
                 "ingested_at": now_iso(),
             })
@@ -121,6 +149,13 @@ def seed_jobs() -> list[dict]:
         batch = rows[i : i + batch_size]
         sb.table("jobs").upsert(batch, on_conflict="job_id").execute()
         print(f"  Upserted jobs {i + 1}–{min(i + batch_size, len(rows))}")
+
+    # Ensure JSON skills are persisted reliably for every row.
+    # (Some Supabase setups can drop JSON fields during large upsert batches.)
+    for row in rows:
+        sb.table("jobs").update(
+            {"skills_jobs_json": row["skills_jobs_json"]}
+        ).eq("job_id", row["job_id"]).execute()
 
     print(f"  Total jobs seeded: {len(rows)}")
     return rows
@@ -255,7 +290,7 @@ def embed_jobs(job_rows: list[dict]):
                     "job_id": job["job_id"],
                     "title": job["title"],
                     "company": job["company"],
-                    "skills": [],
+                    "skills": [s["skill"] for s in (job.get("skills_jobs_json") or [])],
                 },
             )
         )

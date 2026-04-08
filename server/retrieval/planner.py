@@ -45,6 +45,7 @@ def plan_retrieval(question: str) -> dict:
     Falls back to (5, 5) if the LLM response can't be parsed.
     """
     prompt = PLANNER_PROMPT.format(question=question)
+    q = question.lower()
 
     try:
         response = httpx.post(
@@ -71,8 +72,23 @@ def plan_retrieval(question: str) -> dict:
 
         top_k_jobs = max(0, min(10, int(plan.get("top_k_jobs", 5))))
         top_k_courses = max(0, min(10, int(plan.get("top_k_courses", 5))))
+
+        # Deterministic guardrails so obvious intent never returns zero retrieval.
+        asks_for_jobs = any(k in q for k in ["job", "jobs", "role", "roles", "position", "intern"])
+        asks_for_courses = any(k in q for k in ["course", "courses", "learn", "learning", "skill gap", "upskill"])
+        if asks_for_jobs:
+            top_k_jobs = max(top_k_jobs, 5)
+        if asks_for_courses:
+            top_k_courses = max(top_k_courses, 4)
         reason = str(plan.get("reason", ""))
         return {"top_k_jobs": top_k_jobs, "top_k_courses": top_k_courses, "reason": reason}
 
     except Exception:
-        return {"top_k_jobs": 5, "top_k_courses": 5, "reason": "fallback defaults"}
+        # Use intent-aware defaults on parser/network failures.
+        asks_for_jobs = any(k in q for k in ["job", "jobs", "role", "roles", "position", "intern"])
+        asks_for_courses = any(k in q for k in ["course", "courses", "learn", "learning", "skill gap", "upskill"])
+        return {
+            "top_k_jobs": 5 if asks_for_jobs else 3,
+            "top_k_courses": 5 if asks_for_courses else 3,
+            "reason": "fallback defaults",
+        }
