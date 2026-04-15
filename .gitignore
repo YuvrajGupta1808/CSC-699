@@ -43,3 +43,7 @@ bun.log*
 # Python
 __pycache__/
 *.py[cod]
+.venv/
+
+# Data
+syllabus/

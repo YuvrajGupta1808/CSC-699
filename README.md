@@ -29,6 +29,7 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 
 ### Backend & Retrieval (`server/`)
 - **Python** pipeline: ingest jobs and courses into Supabase, embed with Ollama (`nomic-embed-text`), and index vectors in **Qdrant**
+- **LangGraph** orchestrates the advisor flow as explicit nodes for planning, retrieval, evidence assembly, candidate generation, critique, and response selection
 - **Streamlit** chat UI for a grounded student advisor (retrieval + local LLM via Ollama)
 - See **`PLAN.md`** for the GenAI retrieval design, graph flow, and implementation notes
 
