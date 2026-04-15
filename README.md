@@ -28,10 +28,11 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 - **UI Components**: Radix UI primitives
 
 ### Backend & Retrieval (`server/`)
-- **Python** pipeline: ingest jobs and courses into Supabase, embed with Ollama (`nomic-embed-text`), and index vectors in **Qdrant**
-- **LangGraph** orchestrates the advisor flow as explicit nodes for planning, retrieval, evidence assembly, candidate generation, critique, and response selection
-- **Streamlit** chat UI for a grounded student advisor (retrieval + local LLM via Ollama)
-- See **`PLAN.md`** for the GenAI retrieval design, graph flow, and implementation notes
+- **Python** pipeline seeds jobs/courses/students into Supabase, embeds with Ollama (`nomic-embed-text`), and stores vectors in **Qdrant**
+- **LangGraph** orchestrates planner -> retrieval -> evidence bundle -> multi-candidate generation -> critique/ranking -> final response
+- **Streamlit** chat UI runs the advisor workflow and exposes evidence + scorecard per answer
+- **LangSmith** tracing is supported via environment variables for observability
+- See **`PLAN.md`** for retrieval design and workflow details
 
 ### Data Processing
 - Natural Language Processing for skill extraction
@@ -57,16 +58,21 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 │   │   ├── lib/           # Utility functions
 │   │   └── hooks/         # Custom React hooks
 │   └── public/            # Static assets
-├── server/                # Python: Supabase, Qdrant, ingest, Streamlit chat
+├── server/                # Python: ingestion, retrieval graph, Streamlit advisor
 │   ├── ingest.py
 │   ├── db/                # Supabase & Qdrant clients
-│   ├── retrieval/         # Embeddings, search, context, planner
+│   ├── retrieval/         # Embeddings, search, planner, graph, critique, observability
 │   ├── streamlit_app/     # Advisor UI
 │   └── requirements.txt
 ├── data/                  # Job postings, course skills, SQL schema
 │   ├── jobs.csv
 │   ├── sfsu_csc_courses_clean_skills.csv
-│   └── JobSkill.sql
+│   ├── JobSkill.sql
+│   └── courses/           # Course data maintenance helpers
+│       ├── sync_courses_to_supabase.py
+│       └── update_course_skills_from_syllabi.py
+├── qdrant/
+│   └── rebuild_course_vectors.py
 ├── PLAN.md                # Retrieval-layer implementation plan
 └── PPM-personalized job recommendation.pdf  # Project documentation
 
@@ -79,7 +85,7 @@ JobSkill analyzes academic transcripts, resumes, and job postings to provide per
 - Node.js 18 or higher
 - npm or yarn package manager
 
-**Backend / retrieval (optional):** Python 3.10+, [Ollama](https://ollama.com/) (embeddings + chat), Qdrant on `localhost:6333`, and a Supabase project. Copy `.env` in the repo root with `SUPABASE_URL` and `SUPABASE_KEY` (see `PLAN.md`).
+**Backend / retrieval prerequisites:** Python 3.10+, [Ollama](https://ollama.com/) (embeddings + chat), Qdrant on `localhost:6333`, and a Supabase project.
 
 ### Installation
 
@@ -116,11 +122,49 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Configure `.env` at the repo root, run Qdrant and Ollama, then seed and start the advisor UI:
+Configure `.env` at the repo root with:
+
+```bash
+SUPABASE_URL=...
+SUPABASE_KEY=...
+QDRANT_URL=http://localhost:6333            # optional override
+OLLAMA_URL=http://localhost:11434           # optional override
+OLLAMA_EMBED_MODEL=nomic-embed-text         # optional override
+OLLAMA_CHAT_MODEL=llama3.2                  # optional override
+RETRIEVAL_TOP_K_JOBS=5                      # optional override
+RETRIEVAL_TOP_K_COURSES=5                   # optional override
+LANGSMITH_TRACING=false                     # optional
+LANGSMITH_PROJECT=jobskill                  # optional
+LANGSMITH_API_KEY=...                       # required only if tracing enabled
+```
+
+Run Qdrant + Ollama, seed data, then start the advisor UI:
+
+```bash
+docker run -d --name qdrant -p 6333:6333 qdrant/qdrant
+ollama serve
+ollama pull nomic-embed-text
+ollama pull llama3.2
+```
+
+Then:
 
 ```bash
 python ingest.py
 streamlit run streamlit_app/app.py
+```
+
+Open:
+`http://localhost:8501` (or the next free Streamlit port).
+
+### Data/Vector Maintenance Helpers
+
+Run from repo root (with `server/.venv` activated and `PYTHONPATH=server`):
+
+```bash
+python data/courses/update_course_skills_from_syllabi.py              # refresh curated course skills in CSV
+PYTHONPATH=server python data/courses/sync_courses_to_supabase.py     # sync course catalog to Supabase
+PYTHONPATH=server python qdrant/rebuild_course_vectors.py             # rebuild courses_collection vectors
 ```
 
 ### Available Scripts
@@ -158,6 +202,8 @@ npm run test:watch   # Run tests in watch mode
 ### Backend & data
 - Python, Supabase, Qdrant, Streamlit, pandas
 - Ollama for embeddings and chat models
+- LangGraph for workflow orchestration
+- LangSmith for tracing/observability (optional)
 
 ### Development Tools
 - ESLint for code linting
