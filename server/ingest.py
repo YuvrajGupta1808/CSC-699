@@ -168,16 +168,23 @@ def seed_jobs() -> list[dict]:
 def seed_courses() -> list[dict]:
     print("\n[3/7] Seeding courses from sfsu_csc_courses_clean_skills.csv...")
     sb = get_supabase()
+    existing_rows = sb.table("courses").select("course_id,course_code").execute().data
+    existing_ids = {
+        (row.get("course_code") or "").strip(): row.get("course_id")
+        for row in existing_rows
+        if row.get("course_code") and row.get("course_id")
+    }
 
     rows = []
     with open(COURSES_CSV, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            course_id = str(uuid.uuid4())
+            course_code = row.get("course_code", "").strip()
+            course_id = existing_ids.get(course_code) or str(uuid.uuid4())
             skills = parse_course_skills(row.get("skills", ""))
             rows.append({
                 "course_id": course_id,
-                "course_code": row.get("course_code", "").strip(),
+                "course_code": course_code,
                 "title": row.get("title", "").strip(),
                 "description": row.get("description", "").strip(),
                 "skills_courses_json": skills,
@@ -322,7 +329,7 @@ def embed_courses(course_rows: list[dict]):
         vector = embed(text)
         points.append(
             PointStruct(
-                id=str(uuid.uuid4()),
+                id=str(uuid.UUID(course["course_id"])),
                 vector=vector,
                 payload={
                     "course_id": course["course_id"],
@@ -350,17 +357,37 @@ if __name__ == "__main__":
         action="store_true",
         help="Skip Supabase seeding; only create Qdrant collections and embed.",
     )
+    parser.add_argument(
+        "--courses-only",
+        action="store_true",
+        help="Only sync course rows to Supabase.",
+    )
     args = parser.parse_args()
+
+    if args.qdrant_only and args.courses_only:
+        parser.error("--qdrant-only and --courses-only cannot be used together.")
 
     print("=" * 60)
     print("  Ingest Pipeline")
     print("=" * 60)
 
-    if not args.qdrant_only:
+    should_print_complete = False
+
+    if args.courses_only:
+        create_tables()
+        course_rows = seed_courses()
+        print("\n" + "=" * 60)
+        print(f"  Course sync complete. {len(course_rows)} rows updated.")
+        print("=" * 60)
+    elif not args.qdrant_only:
         create_tables()
         job_rows = seed_jobs()
         course_rows = seed_courses()
         seed_students()
+        create_qdrant_collections()
+        embed_jobs(job_rows)
+        embed_courses(course_rows)
+        should_print_complete = True
     else:
         print("\n[1-4/7] Skipping Supabase seeding (--qdrant-only).")
         print("        Fetching existing rows from Supabase...")
@@ -386,10 +413,12 @@ if __name__ == "__main__":
         ]
         print(f"        Loaded {len(job_rows)} jobs, {len(course_rows)} courses.")
 
-    create_qdrant_collections()
-    embed_jobs(job_rows)
-    embed_courses(course_rows)
+        create_qdrant_collections()
+        embed_jobs(job_rows)
+        embed_courses(course_rows)
+        should_print_complete = True
 
-    print("\n" + "=" * 60)
-    print("  Ingest complete.")
-    print("=" * 60)
+    if should_print_complete:
+        print("\n" + "=" * 60)
+        print("  Ingest complete.")
+        print("=" * 60)
