@@ -14,6 +14,7 @@ import os
 import json
 import httpx
 from dotenv import load_dotenv
+from langsmith import traceable
 
 load_dotenv()
 
@@ -39,6 +40,7 @@ User question: {question}
 """
 
 
+@traceable(name="plan_retrieval", run_type="llm")
 def plan_retrieval(question: str) -> dict:
     """
     Returns: { "top_k_jobs": int, "top_k_courses": int, "reason": str }

@@ -9,9 +9,12 @@ View B — Job cluster:      Aggregated summary of all retrieved jobs + broad co
 View C — Course path:      Course-first view focused on learning roadmap
 """
 
+from langsmith import traceable
+
 from retrieval.context_builder import bundle_to_context_string
 
 
+@traceable(name="build_candidate_views", run_type="chain")
 def build_candidate_views(bundle: dict) -> list[dict]:
     """
     Returns list of 3 dicts:

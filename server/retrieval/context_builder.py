@@ -1,4 +1,5 @@
 from db.supabase_client import get_supabase
+from langsmith import traceable
 
 
 def get_student_profile(student_id: str) -> dict:
@@ -22,6 +23,7 @@ def get_all_jobs() -> list[dict]:
     return result.data
 
 
+@traceable(name="build_evidence_bundle", run_type="chain")
 def build_evidence_bundle(
     student_id: str,
     job_hits: list[dict],
@@ -41,12 +43,48 @@ def build_evidence_bundle(
     # --- Jobs: enrich from Supabase ---
     enriched_jobs = []
     for hit in job_hits:
-        row = sb.table("jobs").select("skills_jobs_json, description").eq("job_id", hit["job_id"]).single().execute()
-        job_skills = _extract_skill_names(row.data.get("skills_jobs_json") or [])
+        job_row = None
+        job_id = hit.get("job_id")
+        if job_id:
+            rows = (
+                sb.table("jobs")
+                .select("job_id, title, company, skills_jobs_json, description")
+                .eq("job_id", job_id)
+                .limit(1)
+                .execute()
+                .data
+                or []
+            )
+            if rows:
+                job_row = rows[0]
+
+        # Fallback: if job_id is stale/missing, try matching by title+company.
+        if not job_row and hit.get("title") and hit.get("company"):
+            rows = (
+                sb.table("jobs")
+                .select("job_id, title, company, skills_jobs_json, description")
+                .eq("title", hit["title"])
+                .eq("company", hit["company"])
+                .limit(1)
+                .execute()
+                .data
+                or []
+            )
+            if rows:
+                job_row = rows[0]
+
+        if not job_row:
+            # Skip stale vector hit instead of crashing the whole response.
+            continue
+
+        job_skills = _extract_skill_names(job_row.get("skills_jobs_json") or [])
         covered = [s for s in job_skills if s in student_skills]
         gaps = [s for s in job_skills if s not in student_skills]
         enriched_jobs.append({
             **hit,
+            "job_id": job_row.get("job_id", hit.get("job_id")),
+            "title": job_row.get("title", hit.get("title")),
+            "company": job_row.get("company", hit.get("company")),
             "required_skills": job_skills,
             "covered": covered,
             "gaps": gaps,
@@ -54,11 +92,54 @@ def build_evidence_bundle(
 
     # --- Courses: enrich from Supabase ---
     enriched_courses = []
+    seen_courses: set[str] = set()
     for hit in course_hits:
-        row = sb.table("courses").select("skills_courses_json").eq("course_id", hit["course_id"]).single().execute()
-        course_skills = _extract_skill_names(row.data.get("skills_courses_json") or [])
+        course_row = None
+        course_id = hit.get("course_id")
+        course_code = (hit.get("course_code") or "").strip()
+
+        if course_id:
+            rows = (
+                sb.table("courses")
+                .select("course_id, course_code, title, skills_courses_json")
+                .eq("course_id", course_id)
+                .limit(1)
+                .execute()
+                .data
+                or []
+            )
+            if rows:
+                course_row = rows[0]
+
+        # Fallback lookup for stale course_id values from old vector payloads.
+        if not course_row and course_code:
+            rows = (
+                sb.table("courses")
+                .select("course_id, course_code, title, skills_courses_json")
+                .eq("course_code", course_code)
+                .limit(1)
+                .execute()
+                .data
+                or []
+            )
+            if rows:
+                course_row = rows[0]
+
+        if not course_row:
+            # Skip stale vector hit instead of crashing the whole response.
+            continue
+
+        dedup_key = course_row.get("course_id") or course_row.get("course_code") or course_code
+        if dedup_key in seen_courses:
+            continue
+        seen_courses.add(dedup_key)
+
+        course_skills = _extract_skill_names(course_row.get("skills_courses_json") or [])
         enriched_courses.append({
             **hit,
+            "course_id": course_row.get("course_id", hit.get("course_id")),
+            "course_code": course_row.get("course_code", hit.get("course_code")),
+            "title": course_row.get("title", hit.get("title")),
             "teaches": course_skills,
         })
 
@@ -74,6 +155,7 @@ def build_evidence_bundle(
     }
 
 
+@traceable(name="bundle_to_context_string", run_type="chain")
 def bundle_to_context_string(bundle: dict) -> str:
     """
     Convert an evidence bundle into a plain-text context string for the LLM prompt.

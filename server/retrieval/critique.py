@@ -13,6 +13,7 @@ import os
 import json
 import httpx
 from dotenv import load_dotenv
+from langsmith import traceable
 
 load_dotenv()
 
@@ -41,6 +42,7 @@ Respond ONLY with valid JSON, no explanation, no markdown:
 """
 
 
+@traceable(name="critique_candidate", run_type="llm")
 def critique_candidate(question: str, context: str, response: str) -> dict:
     """
     Returns: { "relevance": int, "support": int, "utility": int,
