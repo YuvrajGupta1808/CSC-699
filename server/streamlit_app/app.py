@@ -1,5 +1,5 @@
 """
-streamlit_app/app.py — Student Advisor Chat
+streamlit_app/app.py — Student Advisor Chat (streaming)
 
 Run:
   streamlit run streamlit_app/app.py
@@ -9,21 +9,18 @@ import sys
 from pathlib import Path
 from uuid import uuid4
 
-# Allow imports from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import streamlit as st
 from dotenv import load_dotenv
 
-from retrieval.context_builder import (
-    get_all_students,
-    get_all_jobs,
-    get_student_profile,
-)
-from retrieval.graph import run_advisor_turn
+from retrieval.context_builder import get_all_jobs, get_all_students, get_student_profile
+from retrieval.critique import critique_candidate
+from retrieval.graph import empty_bundle_for_student, run_advisor_retrieval
+from retrieval.llm import stream_direct_response, stream_response
+from retrieval.record_utils import student_completed_courses_value, student_skill_profile_value
 
 load_dotenv()
-
 
 # ---------------------------------------------------------------------------
 # Page config
@@ -33,13 +30,14 @@ st.set_page_config(page_title="Student Advisor", layout="wide")
 st.title("Student Career Advisor")
 
 
-def stop_with_config_error(service: str, error: Exception):
+def _stop_with_error(service: str, error: Exception) -> None:
     st.error(
         f"{service} connection failed.\n\n"
         f"Error: `{error}`\n\n"
         "Please verify `.env` values and that the service is reachable, then refresh."
     )
     st.stop()
+
 
 # ---------------------------------------------------------------------------
 # Sidebar — student + job selection
@@ -48,13 +46,12 @@ def stop_with_config_error(service: str, error: Exception):
 with st.sidebar:
     st.header("Session Setup")
 
-    # Load students once
     if "students_list" not in st.session_state:
         with st.spinner("Loading students..."):
             try:
                 st.session_state.students_list = get_all_students()
             except Exception as e:
-                stop_with_config_error("Supabase", e)
+                _stop_with_error("Supabase", e)
 
     students = st.session_state.students_list
     student_names = {s["name"]: s["student_id"] for s in students}
@@ -62,40 +59,37 @@ with st.sidebar:
     selected_name = st.selectbox("Select student", list(student_names.keys()))
     selected_student_id = student_names[selected_name]
 
-    # Reload profile when student changes
     if st.session_state.get("active_student_id") != selected_student_id:
         st.session_state.active_student_id = selected_student_id
         with st.spinner("Loading profile..."):
             try:
                 st.session_state.student_profile = get_student_profile(selected_student_id)
             except Exception as e:
-                stop_with_config_error("Supabase", e)
+                _stop_with_error("Supabase", e)
         st.session_state.conversation = []
         st.session_state.last_bundle = None
         st.session_state.advisor_session_id = f"streamlit-{uuid4()}"
 
     profile = st.session_state.student_profile
     st.markdown(f"**Major:** {profile.get('major', '—')}")
-    completed = profile.get("completed_courses_json") or []
+    completed = student_completed_courses_value(profile)
     st.markdown(f"**Courses:** {', '.join(completed) or 'none'}")
-    skills = [s["skill"] for s in (profile.get("skill_profile_json") or [])]
+    skills = [s for s in student_skill_profile_value(profile) if isinstance(s, str)]
     st.markdown(f"**Skills:** {', '.join(skills) or 'none'}")
 
     st.divider()
 
-    # Optional job filter
     if "jobs_list" not in st.session_state:
         with st.spinner("Loading jobs..."):
             try:
                 st.session_state.jobs_list = get_all_jobs()
             except Exception as e:
-                stop_with_config_error("Supabase", e)
+                _stop_with_error("Supabase", e)
 
     jobs = st.session_state.jobs_list
-    job_options = {"Any (semantic search)": None}
+    job_options: dict[str, str | None] = {"Any (semantic search)": None}
     for j in jobs:
-        label = f"{j['title']} — {j['company']}"
-        job_options[label] = j["job_id"]
+        job_options[f"{j['title']} — {j['company']}"] = j["job_id"]
 
     selected_job_label = st.selectbox("Job filter (optional)", list(job_options.keys()))
     selected_job_id = job_options[selected_job_label]
@@ -107,7 +101,7 @@ with st.sidebar:
         st.rerun()
 
 # ---------------------------------------------------------------------------
-# Initialize session state
+# Session state
 # ---------------------------------------------------------------------------
 
 if "conversation" not in st.session_state:
@@ -117,28 +111,76 @@ if "last_bundle" not in st.session_state:
 if "advisor_session_id" not in st.session_state:
     st.session_state.advisor_session_id = f"streamlit-{uuid4()}"
 
+
 # ---------------------------------------------------------------------------
-# Chat history display
+# Helpers
+# ---------------------------------------------------------------------------
+
+def _pick_primary_view(views: list[dict], intent: str) -> dict:
+    """Choose the most appropriate candidate view based on query intent."""
+    if not views:
+        raise ValueError("No candidate views to pick from")
+    index_by_intent = {
+        "jobs": 0,       # View A — specific job focus
+        "skill_gap": 1,  # View B — all jobs for gap analysis
+        "courses": 2,    # View C — course path
+        "broad": 1,      # View B — most complete context
+        "general": 1,    # View B — safe default
+    }
+    idx = index_by_intent.get(intent, 1)
+    return views[min(idx, len(views) - 1)]
+
+
+def _render_sources(bundle: dict) -> None:
+    """Render job and course evidence inside an expander."""
+    n_jobs = len(bundle.get("jobs", []))
+    n_courses = len(bundle.get("courses", []))
+    with st.expander(f"Evidence — {n_jobs} job{'s' if n_jobs != 1 else ''}, {n_courses} course{'s' if n_courses != 1 else ''}"):
+        if bundle.get("jobs"):
+            st.markdown("**Jobs retrieved:**")
+            for j in bundle["jobs"]:
+                gaps_str = ", ".join(j.get("gaps", [])) or "none"
+                covered_str = ", ".join(j.get("covered", [])) or "none"
+                st.markdown(
+                    f"- **{j['title']}** @ {j['company']} "
+                    f"(score: {j.get('score', 0):.3f})  \n"
+                    f"  Covers: {covered_str} — Gaps: {gaps_str}"
+                )
+        if bundle.get("courses"):
+            st.markdown("**Courses retrieved:**")
+            for c in bundle["courses"]:
+                teaches_str = ", ".join(c.get("teaches", [])[:5]) or "—"
+                st.markdown(
+                    f"- **{c['course_code']}**: {c['title']} "
+                    f"(score: {c.get('score', 0):.3f})  \n"
+                    f"  Teaches: {teaches_str}"
+                )
+
+
+def _render_scores(scores: dict) -> None:
+    """Render critique scores as metrics inside an expander."""
+    with st.expander("Quality Scorecard"):
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Relevance", f"{scores['relevance']}/10")
+        col2.metric("Support", f"{scores['support']}/10")
+        col3.metric("Utility", f"{scores['utility']}/10")
+        col4.metric("Total", f"{scores['total']:.1f}/10")
+        if scores.get("critique"):
+            st.caption(f"Critique: _{scores['critique']}_")
+        if scores.get("support_findings"):
+            findings = "; ".join(scores["support_findings"][:3])
+            st.caption(f"Support findings: {findings}")
+
+
+# ---------------------------------------------------------------------------
+# Chat history — replay previous turns
 # ---------------------------------------------------------------------------
 
 for turn in st.session_state.conversation:
     with st.chat_message(turn["role"]):
         st.markdown(turn["content"])
         if turn["role"] == "assistant" and turn.get("bundle"):
-            bundle = turn["bundle"]
-            with st.expander(f"Sources — {len(bundle['jobs'])} jobs, {len(bundle['courses'])} courses"):
-                if bundle["jobs"]:
-                    st.markdown("**Jobs retrieved:**")
-                    for j in bundle["jobs"]:
-                        gaps_str = ", ".join(j.get("gaps", [])) or "none"
-                        st.markdown(
-                            f"- **{j['title']}** at {j['company']} "
-                            f"(score: {j['score']}) — gaps: {gaps_str}"
-                        )
-                if bundle["courses"]:
-                    st.markdown("**Courses retrieved:**")
-                    for c in bundle["courses"]:
-                        st.markdown(f"- **{c['course_code']}**: {c['title']} (score: {c['score']})")
+            _render_sources(turn["bundle"])
 
 # ---------------------------------------------------------------------------
 # Chat input
@@ -147,82 +189,107 @@ for turn in st.session_state.conversation:
 user_input = st.chat_input("Ask about jobs, skills, or your learning path...")
 
 if user_input:
-    prior_conversation = list(st.session_state.conversation)
+    # History passed to LLM must only have role + content
+    prior_history = [
+        {"role": t["role"], "content": t["content"]}
+        for t in st.session_state.conversation
+    ]
 
-    # Show user message
     with st.chat_message("user"):
         st.markdown(user_input)
     st.session_state.conversation.append({"role": "user", "content": user_input})
 
-    with st.status("Running LangGraph advisor workflow...", expanded=True) as status:
+    # -----------------------------------------------------------------------
+    # Phase 1: Retrieval — planning, search, bundle, candidate views
+    # -----------------------------------------------------------------------
+
+    retrieval_state: dict | None = None
+    with st.status("Analyzing your question…", expanded=True) as retrieval_status:
         try:
-            result = run_advisor_turn(
+            retrieval_state = run_advisor_retrieval(
                 user_message=user_input,
                 student_id=selected_student_id,
                 selected_job_id=selected_job_id,
-                conversation_history=prior_conversation,
+                conversation_history=prior_history,
                 session_id=st.session_state.advisor_session_id,
+                on_step=st.write,
             )
         except Exception as e:
-            status.update(label="LangGraph advisor workflow failed", state="error", expanded=True)
-            st.error(f"Advisor workflow failed.\n\nError: `{e}`")
+            retrieval_status.update(label="Retrieval failed", state="error", expanded=True)
+            st.error(f"Retrieval error: `{e}`")
             st.stop()
 
-        for line in result.get("status_log", []):
-            st.write(line)
+        plan = retrieval_state.get("plan", {})
+        intent = plan.get("intent", "general")
+        is_direct = retrieval_state.get("is_direct", False)
 
-        status.update(label="LangGraph advisor workflow complete", state="complete", expanded=False)
-
-    # --- Render the winning candidate ---
-    with st.chat_message("assistant"):
-        best = result["best_candidate"]
-        runner_up = result.get("runner_up")
-        score_gap = result.get("score_gap", 999.0)
-        bundle = result["bundle"]
-        candidates = result["candidates"]
-        full_response = result["final_response"]
-        st.session_state.last_bundle = bundle
-
-        st.caption(f"Selected: **{best['view']['label']}** — {best['view']['evidence_description']}")
-
-        # If scores are very close, offer the runner-up as an alternative
-        if runner_up and score_gap < 1.0:
-            st.caption(
-                f"Runner-up: **{runner_up['view']['label']}** (score {runner_up['scores']['total']}) — "
-                f"close match, shown in expander below."
+        if is_direct:
+            retrieval_status.update(label="Ready", state="complete", expanded=False)
+        else:
+            views = retrieval_state.get("candidate_views", [])
+            n_jobs = len(retrieval_state.get("bundle", {}).get("jobs", []))
+            n_courses = len(retrieval_state.get("bundle", {}).get("courses", []))
+            retrieval_status.update(
+                label=f"Retrieved {n_jobs} job{'s' if n_jobs != 1 else ''}, {n_courses} course{'s' if n_courses != 1 else ''} — streaming response…",
+                state="complete",
+                expanded=False,
             )
 
-        st.markdown(full_response)
+    # -----------------------------------------------------------------------
+    # Phase 2: Stream the response token by token
+    # -----------------------------------------------------------------------
 
-        # Critique scorecard
-        with st.expander("Self-RAG Critique Scorecard"):
-            for c in sorted(candidates, key=lambda x: x["scores"]["total"], reverse=True):
-                sc = c["scores"]
-                marker = " ← selected" if c is best else ""
-                st.markdown(
-                    f"**{c['view']['label']}**{marker} — "
-                    f"R:`{sc['relevance']}` S:`{sc['support']}` U:`{sc['utility']}` "
-                    f"total:`{sc['total']}`  \n_{sc['critique']}_"
+    student_profile = retrieval_state.get("student_profile", {})
+
+    with st.chat_message("assistant"):
+
+        if is_direct:
+            # Greeting / no-evidence path
+            token_iter = stream_direct_response(student_profile, user_input, intent)
+            full_response: str = st.write_stream(token_iter)
+            bundle = empty_bundle_for_student(student_profile)
+
+        else:
+            views = retrieval_state.get("candidate_views", [])
+            bundle = retrieval_state["bundle"]
+
+            if not views:
+                # Retrieval ran but produced no views — fall back gracefully
+                token_iter = stream_direct_response(student_profile, user_input, "general")
+                full_response = st.write_stream(token_iter)
+            else:
+                best_view = _pick_primary_view(views, intent)
+                st.caption(
+                    f"View: **{best_view['label']}** — {best_view['evidence_description']}"
                 )
-            if runner_up and score_gap < 1.0:
-                st.markdown("---")
-                st.markdown(f"**Runner-up ({runner_up['view']['label']}) full response:**")
-                st.markdown(runner_up["text"])
 
-        # Sources
-        with st.expander(f"Evidence — {len(bundle['jobs'])} jobs, {len(bundle['courses'])} courses"):
-            if bundle["jobs"]:
-                st.markdown("**Jobs:**")
-                for j in bundle["jobs"]:
-                    gaps_str = ", ".join(j.get("gaps", [])) or "none"
-                    st.markdown(f"- **{j['title']}** @ {j['company']} (score: {j['score']}) — gaps: {gaps_str}")
-            if bundle["courses"]:
-                st.markdown("**Courses:**")
-                for c in bundle["courses"]:
-                    st.markdown(f"- **{c['course_code']}**: {c['title']} (score: {c['score']})")
+                token_iter = stream_response(
+                    best_view["context"], prior_history, user_input
+                )
+                full_response = st.write_stream(token_iter)
 
-    st.session_state.conversation.append({
-        "role": "assistant",
-        "content": full_response,
-        "bundle": bundle,
-    })
+                # -----------------------------------------------------------
+                # Phase 3: Critique + evidence (shown after streaming completes)
+                # -----------------------------------------------------------
+
+                with st.spinner("Scoring response…"):
+                    try:
+                        scores = critique_candidate(
+                            user_input,
+                            best_view.get("bundle") or bundle,
+                            best_view["context"],
+                            full_response,
+                        )
+                    except Exception:
+                        scores = None
+
+                if scores:
+                    _render_scores(scores)
+
+            _render_sources(bundle)
+
+        st.session_state.conversation.append({
+            "role": "assistant",
+            "content": full_response,
+            "bundle": bundle,
+        })
