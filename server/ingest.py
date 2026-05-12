@@ -2,23 +2,26 @@
 ingest.py — One-shot pipeline:
   1. Create Supabase tables (jobs, courses, students)
   2. Seed jobs from data/jobs.csv
-  3. Seed courses from data/sfsu_csc_courses_clean_skills.csv
-  4. Insert 3 fake students
-  5. Create Qdrant collections
-  6. Embed jobs → Qdrant jobs_collection
-  7. Embed courses → Qdrant courses_collection
+  3. Seed courses from data/courses_catalog.csv
+  4. Insert fake students
+  5. Create Weaviate collections (Job, Course)
+  6. Embed jobs → Weaviate Job collection (hybrid: BM25 + semantic)
+  7. Embed courses → Weaviate Course collection
 
 Run:
   python ingest.py
 
 Prerequisites:
-  - docker run -p 6333:6333 qdrant/qdrant
+  - docker run -d --name weaviate -p 8080:8080 -p 50051:50051
+      -e AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      -e DEFAULT_VECTORIZER_MODULE=none
+      -e ENABLE_MODULES=""
+      cr.weaviate.io/semitechnologies/weaviate:1.25.4
   - ollama pull nomic-embed-text
-  - .env filled with SUPABASE_URL + SUPABASE_KEY
+  - .env filled with SUPABASE_URL + SUPABASE_KEY + WEAVIATE_URL
 """
 
 import csv
-import json
 import re
 import uuid
 from datetime import datetime, timezone
@@ -30,61 +33,77 @@ from dotenv import load_dotenv
 REPO_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(REPO_ROOT / ".env")
 
-from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, PointStruct, VectorParams
+import sys
+sys.path.insert(0, str(REPO_ROOT / "weaviate"))
 
 from db.supabase_client import get_supabase
-from db.qdrant_client import get_qdrant
-from retrieval.embedder import embed
+from db.weaviate_client import get_weaviate
+from retrieval.job_content import extract_job_skills
+from retrieval.record_utils import course_skills_value, job_skills_value
+from retrieval.skills import extract_skill_names
 
 # CSV/SQL live at repo root `data/` (not under `server/`)
 DATA_DIR = REPO_ROOT / "data"
 JOBS_CSV = DATA_DIR / "jobs.csv"
-COURSES_CSV = DATA_DIR / "sfsu_csc_courses_clean_skills.csv"
-
-JOBS_COLLECTION = "jobs_collection"
-COURSES_COLLECTION = "courses_collection"
-VECTOR_SIZE = 768  # nomic-embed-text output dimension
-
-JOB_SKILL_KEYWORDS = [
-    "Python", "Java", "JavaScript", "TypeScript", "Rust", "C++", "C#", "SQL",
-    "React", "Node.js", "Django", "Flask", ".NET", "Spring", "FastAPI",
-    "Machine Learning", "Deep Learning", "Data Structures", "Algorithms",
-    "Distributed Systems", "Cloud", "AWS", "GCP", "Azure", "Docker", "Kubernetes",
-    "CI/CD", "Git", "Testing", "Agile", "Scrum", "Jira", "API", "REST",
-]
+COURSES_CSV = DATA_DIR / "courses_catalog.csv"
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def parse_course_skills(raw: str) -> list[dict]:
+def parse_course_skills(raw: str) -> list[str]:
     """
     Parse course skills string like:
       [(Java, 45), (Programming Fundamentals, 35), (Problem Solving, 20)]
     into: [{"skill": "Java", "weight": 45}, ...]
     """
-    pattern = re.findall(r"\(([^,)]+),\s*(\d+)\)", raw)
-    return [{"skill": s.strip(), "weight": int(w)} for s, w in pattern]
+    # Non-greedy .+? correctly handles skill names that contain commas or
+    # nested parentheses, e.g. "CNN Architectures (ResNet, VGG), 17".
+    pattern = re.findall(r"\((.+?),\s*(\d+)\)", raw)
+    return [s.strip() for s, _ in pattern if s.strip() and not s.strip().isdigit()]
 
 
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def extract_job_skills(description: str) -> list[dict]:
-    """
-    Lightweight keyword extraction for job skills from raw descriptions.
-    Returns: [{"skill": "<name>", "weight": <int>}]
-    """
-    text = (description or "").lower()
-    hits = []
-    for skill in JOB_SKILL_KEYWORDS:
-        if skill.lower() in text:
-            hits.append(skill)
-    # De-duplicate while preserving order
-    ordered = list(dict.fromkeys(hits))
-    return [{"skill": s, "weight": 100} for s in ordered]
+def detect_schema_layout() -> dict[str, str]:
+    sb = get_supabase()
+
+    def detect(table: str, preferred: str, fallback: str, probe: str) -> str:
+        try:
+            sb.table(table).select(preferred).limit(1).execute()
+            return preferred
+        except Exception:
+            sb.table(table).select(fallback).limit(1).execute()
+            return fallback
+
+    return {
+        "jobs_skills": detect("jobs", "skills_jobs", "skills_jobs_json", "job_id"),
+        "courses_skills": detect("courses", "skills_courses", "skills_courses_json", "course_id"),
+        "students_completed": detect("students", "completed_courses", "completed_courses_json", "student_id"),
+        "students_profile": detect("students", "skill_profile", "skill_profile_json", "student_id"),
+        "students_recommendations": detect("students", "last_recommendations", "last_recommendations_json", "student_id"),
+    }
+
+
+SCHEMA_LAYOUT = detect_schema_layout()
+
+
+def clear_existing_data():
+    print("\n[reset] Clearing existing Supabase rows and Weaviate collections...")
+    sb = get_supabase()
+    nil_uuid = "00000000-0000-0000-0000-000000000000"
+    sb.table("jobs").delete().neq("job_id", nil_uuid).execute()
+    sb.table("courses").delete().neq("course_id", nil_uuid).execute()
+    sb.table("students").delete().neq("student_id", nil_uuid).execute()
+
+    client = get_weaviate()
+    for class_name in ["Job", "Course"]:
+        if client.collections.exists(class_name):
+            client.collections.delete(class_name)
+            print(f"  Deleted collection: {class_name}")
+    print("  Cleared jobs, courses, students.")
 
 
 # ---------------------------------------------------------------------------
@@ -95,7 +114,7 @@ def create_tables():
     print("\n[1/7] Creating Supabase tables...")
     sb = get_supabase()
 
-    schema_path = DATA_DIR / "JobSkill.sql"
+    schema_path = DATA_DIR / "schema.sql"
     sql = schema_path.read_text()
 
     # Supabase JS client doesn't expose raw SQL — use rpc or just note tables
@@ -108,7 +127,7 @@ def create_tables():
         print("  Tables already exist.")
     except Exception:
         print("  WARNING: Tables may not exist yet.")
-        print("  Please run data/JobSkill.sql in the Supabase SQL editor, then re-run this script.")
+        print("  Please run data/schema.sql in the Supabase SQL editor, then re-run this script.")
         raise SystemExit(1)
 
 
@@ -119,28 +138,30 @@ def create_tables():
 def seed_jobs() -> list[dict]:
     print("\n[2/7] Seeding jobs from jobs.csv...")
     sb = get_supabase()
+    skills_field = SCHEMA_LAYOUT["jobs_skills"]
 
     rows = []
     with open(JOBS_CSV, newline="", encoding="utf-8") as f:
-        # First line is "jobs" (artifact) — skip it
-        first = f.readline().strip()
-        if first != "jobs":
-            f.seek(0)  # not an artifact, rewind
         reader = csv.DictReader(f)
         for row in reader:
             job_id = row.get("job_id") or str(uuid.uuid4())
+            title = row.get("title", "").strip()
             description = row.get("job_description_raw", "").strip()
-            parsed_skills = extract_job_skills(description)
-            rows.append({
+            precomputed = row.get("skills", "").strip()
+            parsed_skills = extract_job_skills(title, description, precomputed=precomputed)
+            job_record = {
                 "job_id": job_id,
                 "source": row.get("source", ""),
-                "title": row.get("title", "").strip(),
+                "title": title,
                 "company": row.get("company", "").strip(),
                 "location": row.get("location", "").strip(),
                 "description": description,
-                "skills_jobs_json": parsed_skills,
                 "posted_at": None,
                 "ingested_at": now_iso(),
+            }
+            job_record[skills_field] = parsed_skills
+            rows.append({
+                **job_record
             })
 
     # Upsert in batches of 100
@@ -150,11 +171,11 @@ def seed_jobs() -> list[dict]:
         sb.table("jobs").upsert(batch, on_conflict="job_id").execute()
         print(f"  Upserted jobs {i + 1}–{min(i + batch_size, len(rows))}")
 
-    # Ensure JSON skills are persisted reliably for every row.
-    # (Some Supabase setups can drop JSON fields during large upsert batches.)
+    # Ensure skills arrays are persisted reliably for every row.
+    # (Some Supabase setups can drop array fields during large upsert batches.)
     for row in rows:
         sb.table("jobs").update(
-            {"skills_jobs_json": row["skills_jobs_json"]}
+            {skills_field: row[skills_field]}
         ).eq("job_id", row["job_id"]).execute()
 
     print(f"  Total jobs seeded: {len(rows)}")
@@ -166,8 +187,9 @@ def seed_jobs() -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def seed_courses() -> list[dict]:
-    print("\n[3/7] Seeding courses from sfsu_csc_courses_clean_skills.csv...")
+    print("\n[3/7] Seeding courses from courses_catalog.csv...")
     sb = get_supabase()
+    skills_field = SCHEMA_LAYOUT["courses_skills"]
     existing_rows = sb.table("courses").select("course_id,course_code").execute().data
     existing_ids = {
         (row.get("course_code") or "").strip(): row.get("course_id")
@@ -182,13 +204,16 @@ def seed_courses() -> list[dict]:
             course_code = row.get("course_code", "").strip()
             course_id = existing_ids.get(course_code) or str(uuid.uuid4())
             skills = parse_course_skills(row.get("skills", ""))
-            rows.append({
+            course_record = {
                 "course_id": course_id,
                 "course_code": course_code,
                 "title": row.get("title", "").strip(),
                 "description": row.get("description", "").strip(),
-                "skills_courses_json": skills,
                 "updated_at": now_iso(),
+            }
+            course_record[skills_field] = skills
+            rows.append({
+                **course_record
             })
 
     sb.table("courses").upsert(rows, on_conflict="course_code").execute()
@@ -205,45 +230,27 @@ FAKE_STUDENTS = [
         "student_id": "00000000-0000-0000-0000-000000000001",
         "name": "Alex Chen",
         "major": "Computer Science",
-        "completed_courses_json": ["CSC 101", "CSC 220", "CSC 315", "CSC 340"],
-        "skill_profile_json": [
-            {"skill": "Python", "weight": 80},
-            {"skill": "Java", "weight": 70},
-            {"skill": "Data Structures", "weight": 65},
-            {"skill": "Algorithms", "weight": 60},
-            {"skill": "Object-Oriented Programming", "weight": 55},
-        ],
-        "last_recommendations_json": None,
+        "completed_courses": ["CSC 101", "CSC 220", "CSC 315", "CSC 340"],
+        "skill_profile": ["Python", "Java", "Data Structures", "Algorithms", "Object-Oriented Programming"],
+        "last_recommendations": None,
         "updated_at": now_iso(),
     },
     {
         "student_id": "00000000-0000-0000-0000-000000000002",
         "name": "Maria Gomez",
         "major": "Computer Science",
-        "completed_courses_json": ["CSC 220", "CSC 415", "CSC 510", "CSC 600", "CSC 667"],
-        "skill_profile_json": [
-            {"skill": "Machine Learning", "weight": 85},
-            {"skill": "Python", "weight": 90},
-            {"skill": "Databases", "weight": 70},
-            {"skill": "Operating Systems", "weight": 60},
-            {"skill": "Deep Learning", "weight": 75},
-            {"skill": "SQL", "weight": 65},
-        ],
-        "last_recommendations_json": None,
+        "completed_courses": ["CSC 220", "CSC 415", "CSC 510", "CSC 600", "CSC 667"],
+        "skill_profile": ["Machine Learning", "Python", "Databases", "Operating Systems", "Deep Learning", "SQL"],
+        "last_recommendations": None,
         "updated_at": now_iso(),
     },
     {
         "student_id": "00000000-0000-0000-0000-000000000003",
         "name": "Sam Patel",
         "major": "Computer Science",
-        "completed_courses_json": ["CSC 101", "CSC 110", "CSC 215"],
-        "skill_profile_json": [
-            {"skill": "Java", "weight": 50},
-            {"skill": "Programming Fundamentals", "weight": 60},
-            {"skill": "Computational Thinking", "weight": 45},
-            {"skill": "Problem Solving", "weight": 55},
-        ],
-        "last_recommendations_json": None,
+        "completed_courses": ["CSC 101", "CSC 110", "CSC 215"],
+        "skill_profile": ["Java", "Programming Fundamentals", "Computational Thinking", "Problem Solving"],
+        "last_recommendations": None,
         "updated_at": now_iso(),
     },
 ]
@@ -252,96 +259,61 @@ FAKE_STUDENTS = [
 def seed_students():
     print("\n[4/7] Inserting fake students...")
     sb = get_supabase()
-    sb.table("students").upsert(FAKE_STUDENTS, on_conflict="student_id").execute()
+    student_rows = []
+    for student in FAKE_STUDENTS:
+        row = {
+            "student_id": student["student_id"],
+            "name": student["name"],
+            "major": student["major"],
+            "updated_at": student["updated_at"],
+        }
+        row[SCHEMA_LAYOUT["students_completed"]] = student["completed_courses"]
+        row[SCHEMA_LAYOUT["students_profile"]] = student["skill_profile"]
+        row[SCHEMA_LAYOUT["students_recommendations"]] = student["last_recommendations"]
+        student_rows.append(row)
+    sb.table("students").upsert(student_rows, on_conflict="student_id").execute()
     for s in FAKE_STUDENTS:
         print(f"  Upserted: {s['name']} ({s['student_id']})")
 
 
 # ---------------------------------------------------------------------------
-# Step 5: Create Qdrant collections
+# Step 5: Create Weaviate collections
 # ---------------------------------------------------------------------------
 
-def create_qdrant_collections():
-    print("\n[5/7] Creating Qdrant collections...")
-    client = get_qdrant()
+def create_weaviate_collections():
+    # Import here to avoid circular import issues with sys.path manipulation
+    from index_jobs import recreate_collection as recreate_job_collection
+    from index_courses import recreate_collection as recreate_course_collection
 
-    for name in [JOBS_COLLECTION, COURSES_COLLECTION]:
-        existing = [c.name for c in client.get_collections().collections]
-        if name in existing:
-            print(f"  Collection '{name}' already exists — skipping.")
-        else:
-            client.create_collection(
-                collection_name=name,
-                vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
-            )
-            print(f"  Created collection: {name}")
+    print("\n[5/7] Creating Weaviate collections...")
+    recreate_job_collection()
+    print("  Created collection: Job")
+    recreate_course_collection()
+    print("  Created collection: Course")
 
 
 # ---------------------------------------------------------------------------
-# Step 6: Embed jobs → Qdrant
+# Step 6: Embed jobs → Weaviate
 # ---------------------------------------------------------------------------
 
 def embed_jobs(job_rows: list[dict]):
-    print(f"\n[6/7] Embedding {len(job_rows)} jobs into Qdrant...")
-    client = get_qdrant()
-    points = []
+    from index_jobs import index_jobs as weaviate_index_jobs
 
-    for i, job in enumerate(job_rows):
-        text = f"{job['title']} {job['company']} {job['description'][:500]}"
-        vector = embed(text)
-        points.append(
-            PointStruct(
-                id=str(uuid.UUID(job["job_id"])),
-                vector=vector,
-                payload={
-                    "job_id": job["job_id"],
-                    "title": job["title"],
-                    "company": job["company"],
-                    "skills": [s["skill"] for s in (job.get("skills_jobs_json") or [])],
-                },
-            )
-        )
-        if (i + 1) % 50 == 0:
-            print(f"  Embedded {i + 1}/{len(job_rows)} jobs...")
-
-    # Upsert in batches
-    batch_size = 50
-    for i in range(0, len(points), batch_size):
-        client.upsert(collection_name=JOBS_COLLECTION, points=points[i : i + batch_size])
-
-    print(f"  Done. {len(points)} job vectors stored.")
+    print(f"\n[6/7] Indexing {len(job_rows)} jobs into Weaviate (hybrid: BM25 + semantic)...")
+    chunk_count = weaviate_index_jobs(job_rows)
+    print(f"  Done. {chunk_count} chunk objects stored.")
 
 
 # ---------------------------------------------------------------------------
-# Step 7: Embed courses → Qdrant
+# Step 7: Embed courses → Weaviate
 # ---------------------------------------------------------------------------
 
 def embed_courses(course_rows: list[dict]):
-    print(f"\n[7/7] Embedding {len(course_rows)} courses into Qdrant...")
-    client = get_qdrant()
-    points = []
+    from index_courses import index_courses as weaviate_index_courses
 
-    for course in course_rows:
-        skills_text = " ".join(
-            s["skill"] for s in (course.get("skills_courses_json") or [])
-        )
-        text = f"{course['course_code']} {course['title']} {course['description']} {skills_text}"
-        vector = embed(text)
-        points.append(
-            PointStruct(
-                id=str(uuid.UUID(course["course_id"])),
-                vector=vector,
-                payload={
-                    "course_id": course["course_id"],
-                    "course_code": course["course_code"],
-                    "title": course["title"],
-                    "skills": [s["skill"] for s in (course.get("skills_courses_json") or [])],
-                },
-            )
-        )
-
-    client.upsert(collection_name=COURSES_COLLECTION, points=points)
-    print(f"  Done. {len(points)} course vectors stored.")
+    print(f"\n[7/7] Indexing {len(course_rows)} courses into Weaviate (hybrid: BM25 + semantic)...")
+    chunk_count = weaviate_index_courses(course_rows)
+    print(f"  Done. {chunk_count} chunk objects stored.")
 
 
 # ---------------------------------------------------------------------------
@@ -353,19 +325,24 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--qdrant-only",
+        "--weaviate-only",
         action="store_true",
-        help="Skip Supabase seeding; only create Qdrant collections and embed.",
+        help="Skip Supabase seeding; only create Weaviate collections and embed.",
     )
     parser.add_argument(
         "--courses-only",
         action="store_true",
         help="Only sync course rows to Supabase.",
     )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Delete all rows from jobs/courses/students and recreate Qdrant collections before ingesting.",
+    )
     args = parser.parse_args()
 
-    if args.qdrant_only and args.courses_only:
-        parser.error("--qdrant-only and --courses-only cannot be used together.")
+    if args.weaviate_only and args.courses_only:
+        parser.error("--weaviate-only and --courses-only cannot be used together.")
 
     print("=" * 60)
     print("  Ingest Pipeline")
@@ -375,21 +352,25 @@ if __name__ == "__main__":
 
     if args.courses_only:
         create_tables()
+        if args.reset:
+            clear_existing_data()
         course_rows = seed_courses()
         print("\n" + "=" * 60)
         print(f"  Course sync complete. {len(course_rows)} rows updated.")
         print("=" * 60)
-    elif not args.qdrant_only:
+    elif not args.weaviate_only:
         create_tables()
+        if args.reset:
+            clear_existing_data()
         job_rows = seed_jobs()
         course_rows = seed_courses()
         seed_students()
-        create_qdrant_collections()
+        create_weaviate_collections()
         embed_jobs(job_rows)
         embed_courses(course_rows)
         should_print_complete = True
     else:
-        print("\n[1-4/7] Skipping Supabase seeding (--qdrant-only).")
+        print("\n[1-4/7] Skipping Supabase seeding (--weaviate-only).")
         print("        Fetching existing rows from Supabase...")
         sb = get_supabase()
         job_rows = [
@@ -397,9 +378,11 @@ if __name__ == "__main__":
                 "job_id": r["job_id"],
                 "title": r["title"],
                 "company": r["company"],
+                "location": r.get("location", ""),
                 "description": r.get("description", ""),
+                SCHEMA_LAYOUT["jobs_skills"]: r.get(SCHEMA_LAYOUT["jobs_skills"]) or [],
             }
-            for r in sb.table("jobs").select("job_id,title,company,description").execute().data
+            for r in sb.table("jobs").select(f"job_id,title,company,location,description,{SCHEMA_LAYOUT['jobs_skills']}").execute().data
         ]
         course_rows = [
             {
@@ -407,13 +390,13 @@ if __name__ == "__main__":
                 "course_code": r["course_code"],
                 "title": r["title"],
                 "description": r.get("description", ""),
-                "skills_courses_json": r.get("skills_courses_json") or [],
+                SCHEMA_LAYOUT["courses_skills"]: r.get(SCHEMA_LAYOUT["courses_skills"]) or [],
             }
-            for r in sb.table("courses").select("*").execute().data
+            for r in sb.table("courses").select(f"course_id,course_code,title,description,{SCHEMA_LAYOUT['courses_skills']}").execute().data
         ]
         print(f"        Loaded {len(job_rows)} jobs, {len(course_rows)} courses.")
 
-        create_qdrant_collections()
+        create_weaviate_collections()
         embed_jobs(job_rows)
         embed_courses(course_rows)
         should_print_complete = True
