@@ -1,0 +1,26 @@
+[
+  {
+    "name": "job-fit question prefers jobs",
+    "question": "What jobs fit my background in software engineering?",
+    "expected": {
+      "top_k_jobs": 6,
+      "top_k_courses": 2
+    }
+  },
+  {
+    "name": "skill-gap question retrieves both jobs and courses",
+    "question": "What courses should I take to close my machine learning skill gaps?",
+    "expected": {
+      "top_k_jobs_min": 3,
+      "top_k_courses_min": 4
+    }
+  },
+  {
+    "name": "greeting skips retrieval",
+    "question": "hello",
+    "expected": {
+      "top_k_jobs": 0,
+      "top_k_courses": 0
+    }
+  }
+]

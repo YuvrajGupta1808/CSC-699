@@ -1,0 +1,61 @@
+[
+  {
+    "name": "role skill question routes to jobs",
+    "kind": "planner",
+    "question": "What skills do I need for backend roles?",
+    "expected": {
+      "intent": "jobs",
+      "top_k_jobs": 6,
+      "top_k_courses": 2
+    }
+  },
+  {
+    "name": "job skill extraction catches rag and graphql",
+    "kind": "job_skill_extraction",
+    "title": "Applied AI Engineer",
+    "description": "Build customer support RAG systems with Python, GraphQL, MongoDB, and PyTorch.",
+    "expected_skills": [
+      "Retrieval-Augmented Generation",
+      "GraphQL",
+      "MongoDB",
+      "PyTorch"
+    ]
+  },
+  {
+    "name": "course matching uses normalized skill names",
+    "kind": "candidate_views",
+    "bundle": {
+      "student": {
+        "name": "Alex",
+        "major": "CS",
+        "skills": ["Python"],
+        "completed_courses": []
+      },
+      "jobs": [
+        {
+          "title": "ML Engineer",
+          "company": "Acme",
+          "gaps": ["ML", "Node.js"],
+          "required_skills": ["Machine Learning", "Node.js"],
+          "covered": ["Python"],
+          "score": 0.9
+        }
+      ],
+      "courses": [
+        {
+          "course_code": "CSC 510",
+          "title": "Machine Learning",
+          "teaches": ["Machine Learning"],
+          "score": 0.8
+        },
+        {
+          "course_code": "CSC 520",
+          "title": "Web APIs",
+          "teaches": ["nodejs"],
+          "score": 0.7
+        }
+      ]
+    },
+    "expected_course_codes": ["CSC 510", "CSC 520"]
+  }
+]
