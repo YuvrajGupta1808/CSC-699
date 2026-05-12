@@ -138,6 +138,7 @@ def _selected_job_fallback_hit(selected_job_id: str) -> dict[str, Any] | None:
         "score": 0.0,
         "semantic_score": 0.0,
         "skill_overlap": 0,
+        "coverage_ratio": 0.0,
     }
 
 
@@ -257,6 +258,12 @@ def search_jobs_node(state: AdvisorState) -> dict[str, Any]:
             job_hits = [fallback_hit] if fallback_hit else []
 
     job_hits = _hydrate_job_hits(job_hits, student_skill_names)
+
+    job_hits = sorted(
+        job_hits,
+        key=lambda h: len(h.get("covered") or []) / max(len(h.get("required_skills") or h.get("skills") or []), 1),
+        reverse=True,
+    )
 
     attach_run_metadata(
         metadata={

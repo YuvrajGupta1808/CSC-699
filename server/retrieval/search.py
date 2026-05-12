@@ -119,6 +119,7 @@ def search_jobs(
         overlap = 0
         if student_skill_set and job_skills:
             overlap = len({normalize_skill_name(s) for s in job_skills} & student_skill_set)
+        coverage_ratio = round(overlap / max(len(job_skills), 1), 4)
         lexical_overlap = count_skill_overlap(list(terms), job_skills)
         title = hit.get("title") or ""
         title_terms = extract_query_terms(title)
@@ -130,6 +131,7 @@ def search_jobs(
             "skills": job_skills,
             "semantic_score": semantic_score,
             "skill_overlap": overlap,
+            "coverage_ratio": coverage_ratio,
             "query_skill_overlap": lexical_overlap,
             "query_title_overlap": title_overlap,
         })
@@ -139,14 +141,15 @@ def search_jobs(
         MIN_JOB_SCORE, score_filtered, len(candidates),
     )
 
-    reranked = _rrf_rerank(candidates, ["semantic_score", "skill_overlap", "query_skill_overlap"])
+    reranked = _rrf_rerank(candidates, ["semantic_score", "coverage_ratio", "query_skill_overlap"])
     for hit in reranked:
         hit["score"] = hit["rrf_score"]
 
     results = reranked[:top_k]
     logger.debug(
-        "search_jobs stage=rrf_rerank top_k=%d returned=%d top_titles=%s",
+        "search_jobs stage=rrf_rerank top_k=%d returned=%d top_titles=%s top_coverage_ratios=%s",
         top_k, len(results), [h.get("title", "?") for h in results[:3]],
+        [h.get("coverage_ratio", 0.0) for h in results[:3]],
     )
     return results
 
