@@ -17,7 +17,7 @@ from retrieval.context_builder import (
     get_student_profile,
 )
 from retrieval.critique import critique_candidate_details
-from retrieval.llm import generate_candidate_details
+from retrieval.llm import generate_candidate_details, generate_direct_response
 from retrieval.observability import (
     aggregate_usage_metadata,
     attach_run_metadata,
@@ -70,7 +70,7 @@ class AdvisorState(TypedDict, total=False):
     status_log: Annotated[list[str], operator.add]
 
 
-def _empty_bundle_for_student(profile: dict[str, Any]) -> dict[str, Any]:
+def empty_bundle_for_student(profile: dict[str, Any]) -> dict[str, Any]:
     return {
         "student": {
             "name": profile.get("name"),
@@ -83,16 +83,14 @@ def _empty_bundle_for_student(profile: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-_THANKS_WORDS = {"thanks", "thank you", "ty", "thx", "thank"}
+# Internal alias kept for graph nodes
+_empty_bundle_for_student = empty_bundle_for_student
+
 
 def _direct_response_text(state: AdvisorState) -> str:
-    intent = state.get("plan", {}).get("intent")
-    if intent == "greeting":
-        user_message = state.get("user_message", "").lower().strip()
-        if user_message in _THANKS_WORDS:
-            return "You're welcome. Let me know if you have other questions about jobs, skills, or courses."
-        return "Hello. Ask about jobs that fit your background, skills you need to build, or courses that can close a gap."
-    return "I do not have enough retrieved evidence to answer that reliably. Ask a more specific question about jobs, skills, or courses."
+    intent = state.get("plan", {}).get("intent", "general")
+    profile = state.get("student_profile", {})
+    return generate_direct_response(profile, state.get("user_message", ""), intent)
 
 
 def _build_job_query(state: AdvisorState) -> str:
@@ -359,10 +357,10 @@ def respond_direct_node(state: AdvisorState) -> dict[str, Any]:
         "scores": {
             "relevance": 10,
             "support": 10,
-            "utility": 8 if state.get("plan", {}).get("intent") == "greeting" else 6,
+            "utility": 8,
             "critique": "",
             "support_findings": [],
-            "total": 9.2 if state.get("plan", {}).get("intent") == "greeting" else 8.2,
+            "total": 9.2,
         },
     }
     return {
@@ -397,27 +395,6 @@ def _generate_candidate_branch(
     view: dict[str, Any],
     conversation_snapshot: list[dict[str, str]],
 ) -> dict[str, Any]:
-    view_bundle = view.get("bundle") or {}
-    view_jobs = view_bundle.get("jobs", []) or []
-    view_courses = view_bundle.get("courses", []) or []
-    view_notes = view_bundle.get("notes", []) or []
-
-    if view_jobs and not view_courses and view_notes:
-        top_job = view_jobs[0]
-        covered = top_job.get("covered") or []
-        gaps = top_job.get("gaps") or []
-        covered_text = ", ".join(covered) if covered else "none"
-        gaps_text = ", ".join(gaps) if gaps else "none"
-        note_text = " ".join(view_notes)
-        text = (
-            f"Based on the retrieved evidence, {top_job['title']} at {top_job['company']} is the clearest fit in this view. "
-            f"You already cover: {covered_text}. "
-            f"Your main gaps are: {gaps_text}. "
-            f"{note_text} "
-            f"I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set."
-        ).strip()
-        return {"view": view, "text": text}
-
     if parent_run is None:
         generation = generate_candidate_details(view["context"], conversation_snapshot, state["user_message"])
         return {
@@ -853,6 +830,68 @@ def build_advisor_graph():
 
 
 ADVISOR_GRAPH = build_advisor_graph()
+
+
+def run_advisor_retrieval(
+    *,
+    user_message: str,
+    student_id: str,
+    conversation_history: list[dict[str, str]],
+    selected_job_id: str | None = None,
+    session_id: str | None = None,
+    on_step: Any = None,
+) -> dict[str, Any]:
+    """
+    Run planning + search + bundle building without any LLM generation or critique.
+    Returns the pipeline state dict plus an `is_direct` flag.
+
+    `on_step(message: str)` is called after each pipeline step completes so the
+    caller can surface live progress (e.g. Streamlit st.write inside st.status).
+    """
+    resolved_session_id = session_id or new_trace_id()
+    turn_id = new_trace_id()
+
+    state: dict[str, Any] = {
+        "user_message": user_message,
+        "student_id": student_id,
+        "selected_job_id": selected_job_id,
+        "session_id": resolved_session_id,
+        "turn_id": turn_id,
+        "conversation_history": conversation_history or [],
+        "status_log": [],
+    }
+
+    def _apply(update: dict[str, Any]) -> None:
+        new_logs: list[str] = update.pop("status_log", [])
+        state["status_log"].extend(new_logs)
+        state.update(update)
+        if on_step:
+            for msg in new_logs:
+                on_step(msg)
+
+    _apply(load_student_node(state))
+    _apply(plan_retrieval_node(state))
+
+    plan = state["plan"]
+    is_direct = (
+        plan.get("intent") == "greeting"
+        or (plan.get("top_k_jobs", 0) == 0 and plan.get("top_k_courses", 0) == 0)
+    )
+
+    if is_direct:
+        return {**state, "is_direct": True}
+
+    _apply(search_jobs_node(state))
+    _apply(search_courses_node(state))
+
+    # If retrieval returned nothing at all, fall back to direct response
+    if not state.get("job_hits") and not state.get("course_hits"):
+        return {**state, "is_direct": True}
+
+    _apply(build_bundle_node(state))
+    _apply(build_candidate_views_node(state))
+
+    return {**state, "is_direct": False}
 
 
 def run_advisor_turn(

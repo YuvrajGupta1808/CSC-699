@@ -1,0 +1,680 @@
+[
+  {
+    "id": "GQ-01",
+    "category": "Specific Job Fit",
+    "student": "Alex Chen",
+    "message": "Am I a good fit for the Junior Software Engineer role at Leidos?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 55.5,
+    "response": "Based on the retrieved evidence, Applied Computer Vision Engineer (TS/SCI) at Vantor is the clearest fit in this view. You already cover: Python. Your main gaps are: Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. No retrieved courses clearly address these gaps for Applied Computer Vision Engineer (TS/SCI): Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Applied Computer Vision Engineer (TS/SCI) at Vantor\n  Required: Computer Vision, Python, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing\n  Student covers: Python\n  Gaps: Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing\n  Source excerpt (job description): Vantor is forging the new frontier of spatial intelligence, helping decision makers and operators navigate what\u2019s happening now and shape what\u2019s coming next. Vantor is a place for problem solvers, changemakers, and go-getters\u2014where people are working together to help our customers see the world differently, and in doing so, be seen differently. Come be part of a mission, not just a job, where you can: Shape your own future, build the next big thing, and change the world. To be eligible for th...",
+      "RETRIEVAL NOTES\n- No retrieved courses clearly address these gaps for Applied Computer Vision Engineer (TS/SCI): Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing."
+    ],
+    "plan": {
+      "intent": "jobs",
+      "top_k_jobs": 6,
+      "top_k_courses": 2,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 6,
+      "support": 10,
+      "utility": 7,
+      "total": 7.85
+    },
+    "ragas_scores": {
+      "faithfulness": 0.625,
+      "response_relevancy": 0.0,
+      "context_precision": 0.5
+    },
+    "ragas_avg": 0.375
+  },
+  {
+    "id": "GQ-04",
+    "category": "Skill Gap Analysis",
+    "student": "Alex Chen",
+    "message": "What specific skills am I missing to qualify for a full stack engineering role?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 51.5,
+    "response": "Based on the relevant job posting and course, it appears that you are missing the following skills:\n\n* TypeScript\n* React\n* Angular\n* HTML/CSS\n* PostgreSQL\n* Operating Systems\n* Technical Communication\n\nAdditionally, having experience with these technologies will likely be beneficial for a full stack engineering role.\n\nHowever, considering your completed courses, I recommend taking CSC 694: Cooperative Education: Computer Science to address the gap in Technical Communication. This course addresses one of the gaps you have in the job posting.\n\nIf you'd like to explore other options, you could also consider taking additional courses that focus on these missing skills, such as learning more about front-end development with React and Angular, or gaining experience with database management using PostgreSQL.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Software Engineer - Customer Portal at Applied Intuition\n  Required: Python, TypeScript, React, Angular, HTML/CSS, PostgreSQL, Operating Systems, Technical Communication\n  Student covers: Python\n  Gaps: TypeScript, React, Angular, HTML/CSS, PostgreSQL, Operating Systems, Technical Communication\n  Source excerpt (job description): About Applied Intuition Applied Intuition, Inc. is powering the future of physical AI. Founded in 2017 and now valued at $15 billion, the Silicon Valley company is creating the digital infrastructure needed to bring intelligence to every moving machine on the planet. Applied Intuition services the automotive, defense, trucking, construction, mining and agriculture industries in three core areas: tools and infrastructure, operating systems, and autonomy. Eighteen of the top 20 global automaker...",
+      "RELEVANT COURSES (top 1 retrieved \u2014 not an exhaustive list)\n- CSC 694: Cooperative Education: Computer Science\n  Teaches: Industry Development, Project Management, Technical Communication, Agile Practices, Team Collaboration and Code Review, Problem Solving in Business Context, Career Development, Industry Tools, Technical Report Writing, Self-Direction and Initiative, Quality Assurance in Industry, Time Management\n  Addresses gaps: Technical Communication\n  Source excerpt (course description): Projects in a business, government, or industrial position of at least one semester's duration. May be repeated for a total of 3 units. (This course is not eligible for certification for enrollment with the VA.)"
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 8,
+      "utility": 8,
+      "total": 8.0
+    },
+    "ragas_scores": {
+      "faithfulness": 1.0,
+      "response_relevancy": 0.92,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.973
+  },
+  {
+    "id": "GQ-06",
+    "category": "Skill Gap Analysis",
+    "student": "Sam Patel",
+    "message": "What is the single most important skill I should learn next to become more employable?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 48.3,
+    "response": "Based on the provided information, it appears that learning Python would be a crucial step in addressing your gaps. You are currently proficient in Java, but none of the relevant job postings require Java as a required skill. However, all of them list Python as a required or desirable skill.\n\nAmong the courses you've completed and retrieved, CSC 411: Intermediate Machine Learning for Interdisciplinary Data Scientists and CSC 871: Deep Learning both teach Python. Additionally, CSC 306: An Interdisciplinary Approach to Computer Programming also covers Python. \n\nLearning Python would address your gaps in Python and provide a valuable skillset that aligns with the requirements of the job postings you've seen.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Sam Patel\nMajor: Computer Science\nCurrent skills: Java, Programming Fundamentals, Computational Thinking, Problem Solving\nCompleted courses: CSC 101, CSC 110, CSC 215",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Product Engineer 1 - Customization and Framework at Esri\n  Required: Python, Java, JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Student covers: Java\n  Gaps: Python, JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Source excerpt (job description): ArcGIS Pro is a powerful geographic information system (GIS) software that is used to analyze, visualize, and share spatial data, helping to solve real-world problems. As a product engineer on the desktop architecture team, you will help define and build the application framework for ArcGIS Pro. This includes all aspects of customizing the application, keyboard shortcuts, UI tweaks, and ensuring the application is extensible via 3rd party developer code. GIS application developers and power u...",
+      "RELEVANT COURSES (top 4 retrieved \u2014 not an exhaustive list)\n- CSC 411: Intermediate Machine Learning for Interdisciplinary Data Scientists\n  Teaches: Python, TensorFlow and Keras, Deep Neural Networks, Transfer Learning, Linear Models, Data Preprocessing, Model Training and Evaluation, Hyperparameter Tuning, Cross-Validation, Scikit-learn, Pandas and NumPy, Image and Text Classification, Data Visualization, Jupyter Notebooks and Colab, Applied ML Workflows, Domain Adaptation\n  Addresses gaps: Python\n  Source excerpt (course description): Intermediate machine learning concepts and tools. Focus on application development, linear model, deep neural network and transfer learning using Python, Tensorflow, and Keras. [Formerly CSC 308]\n- CSC 871: Deep Learning\n  Teaches: Python, PyTorch, Deep Neural Networks, Convolutional Neural Networks, RNNs, Transformer Architecture, Transfer Learning, Optimization Algorithms, Regularization, GPU Computing, Dataset Management, Model Evaluation and Metrics, Hyperparameter Tuning, Research Implementation, Generative Models, Experiment Tracking, MLOps and Model Deployment\n  Addresses gaps: Python\n  Source excerpt (course description): Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only)\n- CSC 306: An Interdisciplinary Approach to Computer Programming\n  Teaches: Python, Procedural Programming, Scientific Computing, NumPy and SciPy, Data Analysis, Problem Solving, Control Flow, File I/O, Data Visualization, Jupyter Notebooks, Debugging, Mathematical Modeling, Abstraction, Interdisciplinary Collaboration, Technical Documentation\n  Addresses gaps: Python\n  Source excerpt (course description): Basics of programming for interdisciplinary problem-solving, using Python.Topics include basic building blocks of programming (variables, control statements, loops, function, abstraction, and more) and problem-solving approaches relevant to problems in the natural sciences.\n- CSC 671: Deep Learning\n  Teaches: Python, PyTorch, Deep Neural Networks, Convolutional Neural Networks, RNNs, Transformer Architecture, Transfer Learning, Optimization Algorithms, Regularization, GPU Computing, Dataset Management, Model Evaluation, Hyperparameter Tuning, Research Implementation, TensorBoard / Weights & Biases, Generative Models, MLOps\n  Addresses gaps: Python\n  Source excerpt (course description): Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only) Syllabus terms: Fall 2024."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 9,
+      "support": 9,
+      "utility": 9,
+      "total": 9.0
+    },
+    "ragas_scores": {
+      "faithfulness": 0.875,
+      "response_relevancy": 0.685,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.853
+  },
+  {
+    "id": "GQ-07",
+    "category": "Course Recommendation",
+    "student": "Alex Chen",
+    "message": "Which courses should I take to become competitive for web development jobs?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 65.6,
+    "response": "To be competitive for web development jobs, I recommend taking CSC 317: Introduction to Web Software Development and CSC 867/667: Internet Application Design and Development.\n\nThese two courses cover essential topics in web software development, including client-side and server-side programming, database integration, RESTful APIs, form validation and sanitization, session management and cookies, and cloud deployment. Additionally, they introduce popular front-end frameworks (HTML5/CSS3, JavaScript, React.js) and back-end technologies (Node.js, Express.js).\n\nCSC 317 provides a solid foundation in web development basics, while CSC 867/667 offers more advanced topics, including RESTful API design, database ORM, and agile development. Taking both courses will give you a comprehensive understanding of the web development field.\n\nNote that I'm not recommending CSC 307: An Interdisciplinary Approach to Web Programming as it covers a broader scope of web-related topics, some of which might be covered in more specialized courses like CSC 867/667.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT COURSES (top 5 retrieved \u2014 not an exhaustive list)\n- CSC 307: An Interdisciplinary Approach to Web Programming\n  Teaches: HTML and CSS, PHP, Python, SQL and MySQL, Web Development, Database Design, Client-Server Architecture, Form Validation, Web Security, Web Debugging, Database Querying, Scientific Communication, Interdisciplinary Collaboration, Version Control\n  Source excerpt (course description): Basics of WWW engineering relevant to studies in interdisciplinary problem-solving. Topics include the basics of developing web and database applications, HTML, PHP, Python, SQL, and MySQL database.\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024.\n- CSC 412: Advanced Software Lab\n  Teaches: Advanced Python, REST API Development, Web Technologies, Git/GitHub Advanced Usage, Docker Containerization, CI/CD Basics, Database Integration, Cloud Platform Basics, Debugging and Profiling, Code Review, Testing, Technical Documentation, Software Development Tools, JavaScript/Node.js Basics\n  Source excerpt (course description): Hands-on exercises in advanced programming, software development tools, and web technologies. Students are encouraged to bring their laptops. Activity. May be repeated for a total of 2 units. (Plus-minus letter grade only)\n- CSC 867: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Software Architecture, Research and Technical Writing\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required.\n- CSC 667: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Agile Development, Technical Documentation\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required. Syllabus terms: Spring 2025."
+    ],
+    "plan": {
+      "intent": "courses",
+      "top_k_jobs": 0,
+      "top_k_courses": 6,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 8,
+      "utility": 7,
+      "total": 7.75
+    },
+    "ragas_scores": {
+      "faithfulness": 0.727,
+      "response_relevancy": 0.893,
+      "context_precision": 0.5
+    },
+    "ragas_avg": 0.707
+  },
+  {
+    "id": "GQ-10",
+    "category": "Career Readiness",
+    "student": "Alex Chen",
+    "message": "I'm graduating in 6 months. Give me an honest assessment of my job market readiness.",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 74.9,
+    "response": "Based on the information provided, I'd say you're not entirely ready for the job market just yet.\n\nYou've completed some relevant courses, such as CSC 101, CSC 220, and CSC 315, but there are significant gaps in your skill set that need to be addressed. Specifically, you lack experience with:\n\n1. Automation\n2. Kubernetes\n3. Azure\n4. AKS (Azure Kubernetes Service)\n5. Terraform\n6. Chef\n7. Docker\n8. Prometheus\n9. Grafana\n10. ELK/EFK\n11. CI/CD\n12. Go\n13. Bash\n14. PowerShell\n\nAdditionally, the job posting for the Senior Site Reliability Engineer at iManage highlights the importance of a broader range of skills, including:\n\n* Cloud and distributed computing concepts (not directly addressed in your current courses)\n* Serverless Computing\n* MapReduce\n* NoSQL Databases\n* Apache Kafka\n* Distributed Consensus\n* CAP Theorem and Consistency Models\n* Infrastructure as Code\n\nWhile you have experience with Data Structures, Algorithms, Object-Oriented Programming, and Python, Java, there is still a need to bridge the gaps in your skill set.\n\nTo get more job market ready, I recommend taking the following courses:\n\n1. CSC 847: Cloud and Distributed Computing: Concepts and Applications (already retrieved) - This course addresses several of the gaps mentioned above, including Kubernetes.\n2. Additional relevant courses or training programs that cover Automation, CI/CD, and cloud computing concepts would be beneficial.\n\nKeep in mind that this assessment is based on limited information, and I may not have considered all aspects of your skill set. If you'd like to discuss further or explore additional options, I'm here to help.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Senior Site Reliability Engineer at iManage\n  Required: Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, Java, Python, Go, Bash, PowerShell\n  Student covers: Java, Python\n  Gaps: Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, Go, Bash, PowerShell\n  Source excerpt (job description): SRE is part of a global organization that leverages the latest technology to communicate with our colleagues across the globe. We organize ourselves into distributed teams -- SRE teams are anchored to iManage offices across the globe. Tuesdays and Thursdays are dedicated to in-office collaboration, rapid innovation, and developing a sense of belonging at iManage. Mondays and Fridays are reserved for (remote-friendly) focus time to get things done. Have the best of both work styles in a workpl...",
+      "RELEVANT COURSES (top 1 retrieved \u2014 not an exhaustive list)\n- CSC 847: Cloud and Distributed Computing: Concepts and Applications\n  Teaches: AWS / GCP / Azure, Docker Containerization, Kubernetes, Microservices Architecture, Serverless Computing, MapReduce, NoSQL Databases, Apache Kafka, Distributed Consensus, CAP Theorem and Consistency Models, Infrastructure as Code, Cloud CI/CD, Virtualization, Cloud Security and IAM, Cost Management and Cloud FinOps, Service Mesh\n  Addresses gaps: Kubernetes\n  Source excerpt (course description): Infrastructure, platform, and software as a service. Includes enabling techniques behind cloud computing including virtualization, multi-tenancy, and service-oriented architecture. Cloud storage options such as NoSQL databases, emerging technologies such as containers and Kubernetes, parallel and distributed computing platforms including MapReduce and Apache Sparc, and hands-on experience on public clouds such as the Amazon Cloud and Google Cloud. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "broad",
+      "top_k_jobs": 6,
+      "top_k_courses": 6,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 7,
+      "support": 6,
+      "utility": 8,
+      "total": 6.85
+    },
+    "ragas_scores": {
+      "faithfulness": null,
+      "response_relevancy": 0.0,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.5
+  },
+  {
+    "id": "GQ-13",
+    "category": "Job Comparison",
+    "student": "Alex Chen",
+    "message": "Between a software engineering role at Microsoft and one at a startup like Giga, which is a better fit for where I am now?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 61.2,
+    "response": "Based on the job posting excerpt for Software Engineer, University Grad at Glean, it appears that both Microsoft and Giga require additional skills beyond what you've already completed. \n\nGlean requires JavaScript, Natural Language Processing, Distributed Systems, in addition to the skills you've covered. It seems more aligned with your current skill set.\n\nMicrosoft's requirements don't have any gaps directly addressed by the courses you've completed (CSC 101, CSC 220, CSC 315, and CSC 340). However, CSC 867: Internet Application Design and Development does cover JavaScript, which addresses one of Glean's gap requirements.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Software Engineer, University Grad at Glean\n  Required: Python, Java, JavaScript, Natural Language Processing, Distributed Systems, Data Structures, Algorithms\n  Student covers: Python, Java, Data Structures, Algorithms\n  Gaps: JavaScript, Natural Language Processing, Distributed Systems\n  Source excerpt (job description): About the Role: Are you a recent university graduate with a passion for software engineering and a desire to make a difference in the tech world? We are seeking highly motivated and creative graduates to join our team in various software engineering roles: Backend Engineer, Product Engineer, and ML Engineer. As a University Graduate Software Engineer, you will participate in designing, developing, and maintaining software solutions that power our products and services. Team placements will be...",
+      "RELEVANT COURSES (top 2 retrieved \u2014 not an exhaustive list)\n- CSC 867: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Software Architecture, Research and Technical Writing\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required.\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024."
+    ],
+    "plan": {
+      "intent": "jobs",
+      "top_k_jobs": 6,
+      "top_k_courses": 2,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 6,
+      "utility": 8,
+      "total": 7.2
+    },
+    "ragas_scores": {
+      "faithfulness": 0.5,
+      "response_relevancy": 0.674,
+      "context_precision": 0.583
+    },
+    "ragas_avg": 0.586
+  },
+  {
+    "id": "GQ-15",
+    "category": "Action Plan",
+    "student": "Alex Chen",
+    "message": "What are the top 3 most impactful things I can do this semester to improve my job prospects?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 80.0,
+    "response": "Based on your current skills and the gaps identified from the relevant job postings, I recommend the following top 3 most impactful things you can do this semester to improve your job prospects:\n\n1. **Take CSC 847: Cloud and Distributed Computing: Concepts and Applications**. This course addresses several key gaps in your skillset, including Kubernetes, NoSQL Databases, and Infrastructure as Code. By taking this course, you'll gain a deeper understanding of cloud computing concepts and how to apply them in a real-world setting.\n2. **Take CSC 317: Introduction to Web Software Development** or **CSC 667/867: Internet Application Design and Development**, whichever is available. These courses cover essential skills for web development, including JavaScript, Node.js, RESTful APIs, and database management. By taking one of these courses, you'll gain hands-on experience with modern web technologies.\n3. **Take CSC 694: Cooperative Education: Computer Science** or find alternative experiential learning opportunities that focus on technical communication. Although your current gap in technical communication is substantial, the skills learned in this course can be applied to many areas of software engineering and tech industry work.\n\nThese recommendations address the most significant gaps in your skillset, which should help you improve your job prospects.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 6 retrieved \u2014 not an exhaustive list)\n- Site Reliability Engineer at Equifax\n  Required: AWS, GCP, Terraform, Jenkins, Python, Bash, Java, Go, JavaScript, Node.js, Docker, Kubernetes, CI/CD, Linux, Windows, Infrastructure as Code\n  Student covers: Python, Java\n  Gaps: AWS, GCP, Terraform, Jenkins, Bash, Go, JavaScript, Node.js, Docker, Kubernetes, CI/CD, Linux, Windows, Infrastructure as Code\n  Source excerpt (job description): Equifax is where you can power your possible. If you want to achieve your true potential, chart new paths, develop new skills, collaborate with bright minds, and make a meaningful impact, we want to hear from you. Site Reliability Engineering (SRE) at Equifax is a discipline that combines software and systems engineering for building and running large-scale, distributed, fault-tolerant systems. SRE ensures that internal and external services meet or exceed reliability and performance expectat...\n- Software Engineer Lead at Toyota\n  Required: Java, Spring Boot, Cloud-Native Technologies, Microservices, REST APIs, CI/CD, DevOps, Kubernetes, NoSQL Databases, Agile/Scrum, Domain-Driven Design, Event-Driven Architecture, Monitoring Tools, Technical Leadership, Collaboration, Technical Communication\n  Student covers: Java\n  Gaps: Spring Boot, Cloud-Native Technologies, Microservices, REST APIs, CI/CD, DevOps, Kubernetes, NoSQL Databases, Agile/Scrum, Domain-Driven Design, Event-Driven Architecture, Monitoring Tools, Technical Leadership, Collaboration, Technical Communication\n  Source excerpt (job description): Overview Who we are Collaborative. Respectful. A place to dream and do. These are just a few words that describe what life is like at Toyota. As one of the world\u2019s most admired brands, Toyota is growing and leading the future of mobility through innovative, high-quality solutions designed to enhance lives and delight those we serve. We\u2019re looking for talented team members who want to Dream. Do. Grow. with us. An important part of the Toyota family is Toyota Financial Services (TFS), the finan...\n- (USA) Senior, Software Engineer at Walmart\n  Required: Java, Python, Spring Boot, RESTful services, Microservices, BigQuery, SQL, Data modeling, Stored procedures, Cloud-based applications, GCP, CI/CD pipelines, Automated testing, Kubernetes, Docker, Distributed Systems\n  Student covers: Java, Python\n  Gaps: Spring Boot, RESTful services, Microservices, BigQuery, SQL, Data modeling, Stored procedures, Cloud-based applications, GCP, CI/CD pipelines, Automated testing, Kubernetes, Docker, Distributed Systems\n  Source excerpt (job description): Position Summary... What you'll do... Walmart Global Tech builds the technology that powers one of the world\u2019s largest retailers, serving millions of customers and associates every day. Our teams work at massive scale, solving complex problems across commerce, data, and platform engineering. International Real Estate owns and delivers the technology that enables site selection, store constructing, property management, store asset management, and facilitating maintenance across the enterprise....\n- Senior Computer Vision Engineer at Niantic Spatial\n  Required: Computer Vision, Python, C++, Structure from Motion, Visual Positioning System, 3D Mapping, PyTorch, JAX, Git, CUDA, Shader Programming, Machine Learning, Algorithm Development, Performance Optimization, Technical Leadership, Geospatial AI\n  Student covers: Python\n  Gaps: Computer Vision, C++, Structure from Motion, Visual Positioning System, 3D Mapping, PyTorch, JAX, Git, CUDA, Shader Programming, Machine Learning, Algorithm Development, Performance Optimization, Technical Leadership, Geospatial AI\n  Source excerpt (job description): At Niantic Spatial, we\u2019re building the future of geospatial AI. Powered by a proprietary database of over 30 billion posed images and a groundbreaking third-generation digital map, our mission is to develop spatial intelligence that helps both humans and machines better understand, navigate, and engage with the physical world. Our high-fidelity mapping technology unlocks a new dimension of interaction\u2014laying the foundation for AI to truly comprehend and operate within real-world environments....\n- Data Scientist / Software Developer at Titan Technologies\n  Required: Python, NLP, LLM Workflows, Quantitative Evaluation, Ontology Management, Knowledge Graphs, API Development, Semantic Engineering, Prompting, Retrieval, Fine-tuning, Agent Integration, Version Control, Software Testing, Data Science, Software Development\n  Student covers: Python\n  Gaps: NLP, LLM Workflows, Quantitative Evaluation, Ontology Management, Knowledge Graphs, API Development, Semantic Engineering, Prompting, Retrieval, Fine-tuning, Agent Integration, Version Control, Software Testing, Data Science, Software Development\n  Source excerpt (job description): Titan is hiring! We are seeking a highly qualified Data Scientist / Software Developer to support mission-critical, AI-based services for a government client operating in a secure, classified environment. Consider this exciting opportunity to work at the forefront of applied AI and knowledge systems, directly impacting national-level initiatives. In this role, you will play a pivotal role in designing, managing, and evolving AI-driven solutions that enable users to leverage private and sensit...\n- Senior DevOps Engineer I at Spring Health\n  Required: DevOps, AWS, Azure, GCP, Infrastructure as Code, Kubernetes, EKS, Automation, Telemetry, Observability, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance\n  Student covers: none\n  Gaps: DevOps, AWS, Azure, GCP, Infrastructure as Code, Kubernetes, EKS, Automation, Telemetry, Observability, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance\n  Source excerpt (job description): OUR MISSION: TO ELIMINATE EVERY BARRIER TO MENTAL HEALTH. At Spring Health, we\u2019re on a mission to revolutionize mental healthcare by removing every barrier that prevents people from getting the help they need, when they need it. Our clinically validated technology, Precision Mental Healthcare [https://www.springhealth.com/our-approach], empowers us to deliver the right care at the right time\u2014whether it\u2019s therapy, coaching, medication, or beyond\u2014tailored to each individual\u2019s needs. We proudly ...",
+      "RELEVANT COURSES (top 5 retrieved \u2014 not an exhaustive list)\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Addresses gaps: JavaScript, Node.js, RESTful APIs\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024.\n- CSC 667: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Agile Development, Technical Documentation\n  Addresses gaps: JavaScript, Node.js\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required. Syllabus terms: Spring 2025.\n- CSC 867: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Software Architecture, Research and Technical Writing\n  Addresses gaps: JavaScript, Node.js\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required.\n- CSC 847: Cloud and Distributed Computing: Concepts and Applications\n  Teaches: AWS / GCP / Azure, Docker Containerization, Kubernetes, Microservices Architecture, Serverless Computing, MapReduce, NoSQL Databases, Apache Kafka, Distributed Consensus, CAP Theorem and Consistency Models, Infrastructure as Code, Cloud CI/CD, Virtualization, Cloud Security and IAM, Cost Management and Cloud FinOps, Service Mesh\n  Addresses gaps: Kubernetes, NoSQL Databases, Infrastructure as Code\n  Source excerpt (course description): Infrastructure, platform, and software as a service. Includes enabling techniques behind cloud computing including virtualization, multi-tenancy, and service-oriented architecture. Cloud storage options such as NoSQL databases, emerging technologies such as containers and Kubernetes, parallel and distributed computing platforms including MapReduce and Apache Sparc, and hands-on experience on public clouds such as the Amazon Cloud and Google Cloud. (Plus-minus letter grade only)\n- CSC 694: Cooperative Education: Computer Science\n  Teaches: Industry Development, Project Management, Technical Communication, Agile Practices, Team Collaboration and Code Review, Problem Solving in Business Context, Career Development, Industry Tools, Technical Report Writing, Self-Direction and Initiative, Quality Assurance in Industry, Time Management\n  Addresses gaps: Technical Communication\n  Source excerpt (course description): Projects in a business, government, or industrial position of at least one semester's duration. May be repeated for a total of 3 units. (This course is not eligible for certification for enrollment with the VA.)"
+    ],
+    "plan": {
+      "intent": "broad",
+      "top_k_jobs": 6,
+      "top_k_courses": 6,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 10,
+      "support": 8,
+      "utility": 10,
+      "total": 9.2
+    },
+    "ragas_scores": {
+      "faithfulness": 0.923,
+      "response_relevancy": 0.776,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.9
+  },
+  {
+    "id": "GQ-17",
+    "category": "Domain Pivot",
+    "student": "Alex Chen",
+    "message": "I want to pivot into data science. What's the gap between where I am and data science jobs?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 79.2,
+    "response": "Based on the job posting for Clinical Data Scientist at RedSail Technologies, it seems that you have a good foundation in programming languages like Python, but there are several gaps in your skills.\n\nYou're missing SQL, PowerBI, Tableau, Go, Data Visualization, Statistical Analysis, Data Cleaning, Exploratory Data Analysis, Feature Engineering, HIPAA Compliance, and Data Collection. \n\nThe CSC 311: Data Structures for Data Science Application Development course seems like a good starting point to address some of these gaps, particularly in Exploratory Data Analysis.\n\nAdditionally, the CSC 869: Data Mining course covers many of the other missing skills, such as Feature Engineering and Data Visualization.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Clinical Data Scientist at RedSail Technologies\n  Required: SQL, PowerBI, Tableau, Python, Go, Data Visualization, Statistical Analysis, Data Cleaning, Exploratory Data Analysis, Feature Engineering, HIPAA Compliance, Data Collection\n  Student covers: Python\n  Gaps: SQL, PowerBI, Tableau, Go, Data Visualization, Statistical Analysis, Data Cleaning, Exploratory Data Analysis, Feature Engineering, HIPAA Compliance, Data Collection\n  Source excerpt (job description): Clinical Data Scientist Job Summary The RedSail Technologies Network Services Business Unit has the primary mission to create incremental value streams for RedSail through the development and activation of Clinical, Financial, & Operational Programs that leverage our uniquely integrated technology platforms as well as our associated reach within the targeted market segments. The Clinical Data Scientist, will participate in the making use of RedSail\u2019s data to evaluate and establish various imp...",
+      "RELEVANT COURSES (top 2 retrieved \u2014 not an exhaustive list)\n- CSC 311: Data Structures for Data Science Application Development\n  Teaches: Python, Data Structures, Pandas and NumPy, Jupyter Notebooks, Algorithm Analysis, Data Wrangling and Cleaning, Sorting and Searching, Hash Maps, Exploratory Data Analysis, Data Pipeline Design, Statistical Data Structures, Recursion, Visualization, Version Control, Technical Communication\n  Addresses gaps: Exploratory Data Analysis\n  Source excerpt (course description): Focuses on learning about and utilizing data structures and algorithms effectively for developing data science applications. Utilizes Python and Jupyter Notebook. [Formerly CSC 219]\n- CSC 869: Data Mining\n  Teaches: Data Mining Algorithms, Classification, Clustering, Association Rule Mining, Anomaly Detection, Feature Engineering, Dimensionality Reduction, Data Preprocessing and Cleaning, Python, Bioinformatics Mining, Model Evaluation, SQL for Data Extraction, Data Visualization, Research Paper Reading, Knowledge Discovery, Pattern Recognition\n  Addresses gaps: Feature Engineering, Data Visualization\n  Source excerpt (course description): Knowledge discovery process, basic data mining concepts, key mining algorithms, and data mining in practical domains such as bioinformatics. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 6,
+      "top_k_courses": 4,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 10,
+      "support": 4,
+      "utility": 10,
+      "total": 7.6
+    },
+    "ragas_scores": {
+      "faithfulness": 1.0,
+      "response_relevancy": 0.602,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.867
+  },
+  {
+    "id": "GQ-22",
+    "category": "Strong Fit",
+    "student": "Marcus Webb",
+    "message": "Am I ready for a cloud or DevOps engineering role?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 79.9,
+    "response": "Based on your current skills and completed courses, it appears that you have a solid foundation in many areas relevant to cloud engineering. You've taken courses like CSC 647: Cloud Security and Compliance (not directly listed, but likely covered similar topics as CSC 746), which suggests some knowledge of security considerations in the cloud.\n\nHowever, there are still some gaps in your skill set and expertise that you'll need to address for a role in either cloud engineering or DevOps. Specifically:\n\n1. Azure: While you've taken courses on AWS and have experience with other cloud providers (Docker, Kubernetes, Terraform), it seems you lack hands-on experience with Microsoft Azure.\n2. DevSecOps: You've covered some aspects of DevOps (CI/CD, Infrastructure as Code) but not specifically the security component.\n3. Virtualization: Although you have a course on virtualization in CSC 847, reviewing its material to ensure you understand it thoroughly would be beneficial.\n\nTo bridge these gaps and prepare for cloud or DevOps engineering roles, I recommend focusing on:\n\n1. Azure training (online courses, certifications like AZ-900)\n2. Familiarizing yourself with security best practices in cloud environments\n3. Reviewing the material from CSC 847: Cloud and Distributed Computing to solidify your understanding of virtualization",
+    "contexts": [
+      "STUDENT PROFILE\nName: Marcus Webb\nMajor: Computer Science\nCurrent skills: Python, AWS, Docker, Kubernetes, Terraform, CI/CD, Linux, Bash, Git, Go, Infrastructure as Code, Observability, PostgreSQL, Ansible\nCompleted courses: CSC 220, CSC 415, CSC 645, CSC 647, CSC 651, CSC 652, CSC 746",
+      "RELEVANT JOB POSTINGS (top 2 retrieved \u2014 not an exhaustive list)\n- Cloud Engineer at Leidos\n  Required: Azure, Terraform, Ansible, Kubernetes, Docker, DevSecOps, Infrastructure as Code, CI/CD, Virtualization, Network Security, Identity and Access Management, Root Cause Analysis, Cloud Scaling, Hybrid Cloud Infrastructure, Monitoring Tools, Compliance Auditing\n  Student covers: Terraform, Ansible, Kubernetes, Docker, Infrastructure as Code, CI/CD\n  Gaps: Azure, DevSecOps, Virtualization, Network Security, Identity and Access Management, Root Cause Analysis, Cloud Scaling, Hybrid Cloud Infrastructure, Monitoring Tools, Compliance Auditing\n  Source excerpt (job description): The Defense Sector at Leidos is looking for a Cloud Engineer to support multiple fast-paced programs across the Air Force. The Cloud Engineer will deploy, maintain, and scale hybrid cloud digital infrastructure for multiple Air Force customers. This position requires a fast-learning, high-performing candidate with a proven history of delivering cloud solutions to customers. The ideal candidate will have experience in deploying and maintaining cloud infrastructure in Microsoft Azure cloud usin...\n- Site Reliability Engineer at Qlik\n  Required: Terraform, Kubernetes, AWS, Azure, Python, Go, Bash, CI/CD, Prometheus, Open Telemetry, Helm, MongoDB, Infrastructure as Code, Microservices, Networking Security, Observability\n  Student covers: Terraform, Kubernetes, AWS, Python, Go, Bash, CI/CD, Infrastructure as Code, Observability\n  Gaps: Azure, Prometheus, Open Telemetry, Helm, MongoDB, Microservices, Networking Security\n  Source excerpt (job description): What makes us Qlik? A Gartner\u00ae Magic Quadrant\u2122 Leader for 15 years in a row, Qlik transforms complex data landscapes into actionable insights, driving strategic business outcomes. Serving over 40,000 global customers, our portfolio leverages pervasive data quality and advanced AI/ML capabilities that lead to better decisions, faster. We excel in integration and governance solutions that work with diverse data sources, and our real-time analytics uncover hidden patterns, empowering teams to ad...",
+      "RELEVANT COURSES (top 1 retrieved \u2014 not an exhaustive list)\n- CSC 847: Cloud and Distributed Computing: Concepts and Applications\n  Teaches: AWS / GCP / Azure, Docker Containerization, Kubernetes, Microservices Architecture, Serverless Computing, MapReduce, NoSQL Databases, Apache Kafka, Distributed Consensus, CAP Theorem and Consistency Models, Infrastructure as Code, Cloud CI/CD, Virtualization, Cloud Security and IAM, Cost Management and Cloud FinOps, Service Mesh\n  Addresses gaps: Virtualization\n  Source excerpt (course description): Infrastructure, platform, and software as a service. Includes enabling techniques behind cloud computing including virtualization, multi-tenancy, and service-oriented architecture. Cloud storage options such as NoSQL databases, emerging technologies such as containers and Kubernetes, parallel and distributed computing platforms including MapReduce and Apache Sparc, and hands-on experience on public clouds such as the Amazon Cloud and Google Cloud. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "jobs",
+      "top_k_jobs": 6,
+      "top_k_courses": 2,
+      "reason": "job-fit or recommendation question",
+      "classifier": "keyword_fallback"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 6,
+      "utility": 8,
+      "total": 7.2
+    },
+    "ragas_scores": {
+      "faithfulness": 0.833,
+      "response_relevancy": 0.0,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.611
+  },
+  {
+    "id": "GQ-25",
+    "category": "Cross-Disciplinary",
+    "student": "Priya Sharma",
+    "message": "Which courses would strengthen my data science skills specifically for biomedical research?",
+    "model": "llama3.2",
+    "status": "ok",
+    "elapsed_s": 47.4,
+    "response": "Based on your current skillset and completed courses, I recommend the following courses to strengthen your data science skills specifically for biomedical research:\n\n1. CSC 408: Machine Learning and Data Science for Personalized Medicine\n\t* This course covers machine learning and data science concepts applied to genomic datasets, which is highly relevant to biomedical research.\n2. CSC 821 (or CSC 621): Biomedical Imaging and Analysis\n\t* Although there's a minor discrepancy in course titles, both versions cover medical image processing, analysis, and visualization, which are essential skills for working with biomedical data.\n\nThese courses will help you develop the necessary skills in machine learning, data science, and biomedical imaging to tackle common challenges in biomedical research.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Priya Sharma\nMajor: Computer Science / Biology\nCurrent skills: Python, R, SQL, Machine Learning, Bioinformatics, Pandas, Statistical Modeling, Data Analysis, Git, MATLAB, Genomics, Data Visualization\nCompleted courses: CSC 311, CSC 408, CSC 411, CSC 509, CSC 511, CSC 601, CSC 657, CSC 805",
+      "RELEVANT COURSES (top 6 retrieved \u2014 not an exhaustive list)\n- CSC 311: Data Structures for Data Science Application Development\n  Teaches: Python, Data Structures, Pandas and NumPy, Jupyter Notebooks, Algorithm Analysis, Data Wrangling and Cleaning, Sorting and Searching, Hash Maps, Exploratory Data Analysis, Data Pipeline Design, Statistical Data Structures, Recursion, Visualization, Version Control, Technical Communication\n  Source excerpt (course description): Focuses on learning about and utilizing data structures and algorithms effectively for developing data science applications. Utilizes Python and Jupyter Notebook. [Formerly CSC 219]\n- CSC 408: Machine Learning and Data Science for Personalized Medicine\n  Teaches: Python, Machine Learning, Genomic Data Analysis, Bioinformatics Concepts, Data Preprocessing, Classification, Statistical Analysis, Pandas and NumPy, Data Visualization, Healthcare Domain Knowledge, Model Evaluation, Research Literature Review, Scientific Writing, Dimensionality Reduction, Bioinformatics Databases, Jupyter Notebooks\n  Source excerpt (course description): Exploration of the concepts and tools needed to analyze, interpret, and reason from genomic datasets to help medical professionals better treat their patients. Diseases often affect patients differently depending on their genetic background. To make personalized medicine a reality, it is necessary to leverage the data from genomic datasets. Genomic data science applies machine learning and data science to the genome to better diagnose and treat patients. [Formerly CSC 508]\n- CSC 821: Biomedical Imaging and Analysis\n  Teaches: Medical Image Processing, Image Filtering and Enhancement, Image Segmentation, Image Registration, 3D Visualization, Medical Imaging Libraries, Medical Imaging DL, Imaging Physics, Performance Evaluation Metrics, Academic Writing, Medical Statistics, Research Literature Review, Data Annotation and Curation, Ethics in Medical AI\n  Source excerpt (course description): Introduction to medical and biological imaging, imaging physics, 3D image formats, and visualization. Basic digital image processing and analysis, filtering, registration, segmentation, quantification, and performance evaluation. (Plus-minus letter grade only)\n- CSC 602: Interview Preparation for Data Science and Machine Learning for Biotechnology Opportunities\n  Teaches: Technical Interviewing, DS&A for Interviews, Python for Coding Interviews, SQL for Data Science Interviews, System Design Communication, Behavioral Interviewing, Whiteboard Coding, ML Interview Prep, Resume and LinkedIn Optimization, Portfolio Development, Professional Networking, Communication of Technical Concepts, Mock Interview Practice, Domain Knowledge in Biotechnology, Probability and Statistics\n  Source excerpt (course description): Preparation for interviews for data science-related internships and full-time positions in industry. Emphasis on oral and written communication common in coding interviews for problem-solving. Development of interview skills such as how to communicate about technical aspects, describe a problem, and articulate issues. Practice of key problem-solving strategies specific to technical/coding interviews in Biotechnology. (CR/NC grading only)\n- CSC 621: Biomedical Imaging and Analysis\n  Teaches: Medical Image Processing, Image Filtering and Enhancement, Image Segmentation, Image Registration, 3D Medical Imaging, Medical Imaging Libraries, Medical Imaging ML, Imaging Physics, Model Evaluation, Image Feature Extraction, Scientific Writing, Medical Imaging Statistics, Medical Imaging DL, Data Annotation Tools, Ethics and HIPAA in Medical AI\n  Source excerpt (course description): Introduction to medical and biological imaging, imaging physics, 3D image formats, and visualization. Basic digital image processing and analysis, filtering, registration, segmentation, quantification, and performance evaluation. (Plus-minus letter grade only) Syllabus terms: Fall 2023.\n- CSC 869: Data Mining\n  Teaches: Data Mining Algorithms, Classification, Clustering, Association Rule Mining, Anomaly Detection, Feature Engineering, Dimensionality Reduction, Data Preprocessing and Cleaning, Python, Bioinformatics Mining, Model Evaluation, SQL for Data Extraction, Data Visualization, Research Paper Reading, Knowledge Discovery, Pattern Recognition\n  Source excerpt (course description): Knowledge discovery process, basic data mining concepts, key mining algorithms, and data mining in practical domains such as bioinformatics. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "courses",
+      "top_k_jobs": 0,
+      "top_k_courses": 6,
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 9,
+      "support": 8,
+      "utility": 7,
+      "total": 8.1
+    },
+    "ragas_scores": {
+      "faithfulness": 0.545,
+      "response_relevancy": 0.974,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.84
+  },
+  {
+    "id": "GQ-01",
+    "category": "Specific Job Fit",
+    "student": "Alex Chen",
+    "message": "Am I a good fit for the Junior Software Engineer role at Leidos?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 51.1,
+    "response": "Based on the retrieved evidence, Applied Computer Vision Engineer (TS/SCI) at Vantor is the clearest fit in this view. You already cover: Python. Your main gaps are: Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. No retrieved courses clearly address these gaps for Applied Computer Vision Engineer (TS/SCI): Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Applied Computer Vision Engineer (TS/SCI) at Vantor\n  Required: Computer Vision, Python, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing\n  Student covers: Python\n  Gaps: Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing\n  Source excerpt (job description): Vantor is forging the new frontier of spatial intelligence, helping decision makers and operators navigate what\u2019s happening now and shape what\u2019s coming next. Vantor is a place for problem solvers, changemakers, and go-getters\u2014where people are working together to help our customers see the world differently, and in doing so, be seen differently. Come be part of a mission, not just a job, where you can: Shape your own future, build the next big thing, and change the world. To be eligible for th...",
+      "RETRIEVAL NOTES\n- No retrieved courses clearly address these gaps for Applied Computer Vision Engineer (TS/SCI): Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 6,
+      "top_k_courses": 2,
+      "sub_intent": "Assess whether your technical skills and education align with Leidos' Junior Software Engineer requirements.",
+      "reasoning": "The user is asking for a detailed evaluation of their fit into the role based on skill alignment with Leidos' needs.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 6,
+      "support": 5,
+      "utility": 7,
+      "total": 5.85
+    },
+    "ragas_scores": {
+      "faithfulness": 0.625,
+      "response_relevancy": 0.0,
+      "context_precision": 0.5
+    },
+    "ragas_avg": 0.375
+  },
+  {
+    "id": "GQ-04",
+    "category": "Skill Gap Analysis",
+    "student": "Alex Chen",
+    "message": "What specific skills am I missing to qualify for a full stack engineering role?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 74.1,
+    "response": "To qualify for a full stack engineering role, Alex Chen needs to develop specific technical skills. Here's a structured plan based on the identified gaps:\n\n### Required Skills for a Full Stack Engineering Role:\n1. **HTML/CSS/UX Development**: Strong foundational skills in creating responsive and user-friendly interfaces.\n2. **React/Django/PHP/Node.js/Python/TypeScript**: Proficiency in front-end development using key frameworks and languages.\n3. **SQL/Django/Python/Agile/Cloud Computing (AWS)/ML/NLP**: Expertise in database management, cloud technologies, and machine learning integration.\n4. **Web Development with PHP/PHP-Numbers**: Strong background in backend systems and tools for web operations.\n5. **Domain Knowledge in AI, NLP, etc.**: Specialization in areas relevant to current engineering roles.\n\n### Courses Alex Should Complete:\n1. **Web Development with PHP/PHP-Numbers** (CSC 220)\n   - Focus: Developing efficient and maintainable systems using PHP and PHP-NUMBERS.\n   - Skills: PHP programming, server-side scripting, object-oriented programming, error handling, performance optimization.\n\n2. **React/Django/Node.js/Python/TypeScript/UX Development** (CSC 315)\n   - Focus: Building scalable and responsive web applications using React and Django.\n   - Skills: Front-end development, JavaScript, TypeScript, frontend best practices (UX), data APIs, dynamic web solutions.\n\n3. **SQL with Databases/Python/NLP/AI/ML/Docker/CI/Cloud Computing** (CSC 340)\n   - Focus: Managing databases and integrating machine learning systems.\n   - Skills: SQL, database management, Python programming, natural language processing, deep learning frameworks (PyTorch), Docker, CI/CD pipelines.\n\n### Conclusion:\nBy completing these courses, Alex will strengthen his technical skills to qualify for a full stack engineering role. His gaps in TypeScript, React/Django, SQL, AWS, LLMs, and Code Review will be addressed through targeted course completion.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 2 retrieved \u2014 not an exhaustive list)\n- Software Engineer - Customer Portal at Applied Intuition\n  Required: Python, TypeScript, React, Angular, HTML/CSS, PostgreSQL, Operating Systems, Technical Communication\n  Student covers: Python\n  Gaps: TypeScript, React, Angular, HTML/CSS, PostgreSQL, Operating Systems, Technical Communication\n  Source excerpt (job description): About Applied Intuition Applied Intuition, Inc. is powering the future of physical AI. Founded in 2017 and now valued at $15 billion, the Silicon Valley company is creating the digital infrastructure needed to bring intelligence to every moving machine on the planet. Applied Intuition services the automotive, defense, trucking, construction, mining and agriculture industries in three core areas: tools and infrastructure, operating systems, and autonomy. Eighteen of the top 20 global automaker...\n- New Grad Software Engineer at Color\n  Required: Python, React, Django, SQL, AWS, LLMs, Code Review\n  Student covers: Python\n  Gaps: React, Django, SQL, AWS, LLMs, Code Review\n  Source excerpt (job description): About The Role Our New Grad role is designed for students who graduated (or expect to graduate) between May 2025 and June 2026 with a Bachelor\u2019s degree in Computer Science or a related field. Candidates in combined BS/MS programs are also eligible. Candidates who already have full-time industry software engineering experience should consider applying to our other engineering roles. We are hiring recent software engineering graduates to join teams at Color working on new programs and technolog...",
+      "RETRIEVAL NOTES\n- No retrieved courses clearly address the top combined gaps: angular, aws, html css, llms, operating systems, postgresql, react, retrieval augmented generation, sql, typescript.",
+      "RELEVANT COURSES (top 2 retrieved \u2014 not an exhaustive list)\n- CSC 307: An Interdisciplinary Approach to Web Programming\n  Teaches: HTML and CSS, PHP, Python, SQL and MySQL, Web Development, Database Design, Client-Server Architecture, Form Validation, Web Security, Web Debugging, Database Querying, Scientific Communication, Interdisciplinary Collaboration, Version Control\n  Source excerpt (course description): Basics of WWW engineering relevant to studies in interdisciplinary problem-solving. Topics include the basics of developing web and database applications, HTML, PHP, Python, SQL, and MySQL database.\n- CSC 602: Interview Preparation for Data Science and Machine Learning for Biotechnology Opportunities\n  Teaches: Technical Interviewing, DS&A for Interviews, Python for Coding Interviews, SQL for Data Science Interviews, System Design Communication, Behavioral Interviewing, Whiteboard Coding, ML Interview Prep, Resume and LinkedIn Optimization, Portfolio Development, Professional Networking, Communication of Technical Concepts, Mock Interview Practice, Domain Knowledge in Biotechnology, Probability and Statistics\n  Source excerpt (course description): Preparation for interviews for data science-related internships and full-time positions in industry. Emphasis on oral and written communication common in coding interviews for problem-solving. Development of interview skills such as how to communicate about technical aspects, describe a problem, and articulate issues. Practice of key problem-solving strategies specific to technical/coding interviews in Biotechnology. (CR/NC grading only)"
+    ],
+    "plan": {
+      "intent": "jobs",
+      "top_k_jobs": 6,
+      "top_k_courses": 2,
+      "reason": "job-oriented skill requirements question",
+      "classifier": "keyword_fallback"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 6,
+      "utility": 7,
+      "total": 6.95
+    },
+    "ragas_scores": {
+      "faithfulness": null,
+      "response_relevancy": 0.932,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.966
+  },
+  {
+    "id": "GQ-06",
+    "category": "Skill Gap Analysis",
+    "student": "Sam Patel",
+    "message": "What is the single most important skill I should learn next to become more employable?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 62.4,
+    "response": "To address the skill gaps highlighted in the job postings, your next step should focus on expanding your knowledge of deep learning frameworks and improving your programming skills to apply them more effectively. Additionally, you may want to strengthen your computational thinking by taking courses that cover algorithms and data structures.\n\n1. **Deep Learning Frameworks**: Deepen your understanding of deep learning frameworks beyond the scope covered in Csc 871 (Deep Learning). If available, learn how to use TensorFlow or Keras for building more complex models.\n2. **Algorithm and Data Structure Refresher**: Enhance your programming skills by taking a refresher course on algorithm design and data structures, which will be useful in both the Product Engineer and AI Engineer roles.\n3. **Reinforcement of Java Skills**: If applicable, take a Java refresher to solidify your knowledge of more advanced topics like algorithms or object-oriented programming.\n\nThese steps will better prepare you for the specific skills required by both job postings.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Sam Patel\nMajor: Computer Science\nCurrent skills: Java, Programming Fundamentals, Computational Thinking, Problem Solving\nCompleted courses: CSC 101, CSC 110, CSC 215",
+      "RELEVANT JOB POSTINGS (top 2 retrieved \u2014 not an exhaustive list)\n- Product Engineer 1 - Customization and Framework at Esri\n  Required: Python, Java, JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Student covers: Java\n  Gaps: Python, JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Source excerpt (job description): ArcGIS Pro is a powerful geographic information system (GIS) software that is used to analyze, visualize, and share spatial data, helping to solve real-world problems. As a product engineer on the desktop architecture team, you will help define and build the application framework for ArcGIS Pro. This includes all aspects of customizing the application, keyboard shortcuts, UI tweaks, and ensuring the application is extensible via 3rd party developer code. GIS application developers and power u...\n- AI Engineer\n    AI Engineer\n    AI Engineer at Volkswagen AG\n  Required: Deep Learning, Computer Vision, Machine Learning, Python, TensorFlow, AWS, CNN, RNN, LSTM, C++, CUDA, OpenCV, MATLAB, System Architecture, Object Detection, NLP\n  Student covers: none\n  Gaps: Deep Learning, Computer Vision, Machine Learning, Python, TensorFlow, AWS, CNN, RNN, LSTM, C++, CUDA, OpenCV, MATLAB, System Architecture, Object Detection, NLP\n  Source excerpt (job description): Worldwide, the Volkswagen Group has a long tradition of dramatic innovations. The Volkswagen Group with its headquarters in Wolfsburg, Germany is one of the world\u2019s leading automobile manufacturers and the largest carmaker in Europe. The Group comprises twelve brands from seven European countries: Volkswagen Passenger Cars, Audi, SEAT, \u0160KODA, Bentley, Bugatti, Lamborghini, Porsche, Ducati, Volkswagen Commercial Vehicles, Scania and MAN.Brief Role Description This role will be tasked with appl...",
+      "RELEVANT COURSES (top 4 retrieved \u2014 not an exhaustive list)\n- CSC 411: Intermediate Machine Learning for Interdisciplinary Data Scientists\n  Teaches: Python, TensorFlow and Keras, Deep Neural Networks, Transfer Learning, Linear Models, Data Preprocessing, Model Training and Evaluation, Hyperparameter Tuning, Cross-Validation, Scikit-learn, Pandas and NumPy, Image and Text Classification, Data Visualization, Jupyter Notebooks and Colab, Applied ML Workflows, Domain Adaptation\n  Addresses gaps: Python\n  Source excerpt (course description): Intermediate machine learning concepts and tools. Focus on application development, linear model, deep neural network and transfer learning using Python, Tensorflow, and Keras. [Formerly CSC 308]\n- CSC 871: Deep Learning\n  Teaches: Python, PyTorch, Deep Neural Networks, Convolutional Neural Networks, RNNs, Transformer Architecture, Transfer Learning, Optimization Algorithms, Regularization, GPU Computing, Dataset Management, Model Evaluation and Metrics, Hyperparameter Tuning, Research Implementation, Generative Models, Experiment Tracking, MLOps and Model Deployment\n  Addresses gaps: Python\n  Source excerpt (course description): Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only)\n- CSC 306: An Interdisciplinary Approach to Computer Programming\n  Teaches: Python, Procedural Programming, Scientific Computing, NumPy and SciPy, Data Analysis, Problem Solving, Control Flow, File I/O, Data Visualization, Jupyter Notebooks, Debugging, Mathematical Modeling, Abstraction, Interdisciplinary Collaboration, Technical Documentation\n  Addresses gaps: Python\n  Source excerpt (course description): Basics of programming for interdisciplinary problem-solving, using Python.Topics include basic building blocks of programming (variables, control statements, loops, function, abstraction, and more) and problem-solving approaches relevant to problems in the natural sciences.\n- CSC 671: Deep Learning\n  Teaches: Python, PyTorch, Deep Neural Networks, Convolutional Neural Networks, RNNs, Transformer Architecture, Transfer Learning, Optimization Algorithms, Regularization, GPU Computing, Dataset Management, Model Evaluation, Hyperparameter Tuning, Research Implementation, TensorBoard / Weights & Biases, Generative Models, MLOps\n  Addresses gaps: Python\n  Source excerpt (course description): Exploration of the major technology trends that drive Deep Learning. Discussion of concepts and technologies to build, train, and apply fully connected deep neural networks. Focus on understanding the key parameters in a neural network's architecture and learning how Deep Learning actually works. (Plus-minus letter grade only) Syllabus terms: Fall 2024."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "sub_intent": "most-important-skill-i-need-to-learn-next",
+      "reasoning": "The user is asking about their most important skill to enhance employability. This aligns with the intent of identifying skill gaps and focusing on necessary learning.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 8,
+      "utility": 8,
+      "total": 8.0
+    },
+    "ragas_scores": {
+      "faithfulness": 1.0,
+      "response_relevancy": 0.688,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.896
+  },
+  {
+    "id": "GQ-07",
+    "category": "Course Recommendation",
+    "student": "Alex Chen",
+    "message": "Which courses should I take to become competitive for web development jobs?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 72.7,
+    "response": "Alex Chen should take both **CSC 667** and **CSC 317** for a well-rounded approach to web development.\n\n- **CSC 667**: Teaches essential JavaScript, Node.js, React, Express, PostgreSQL, and web security. This course will enhance his skills in frontend components, server-side technologies, databases, and testing.\n  \n- **CSC 317**: Provides a comprehensive foundation in HTML/CSS, Node.js, Express, SQL/MySQL, UNIX/Linux, RESTful APIs, form validation, cookies, security, and database connectivity. This course will cover the broader scope of front-end and back-end development.\n\nThese courses together offer foundational knowledge in both front-end and back-end development, preparing Alex for competitive web development roles.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 2 retrieved \u2014 not an exhaustive list)\n- Product Engineer 1 - Customization and Framework at Esri\n  Required: Python, Java, JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Student covers: Python, Java\n  Gaps: JavaScript, Rust, Testing, Agile/Scrum, Technical Communication\n  Source excerpt (job description): ArcGIS Pro is a powerful geographic information system (GIS) software that is used to analyze, visualize, and share spatial data, helping to solve real-world problems. As a product engineer on the desktop architecture team, you will help define and build the application framework for ArcGIS Pro. This includes all aspects of customizing the application, keyboard shortcuts, UI tweaks, and ensuring the application is extensible via 3rd party developer code. GIS application developers and power u...\n- Software Engineer, University Grad at Glean\n  Required: Python, Java, JavaScript, Natural Language Processing, Distributed Systems, Data Structures, Algorithms\n  Student covers: Python, Java, Data Structures, Algorithms\n  Gaps: JavaScript, Natural Language Processing, Distributed Systems\n  Source excerpt (job description): About the Role: Are you a recent university graduate with a passion for software engineering and a desire to make a difference in the tech world? We are seeking highly motivated and creative graduates to join our team in various software engineering roles: Backend Engineer, Product Engineer, and ML Engineer. As a University Graduate Software Engineer, you will participate in designing, developing, and maintaining software solutions that power our products and services. Team placements will be...",
+      "RELEVANT COURSES (top 2 retrieved \u2014 not an exhaustive list)\n- CSC 667: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Agile Development, Technical Documentation\n  Addresses gaps: JavaScript, React.js\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required. Syllabus terms: Spring 2025.\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024."
+    ],
+    "plan": {
+      "intent": "broad",
+      "top_k_jobs": 6,
+      "top_k_courses": 6,
+      "reason": "broad readiness analysis",
+      "classifier": "keyword_fallback"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 10,
+      "utility": 7,
+      "total": 8.55
+    },
+    "ragas_scores": {
+      "faithfulness": 0.571,
+      "response_relevancy": 0.906,
+      "context_precision": 0.833
+    },
+    "ragas_avg": 0.77
+  },
+  {
+    "id": "GQ-10",
+    "category": "Career Readiness",
+    "student": "Alex Chen",
+    "message": "I'm graduating in 6 months. Give me an honest assessment of my job market readiness.",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 54.6,
+    "response": "**Alex Chen Job Market Assessment**\n\n**Current Skills and Courses:**\n- **Python, Java, Data Structures, Algorithms, Object-Oriented Programming**\n- Completed Courses:\n  - CSC 847: Cloud and Distributed Computing (Teaches AWS/GCP/Azure Docker/Kubernetes, etc.)\n\n**Job Requirements:**\n- Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, Go, Bash, PowerShell.\n\n**Gap Analysis:**\n\nAlex's skills cover most job requirements except for specific cloud technologies beyond the scope of their current course. Specifically:\n- **Gap in Job Postings:** Kubernetes and related cloud platforms (e.g., AWS, Azure) are missing.\n- **Additional Skills Needed:** Advanced roles may require expertise in these cloud technologies.\n\n**Recommendations:**\n1. **CSC 847** is a strong candidate for the gap in **Kubernetes**, providing foundational knowledge essential for iManage's role.\n2. For other cloud-specific roles, courses or additional training in AWS, Azure, or GCP services should be pursued to meet their job requirements.\n\nOverall, Alex has comprehensive skills but needs advanced cloud knowledge beyond CSC 847 to align with the SRE role at iManage.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Senior Site Reliability Engineer at iManage\n  Required: Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, Java, Python, Go, Bash, PowerShell\n  Student covers: Java, Python\n  Gaps: Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, Go, Bash, PowerShell\n  Source excerpt (job description): SRE is part of a global organization that leverages the latest technology to communicate with our colleagues across the globe. We organize ourselves into distributed teams -- SRE teams are anchored to iManage offices across the globe. Tuesdays and Thursdays are dedicated to in-office collaboration, rapid innovation, and developing a sense of belonging at iManage. Mondays and Fridays are reserved for (remote-friendly) focus time to get things done. Have the best of both work styles in a workpl...",
+      "RELEVANT COURSES (top 1 retrieved \u2014 not an exhaustive list)\n- CSC 847: Cloud and Distributed Computing: Concepts and Applications\n  Teaches: AWS / GCP / Azure, Docker Containerization, Kubernetes, Microservices Architecture, Serverless Computing, MapReduce, NoSQL Databases, Apache Kafka, Distributed Consensus, CAP Theorem and Consistency Models, Infrastructure as Code, Cloud CI/CD, Virtualization, Cloud Security and IAM, Cost Management and Cloud FinOps, Service Mesh\n  Addresses gaps: Kubernetes\n  Source excerpt (course description): Infrastructure, platform, and software as a service. Includes enabling techniques behind cloud computing including virtualization, multi-tenancy, and service-oriented architecture. Cloud storage options such as NoSQL databases, emerging technologies such as containers and Kubernetes, parallel and distributed computing platforms including MapReduce and Apache Sparc, and hands-on experience on public clouds such as the Amazon Cloud and Google Cloud. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "sub_intent": "Identify skill gaps and align with career paths.",
+      "reasoning": "The user is assessing their job market readiness by comparing themselves to others. This context suggests they are evaluating skills against specific companies or roles, thus requiring a detailed skill gap analysis.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 7,
+      "utility": 8,
+      "total": 7.6
+    },
+    "ragas_scores": {
+      "faithfulness": 0.667,
+      "response_relevancy": 0.614,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.76
+  },
+  {
+    "id": "GQ-13",
+    "category": "Job Comparison",
+    "student": "Alex Chen",
+    "message": "Between a software engineering role at Microsoft and one at a startup like Giga, which is a better fit for where I am now?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 76.3,
+    "response": "Based on the information provided, the conclusion is that Giga offers a job opportunity focused on web software development skills, which aligns with the courses taken by the student. While Microsoft also provides opportunities in various roles, Giga's emphasis on hands-on experience and specific technical competencies makes it a suitable fit for candidates comfortable with Python, Java, JavaScript, RESTful APIs, API Testing, Session Management, Cloud Deployment, Agile Development, and Technical Documentation.\n\n**Recommendation:** If confident in the specific courses and having some gaps covered, Giga may offer a fitting job opportunity due to its focus on web software development skills.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Software Engineer, University Grad at Glean\n  Required: Python, Java, JavaScript, Natural Language Processing, Distributed Systems, Data Structures, Algorithms\n  Student covers: Python, Java, Data Structures, Algorithms\n  Gaps: JavaScript, Natural Language Processing, Distributed Systems\n  Source excerpt (job description): About the Role: Are you a recent university graduate with a passion for software engineering and a desire to make a difference in the tech world? We are seeking highly motivated and creative graduates to join our team in various software engineering roles: Backend Engineer, Product Engineer, and ML Engineer. As a University Graduate Software Engineer, you will participate in designing, developing, and maintaining software solutions that power our products and services. Team placements will be...",
+      "RELEVANT COURSES (top 3 retrieved \u2014 not an exhaustive list)\n- CSC 867: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Software Architecture, Research and Technical Writing\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required.\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024.\n- CSC 667: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Agile Development, Technical Documentation\n  Addresses gaps: JavaScript\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required. Syllabus terms: Spring 2025."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "sub_intent": "Which role aligns best with my current skill set and project expectations?",
+      "reasoning": "The user is seeking a career choice between two companies that value different experiences. Comparing job roles from each company can help identify potential gaps in skills or projects that may benefit their current situation.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 8,
+      "support": 10,
+      "utility": 7,
+      "total": 8.55
+    },
+    "ragas_scores": {
+      "faithfulness": 0.4,
+      "response_relevancy": 0.622,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.674
+  },
+  {
+    "id": "GQ-15",
+    "category": "Action Plan",
+    "student": "Alex Chen",
+    "message": "What are the top 3 most impactful things I can do this semester to improve my job prospects?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 66.6,
+    "response": "Based on your profile and the job postings, I recommend completing the following CS-related courses that align with the technical skills required for many of the positions listed:\n\n1. **CSC 317: Introduction to Web Software Development**  \n   This course focuses on building modern web applications using JavaScript, HTML5/CSS3, React.js, and Express.js, which are essential for roles requiring web-based solutions.\n\n2. **CSC 667/867: Internet Application Design and Development**  \n   These advanced courses cover topics such as RESTful API design, WebSockets, JWT and OAuth2, which are critical for roles that require modern application architectures.\n\n3. **CSC 867: Internet Application Design and Development**  \n   This course delves deeper into advanced technologies like database ORM, API testing, session management, and cloud deployment, preparing you for roles in mission-critical environments.\n\nBy completing these courses, you will acquire the technical skills needed to succeed in many of the job postings listed, addressing gaps in your current knowledge of web development, modern application design, and internet technologies.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 6 retrieved \u2014 not an exhaustive list)\n- Site Reliability Engineer at Equifax\n  Required: AWS, GCP, Terraform, Jenkins, Python, Bash, Java, Go, JavaScript, Node.js, Docker, Kubernetes, CI/CD, Linux, Windows, Infrastructure as Code\n  Student covers: Python, Java\n  Gaps: AWS, GCP, Terraform, Jenkins, Bash, Go, JavaScript, Node.js, Docker, Kubernetes, CI/CD, Linux, Windows, Infrastructure as Code\n  Source excerpt (job description): Equifax is where you can power your possible. If you want to achieve your true potential, chart new paths, develop new skills, collaborate with bright minds, and make a meaningful impact, we want to hear from you. Site Reliability Engineering (SRE) at Equifax is a discipline that combines software and systems engineering for building and running large-scale, distributed, fault-tolerant systems. SRE ensures that internal and external services meet or exceed reliability and performance expectat...\n- Software Engineer Lead at Toyota\n  Required: Java, Spring Boot, Cloud-Native Technologies, Microservices, REST APIs, CI/CD, DevOps, Kubernetes, NoSQL Databases, Agile/Scrum, Domain-Driven Design, Event-Driven Architecture, Monitoring Tools, Technical Leadership, Collaboration, Technical Communication\n  Student covers: Java\n  Gaps: Spring Boot, Cloud-Native Technologies, Microservices, REST APIs, CI/CD, DevOps, Kubernetes, NoSQL Databases, Agile/Scrum, Domain-Driven Design, Event-Driven Architecture, Monitoring Tools, Technical Leadership, Collaboration, Technical Communication\n  Source excerpt (job description): Overview Who we are Collaborative. Respectful. A place to dream and do. These are just a few words that describe what life is like at Toyota. As one of the world\u2019s most admired brands, Toyota is growing and leading the future of mobility through innovative, high-quality solutions designed to enhance lives and delight those we serve. We\u2019re looking for talented team members who want to Dream. Do. Grow. with us. An important part of the Toyota family is Toyota Financial Services (TFS), the finan...\n- (USA) Senior, Software Engineer at Walmart\n  Required: Java, Python, Spring Boot, RESTful services, Microservices, BigQuery, SQL, Data modeling, Stored procedures, Cloud-based applications, GCP, CI/CD pipelines, Automated testing, Kubernetes, Docker, Distributed Systems\n  Student covers: Java, Python\n  Gaps: Spring Boot, RESTful services, Microservices, BigQuery, SQL, Data modeling, Stored procedures, Cloud-based applications, GCP, CI/CD pipelines, Automated testing, Kubernetes, Docker, Distributed Systems\n  Source excerpt (job description): Position Summary... What you'll do... Walmart Global Tech builds the technology that powers one of the world\u2019s largest retailers, serving millions of customers and associates every day. Our teams work at massive scale, solving complex problems across commerce, data, and platform engineering. International Real Estate owns and delivers the technology that enables site selection, store constructing, property management, store asset management, and facilitating maintenance across the enterprise....\n- Senior Computer Vision Engineer at Niantic Spatial\n  Required: Computer Vision, Python, C++, Structure from Motion, Visual Positioning System, 3D Mapping, PyTorch, JAX, Git, CUDA, Shader Programming, Machine Learning, Algorithm Development, Performance Optimization, Technical Leadership, Geospatial AI\n  Student covers: Python\n  Gaps: Computer Vision, C++, Structure from Motion, Visual Positioning System, 3D Mapping, PyTorch, JAX, Git, CUDA, Shader Programming, Machine Learning, Algorithm Development, Performance Optimization, Technical Leadership, Geospatial AI\n  Source excerpt (job description): At Niantic Spatial, we\u2019re building the future of geospatial AI. Powered by a proprietary database of over 30 billion posed images and a groundbreaking third-generation digital map, our mission is to develop spatial intelligence that helps both humans and machines better understand, navigate, and engage with the physical world. Our high-fidelity mapping technology unlocks a new dimension of interaction\u2014laying the foundation for AI to truly comprehend and operate within real-world environments....\n- Data Scientist / Software Developer at Titan Technologies\n  Required: Python, NLP, LLM Workflows, Quantitative Evaluation, Ontology Management, Knowledge Graphs, API Development, Semantic Engineering, Prompting, Retrieval, Fine-tuning, Agent Integration, Version Control, Software Testing, Data Science, Software Development\n  Student covers: Python\n  Gaps: NLP, LLM Workflows, Quantitative Evaluation, Ontology Management, Knowledge Graphs, API Development, Semantic Engineering, Prompting, Retrieval, Fine-tuning, Agent Integration, Version Control, Software Testing, Data Science, Software Development\n  Source excerpt (job description): Titan is hiring! We are seeking a highly qualified Data Scientist / Software Developer to support mission-critical, AI-based services for a government client operating in a secure, classified environment. Consider this exciting opportunity to work at the forefront of applied AI and knowledge systems, directly impacting national-level initiatives. In this role, you will play a pivotal role in designing, managing, and evolving AI-driven solutions that enable users to leverage private and sensit...\n- Senior DevOps Engineer I at Spring Health\n  Required: DevOps, AWS, Azure, GCP, Infrastructure as Code, Kubernetes, EKS, Automation, Telemetry, Observability, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance\n  Student covers: none\n  Gaps: DevOps, AWS, Azure, GCP, Infrastructure as Code, Kubernetes, EKS, Automation, Telemetry, Observability, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance\n  Source excerpt (job description): OUR MISSION: TO ELIMINATE EVERY BARRIER TO MENTAL HEALTH. At Spring Health, we\u2019re on a mission to revolutionize mental healthcare by removing every barrier that prevents people from getting the help they need, when they need it. Our clinically validated technology, Precision Mental Healthcare [https://www.springhealth.com/our-approach], empowers us to deliver the right care at the right time\u2014whether it\u2019s therapy, coaching, medication, or beyond\u2014tailored to each individual\u2019s needs. We proudly ...",
+      "RELEVANT COURSES (top 3 retrieved \u2014 not an exhaustive list)\n- CSC 317: Introduction to Web Software Development\n  Teaches: JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, UNIX/Linux, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, Web Security, Database Connectivity, E-Commerce Application Development, Deployment Basics\n  Addresses gaps: JavaScript, Node.js, RESTful APIs\n  Source excerpt (course description): Introduction to topics in UNIX and creating web pages including reading and processing user input submitted through web pages, client side and server side programming, connecting a web page to a database, and building an e-commerce site or Internet Application. Syllabus terms: Fall 2024.\n- CSC 667: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Agile Development, Technical Documentation\n  Addresses gaps: JavaScript, Node.js\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required. Syllabus terms: Spring 2025.\n- CSC 867: Internet Application Design and Development\n  Teaches: JavaScript, Node.js, React.js, Express.js, PostgreSQL, RESTful API Design, HTML5/CSS3, WebSockets, JWT and OAuth2, Web Security, Docker Containerization, Git/GitHub CI/CD, Database ORM, API Testing, Session Management, Cloud Deployment, Software Architecture, Research and Technical Writing\n  Addresses gaps: JavaScript, Node.js\n  Source excerpt (course description): Fundamental technologies on which the World Wide Web is based. Extra fee required."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 6,
+      "top_k_courses": 4,
+      "sub_intent": "...",
+      "reasoning": "The question is about improving job prospects, which typically involves developing skills (like technical or soft) that align with specific roles. This fits under the 'skill gap' intent, seeking knowledge or courses to address any skill gaps in preparation for a specific role.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 10,
+      "support": 8,
+      "utility": 10,
+      "total": 9.2
+    },
+    "ragas_scores": {
+      "faithfulness": 0.7,
+      "response_relevancy": 0.619,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.773
+  },
+  {
+    "id": "GQ-17",
+    "category": "Domain Pivot",
+    "student": "Alex Chen",
+    "message": "I want to pivot into data science. What's the gap between where I am and data science jobs?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 69.6,
+    "response": "Alex Chen is transitioning into data science and needs courses that address his skill gaps. Here's a structured summary of the required courses:\n\n1. **RedSails Technologies (Clinical Data Scientist Role)**\n   - **Gaps**: ETL/ELT, Data Modeling, SQL, Cloud Platforms, CI/CD, etc.\n   - **Courses Needed**:\n     - CSC 874: Big Data Analysis covers ETL/ELT and cloud platforms.\n\n2. **Lakeview Loan Servicing (Data Engineer/Mortgage Servicing Role)**\n   - **Gaps**: ETL/ELT, Data Modeling, Cloud Platforms (AWS), CI/CD, etc.\n   - **Courses Needed**:\n     - CSC 874: Big Data Analysis covers ETL/ELT and cloud platforms.\n\n3. **Network Designs Inc. (Data Engineer/Integration Specialist #1768469)**\n   - **Gaps**: ETL Tools, APIs, Microservices, Data Modeling, Data Governance, etc.\n   - **Courses Needed**:\n     - CSC 869: Data Mining covers feature engineering and data visualization.\n\nEach course addresses specific skills that Alex is currently lacking, providing a clear path to transitioning into data science.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Alex Chen\nMajor: Computer Science\nCurrent skills: Python, Java, Data Structures, Algorithms, Object-Oriented Programming\nCompleted courses: CSC 101, CSC 220, CSC 315, CSC 340",
+      "RELEVANT JOB POSTINGS (top 3 retrieved \u2014 not an exhaustive list)\n- Clinical Data Scientist at RedSail Technologies\n  Required: SQL, PowerBI, Tableau, Python, Go, Data Visualization, Statistical Analysis, Data Cleaning, Exploratory Data Analysis, Feature Engineering, HIPAA Compliance, Data Collection\n  Student covers: Python\n  Gaps: SQL, PowerBI, Tableau, Go, Data Visualization, Statistical Analysis, Data Cleaning, Exploratory Data Analysis, Feature Engineering, HIPAA Compliance, Data Collection\n  Source excerpt (job description): Clinical Data Scientist Job Summary The RedSail Technologies Network Services Business Unit has the primary mission to create incremental value streams for RedSail through the development and activation of Clinical, Financial, & Operational Programs that leverage our uniquely integrated technology platforms as well as our associated reach within the targeted market segments. The Clinical Data Scientist, will participate in the making use of RedSail\u2019s data to evaluate and establish various imp...\n- Data Engineer, Mortgage Servicing at Lakeview Loan Servicing\n  Required: ETL/ELT, Data Modeling, SQL, Python, Cloud Platforms, CI/CD, Infrastructure-as-Code, Data Warehousing, Real-time Processing, API Integration, Observability, Financial Data Reconciliation\n  Student covers: Python\n  Gaps: ETL/ELT, Data Modeling, SQL, Cloud Platforms, CI/CD, Infrastructure-as-Code, Data Warehousing, Real-time Processing, API Integration, Observability, Financial Data Reconciliation\n  Source excerpt (job description): Overview The Data Engineer, Mortgage Servicing on the Nebula team acts as the mortgage servicing data subject matter expert and plays a critical role in building and evolving the data foundation that powers analytics, reporting, AI development, and operational decision-making across the organization. This role is responsible for designing, building, and maintaining reliable, scalable, and flexible data systems that support a wide range of internal and external use cases. This role requires do...\n- Data Engineer / Integration Specialist #1768469 at Network Designs Inc.\n  Required: ETL Tools, SQL, Python, Java, APIs, Microservices, Data Modeling, Kafka, Kinesis, AWS GovCloud, FHIR, Docker, Kubernetes, Data Governance, Data Architecture, Cloud-native Data Services\n  Student covers: Python, Java\n  Gaps: ETL Tools, SQL, APIs, Microservices, Data Modeling, Kafka, Kinesis, AWS GovCloud, FHIR, Docker, Kubernetes, Data Governance, Data Architecture, Cloud-native Data Services\n  Source excerpt (job description): About NDi: Network Designs, Inc. (NDi) is a leading Federal contractor that specializes in designing, developing, and delivering information technology and network solutions for government customers. Founded in 1985, NDi's firmly defined core values have driven all aspects of the business, which have been paramount to our company's success and the establishment of an enjoyable workplace atmosphere. At NDi, we believe that our people are the cornerstone of our success, and we value collaborati...",
+      "RELEVANT COURSES (top 3 retrieved \u2014 not an exhaustive list)\n- CSC 311: Data Structures for Data Science Application Development\n  Teaches: Python, Data Structures, Pandas and NumPy, Jupyter Notebooks, Algorithm Analysis, Data Wrangling and Cleaning, Sorting and Searching, Hash Maps, Exploratory Data Analysis, Data Pipeline Design, Statistical Data Structures, Recursion, Visualization, Version Control, Technical Communication\n  Addresses gaps: Exploratory Data Analysis\n  Source excerpt (course description): Focuses on learning about and utilizing data structures and algorithms effectively for developing data science applications. Utilizes Python and Jupyter Notebook. [Formerly CSC 219]\n- CSC 874: Topics in Big Data Analysis\n  Teaches: Big Data Technologies Overview, Apache Spark, Apache Hadoop, Distributed Data Processing, Cloud Data Platforms, Large-Scale ML, Statistical Analysis for Big Data, Data Pipeline Design, Python and Scala for Big Data, Data Quality and Governance, NoSQL Databases, Real-Time Processing, Research Writing, Cloud Cost Optimization\n  Addresses gaps: Real-Time Processing\n  Source excerpt (course description): Introduction to current topics in data sciences and big data analysis. (Plus-minus letter grade only)\n- CSC 869: Data Mining\n  Teaches: Data Mining Algorithms, Classification, Clustering, Association Rule Mining, Anomaly Detection, Feature Engineering, Dimensionality Reduction, Data Preprocessing and Cleaning, Python, Bioinformatics Mining, Model Evaluation, SQL for Data Extraction, Data Visualization, Research Paper Reading, Knowledge Discovery, Pattern Recognition\n  Addresses gaps: Feature Engineering, Data Visualization\n  Source excerpt (course description): Knowledge discovery process, basic data mining concepts, key mining algorithms, and data mining in practical domains such as bioinformatics. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 3,
+      "top_k_courses": 4,
+      "sub_intent": "data science",
+      "reasoning": "The user wants to transition from their current field to data science, indicating a skill gap that requires strengthening in programming and mathematics.",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 10,
+      "support": 10,
+      "utility": 10,
+      "total": 10.0
+    },
+    "ragas_scores": {
+      "faithfulness": 0.562,
+      "response_relevancy": 0.788,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.783
+  },
+  {
+    "id": "GQ-22",
+    "category": "Strong Fit",
+    "student": "Marcus Webb",
+    "message": "Am I ready for a cloud or DevOps engineering role?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 54.8,
+    "response": "Marcus Webb's preparation for a cloud engineering role at Leidos is strong in foundational topics like infrastructure as code, containerization, microservices architecture, and security. However, he may need further training or courses on Azure, DevSecOps, Windows Server, and Identity Management to fully prepare for the role.\n\n**Recommendation:**\n- Marcus should complete additional courses on Azure technology and DevSecOps principles.\n- He might also benefit from courses that cover Windows server management and identity management systems.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Marcus Webb\nMajor: Computer Science\nCurrent skills: Python, AWS, Docker, Kubernetes, Terraform, CI/CD, Linux, Bash, Git, Go, Infrastructure as Code, Observability, PostgreSQL, Ansible\nCompleted courses: CSC 220, CSC 415, CSC 645, CSC 647, CSC 651, CSC 652, CSC 746",
+      "RELEVANT JOB POSTINGS (top 3 retrieved \u2014 not an exhaustive list)\n- Cloud Engineer at Leidos\n  Required: Azure, Terraform, Ansible, Kubernetes, Docker, DevSecOps, Infrastructure as Code, CI/CD, Virtualization, Network Security, Identity and Access Management, Root Cause Analysis, Cloud Scaling, Hybrid Cloud Infrastructure, Monitoring Tools, Compliance Auditing\n  Student covers: Terraform, Ansible, Kubernetes, Docker, Infrastructure as Code, CI/CD\n  Gaps: Azure, DevSecOps, Virtualization, Network Security, Identity and Access Management, Root Cause Analysis, Cloud Scaling, Hybrid Cloud Infrastructure, Monitoring Tools, Compliance Auditing\n  Source excerpt (job description): The Defense Sector at Leidos is looking for a Cloud Engineer to support multiple fast-paced programs across the Air Force. The Cloud Engineer will deploy, maintain, and scale hybrid cloud digital infrastructure for multiple Air Force customers. This position requires a fast-learning, high-performing candidate with a proven history of delivering cloud solutions to customers. The ideal candidate will have experience in deploying and maintaining cloud infrastructure in Microsoft Azure cloud usin...\n- Site Reliability Engineer at Qlik\n  Required: Terraform, Kubernetes, AWS, Azure, Python, Go, Bash, CI/CD, Prometheus, Open Telemetry, Helm, MongoDB, Infrastructure as Code, Microservices, Networking Security, Observability\n  Student covers: Terraform, Kubernetes, AWS, Python, Go, Bash, CI/CD, Infrastructure as Code, Observability\n  Gaps: Azure, Prometheus, Open Telemetry, Helm, MongoDB, Microservices, Networking Security\n  Source excerpt (job description): What makes us Qlik? A Gartner\u00ae Magic Quadrant\u2122 Leader for 15 years in a row, Qlik transforms complex data landscapes into actionable insights, driving strategic business outcomes. Serving over 40,000 global customers, our portfolio leverages pervasive data quality and advanced AI/ML capabilities that lead to better decisions, faster. We excel in integration and governance solutions that work with diverse data sources, and our real-time analytics uncover hidden patterns, empowering teams to ad...\n- Junior Cloud Engineer at Leidos\n  Required: Azure, DevSecOps, Terraform, Ansible, Kubernetes, Docker, Infrastructure-as-Code, CI/CD, Linux, Windows Server, Network Administration, IAM, Bicep, ARM Templates, Root Cause Analysis, Cloud Scaling\n  Student covers: Terraform, Ansible, Kubernetes, Docker, Infrastructure-as-Code, CI/CD, Linux\n  Gaps: Azure, DevSecOps, Windows Server, Network Administration, IAM, Bicep, ARM Templates, Root Cause Analysis, Cloud Scaling\n  Source excerpt (job description): The Defense Sector at Leidos is looking for a Junior Cloud Engineer to support multiple fast-paced program with the Air Force. The Junior Cloud Engineer will support the deployment, maintenance, and scale hybrid cloud digital infrastructure for Air Force customers. This position requires a fast-learning, high-performing candidate with a proven history of delivering cloud solutions to customers. The ideal candidate will have experience in deploying and maintaining cloud infrastructure in Micro...",
+      "RELEVANT COURSES (top 1 retrieved \u2014 not an exhaustive list)\n- CSC 847: Cloud and Distributed Computing: Concepts and Applications\n  Teaches: AWS / GCP / Azure, Docker Containerization, Kubernetes, Microservices Architecture, Serverless Computing, MapReduce, NoSQL Databases, Apache Kafka, Distributed Consensus, CAP Theorem and Consistency Models, Infrastructure as Code, Cloud CI/CD, Virtualization, Cloud Security and IAM, Cost Management and Cloud FinOps, Service Mesh\n  Addresses gaps: Virtualization\n  Source excerpt (course description): Infrastructure, platform, and software as a service. Includes enabling techniques behind cloud computing including virtualization, multi-tenancy, and service-oriented architecture. Cloud storage options such as NoSQL databases, emerging technologies such as containers and Kubernetes, parallel and distributed computing platforms including MapReduce and Apache Sparc, and hands-on experience on public clouds such as the Amazon Cloud and Google Cloud. (Plus-minus letter grade only)"
+    ],
+    "plan": {
+      "intent": "general",
+      "top_k_jobs": 3,
+      "top_k_courses": 3,
+      "sub_intent": "",
+      "reasoning": "",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 7,
+      "support": 10,
+      "utility": 5,
+      "total": 7.7
+    },
+    "ragas_scores": {
+      "faithfulness": 0.833,
+      "response_relevancy": 0.0,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.611
+  },
+  {
+    "id": "GQ-25",
+    "category": "Cross-Disciplinary",
+    "student": "Priya Sharma",
+    "message": "Which courses would strengthen my data science skills specifically for biomedical research?",
+    "model": "deepseek-r1:1.5b",
+    "status": "ok",
+    "elapsed_s": 59.2,
+    "response": "Based on the retrieved evidence, Bioinformatics Scientist at Axle is the clearest fit in this view. You already cover: Bioinformatics, Statistical Modeling, Python, R, Genomics, Data analysis. Your main gaps are: NGS analysis, C++, Bash, Docker, Snakemake, Nextflow, Transcriptomics, Proteomics, HPC infrastructure, Experimental design. No retrieved courses clearly address these gaps for Bioinformatics Scientist: NGS analysis, C++, Bash, Docker, Snakemake, Nextflow, Transcriptomics, Proteomics, HPC infrastructure, Experimental design. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.",
+    "contexts": [
+      "STUDENT PROFILE\nName: Priya Sharma\nMajor: Computer Science / Biology\nCurrent skills: Python, R, SQL, Machine Learning, Bioinformatics, Pandas, Statistical Modeling, Data Analysis, Git, MATLAB, Genomics, Data Visualization\nCompleted courses: CSC 311, CSC 408, CSC 411, CSC 509, CSC 511, CSC 601, CSC 657, CSC 805",
+      "RELEVANT JOB POSTINGS (top 1 retrieved \u2014 not an exhaustive list)\n- Bioinformatics Scientist at Axle\n  Required: Bioinformatics, NGS analysis, Statistical Modeling, Python, R, C++, Bash, Docker, Snakemake, Nextflow, Genomics, Transcriptomics, Proteomics, Data analysis, HPC infrastructure, Experimental design\n  Student covers: Bioinformatics, Statistical Modeling, Python, R, Genomics, Data analysis\n  Gaps: NGS analysis, C++, Bash, Docker, Snakemake, Nextflow, Transcriptomics, Proteomics, HPC infrastructure, Experimental design\n  Source excerpt (job description): (ID: 2026-1976) Axle is a bioscience and information technology company that offers advancements in translational research, biomedical informatics, and data science applications to research centers and healthcare organizations nationally and abroad. With experts in biomedical science, software engineering, and program management, we focus on developing and applying research tools and techniques to empower decision-making and accelerate research discoveries. We work with some of the top resear...",
+      "RETRIEVAL NOTES\n- No retrieved courses clearly address these gaps for Bioinformatics Scientist: NGS analysis, C++, Bash, Docker, Snakemake, Nextflow, Transcriptomics, Proteomics, HPC infrastructure, Experimental design."
+    ],
+    "plan": {
+      "intent": "skill_gap",
+      "top_k_jobs": 6,
+      "top_k_courses": 4,
+      "sub_intent": "...",
+      "reasoning": "...",
+      "classifier": "llm"
+    },
+    "internal_scores": {
+      "relevance": 7,
+      "support": 10,
+      "utility": 7,
+      "total": 8.2
+    },
+    "ragas_scores": {
+      "faithfulness": 0.75,
+      "response_relevancy": 0.0,
+      "context_precision": 1.0
+    },
+    "ragas_avg": 0.583
+  }
+]

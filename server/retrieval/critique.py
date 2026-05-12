@@ -17,6 +17,7 @@ import httpx
 from dotenv import load_dotenv
 
 from retrieval.observability import ollama_timing_metadata, ollama_usage_metadata
+from retrieval.prompts import CRITIQUE_PROMPT
 from retrieval.skills import normalize_skill_name
 
 load_dotenv()
@@ -27,29 +28,6 @@ CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "llama3.2")
 # deepseek-r1 is a reasoning model with a different architecture than llama3.2.
 CRITIQUE_MODEL = os.environ.get("OLLAMA_CRITIQUE_MODEL", "deepseek-r1:1.5b")
 
-CRITIQUE_PROMPT = """You are a critic evaluating an AI advisor's response to a student career question.
-
-Score the response on exactly these 3 axes (0–10 each):
-
-- relevance: Does the response directly answer the student's question without drifting off-topic?
-- support: Are the claims traceable to the evidence context? Penalize overclaims and unsupported specificity.
-- utility: Is the response actionable? Does it give concrete skill gaps, course recommendations, or next steps?
-
-For evidence_citations, list each specific claim in the response (job title, course code/title, or skill name) and its exact source from the evidence context. Only list claims that are specific enough to verify.
-
-STUDENT QUESTION:
-{question}
-
-EVIDENCE CONTEXT USED:
-{context}
-
-RESPONSE TO CRITIQUE:
-{response}
-
-Respond ONLY with valid JSON, no explanation, no markdown:
-{{"relevance": <int>, "support": <int>, "utility": <int>, "critique": "<one sentence on the weakest axis>", "evidence_citations": [{{"claim": "<short claim>", "source": "<exact job title, course code, or skill from evidence>"}}]}}
-"""
-
 TITLE_CONNECTORS = (
     "and|or|of|for|to|in|on|with|the|a|an|vs|via|through|from"
 )
@@ -59,6 +37,38 @@ TITLE_WORD_PATTERN = (
 )
 COMPANY_REFERENCE_PATTERN = re.compile(
     r"\bat\s+[A-Z][A-Za-z0-9&+.#-]*(?:\s+[A-Z][A-Za-z0-9&+.#-]*){0,3}\b"
+)
+
+# Words that commonly start sentences but are never job titles
+_TITLE_SENTENCE_STARTERS = frozenset({
+    "based", "according", "given", "as", "with", "in", "for", "to", "the",
+    "this", "these", "those", "note", "however", "while", "since", "if",
+    "when", "where", "because", "although", "additionally", "furthermore",
+    "therefore", "thus", "overall", "currently", "specifically", "especially",
+    "importantly", "unfortunately", "considering", "looking", "from", "by",
+    "about", "there", "here", "both", "each", "all", "many", "most", "some",
+    "two", "three", "four", "five", "please",
+})
+
+# Short tokens that are skills/languages, not course titles
+_SKILL_TOKENS_NOT_COURSE_TITLES = frozenset({
+    "python", "java", "go", "rust", "sql", "r", "c", "html", "css",
+    "git", "aws", "gcp", "azure", "docker", "linux", "react", "vue",
+    "node", "swift", "kotlin", "scala", "csc",
+})
+
+# Tokens that appear near skill-cue words but are not actual skills
+_SKILL_STOP_WORDS = frozenset({
+    "next", "is", "are", "the", "a", "an", "of", "to", "for", "in",
+    "and", "or", "but", "not", "this", "that", "these", "those",
+    "particularly", "concerning", "especially", "additionally",
+})
+
+# Generic phrase prefixes the critique LLM uses instead of exact entity names
+_CITATION_META_PREFIXES = (
+    "student profile", "student_profile", "evidence context", "relevant job",
+    "relevant course", "the course description", "the job description",
+    "the evidence", "source excerpt", "no course", "no skill",
 )
 
 
@@ -105,13 +115,20 @@ def _extract_claimed_job_titles(response: str) -> set[str]:
     ]
     for pattern in patterns:
         for match in pattern.finditer(response):
-            titles.add(match.group(1).strip().lower())
+            title = match.group(1).strip().lower()
+            words = title.split()
+            # Skip sentence starters and single-word matches (too ambiguous)
+            if not words or words[0] in _TITLE_SENTENCE_STARTERS:
+                continue
+            if len(words) < 2:
+                continue
+            titles.add(title)
     return {title for title in titles if title}
 
 
 def _extract_claimed_course_titles(response: str) -> set[str]:
     titles: set[str] = set()
-    stop_words = {"next", "first", "instead", "afterward", "afterwards", "now", "later"}
+    trailing_stop = {"next", "first", "instead", "afterward", "afterwards", "now", "later"}
     patterns = [
         re.compile(
             rf"(?i:\b(?:take|recommend|recommended|enroll in|consider))\s+({TITLE_WORD_PATTERN})",
@@ -129,10 +146,20 @@ def _extract_claimed_course_titles(response: str) -> set[str]:
     for pattern in patterns:
         for match in pattern.finditer(response):
             words = match.group(1).strip().rstrip(".,;:").split()
-            while words and words[-1].lower() in stop_words:
+            while words and words[-1].lower() in trailing_stop:
                 words.pop()
-            if words:
-                titles.add(" ".join(words).lower())
+            if not words:
+                continue
+            title = " ".join(words).lower()
+            # Must be at least 2 meaningful words and not a bare skill/language token
+            if len(words) < 2:
+                continue
+            if title in _SKILL_TOKENS_NOT_COURSE_TITLES:
+                continue
+            # Skip if the whole title is just a skill token with noise
+            if len(title) < 8:
+                continue
+            titles.add(title)
     return {title for title in titles if title}
 
 
@@ -209,20 +236,27 @@ def _extract_claimed_skills(response: str) -> set[str]:
     ]
     for pattern in cue_patterns:
         for match in re.finditer(pattern, response, re.IGNORECASE):
-            claims.add(normalize_skill_name(match.group(1)))
+            raw = normalize_skill_name(match.group(1))
+            # Skip stop words and overly long strings (sentences, not skills)
+            if raw in _SKILL_STOP_WORDS or len(raw.split()) > 4 or len(raw) > 40:
+                continue
+            claims.add(raw)
 
     for match in re.finditer(r"skills?:\s*([A-Za-z0-9+#./,\-\s]+)", response, re.IGNORECASE):
         for raw_part in match.group(1).split(","):
             part = raw_part.strip()
             if not part:
                 continue
-            claims.add(normalize_skill_name(part))
+            normalized = normalize_skill_name(part)
+            if normalized in _SKILL_STOP_WORDS or len(normalized.split()) > 4 or len(normalized) > 40:
+                continue
+            claims.add(normalized)
 
     return {claim for claim in claims if claim}
 
 
 def _validate_citations(citations: list[dict], entities: dict[str, set[str]]) -> list[str]:
-    """Check that each LLM-generated citation source exists in the evidence bundle."""
+    """Check that each LLM-generated citation source can be traced to the evidence bundle."""
     violations: list[str] = []
     all_allowed = (
         entities["job_titles"]
@@ -235,8 +269,13 @@ def _validate_citations(citations: list[dict], entities: dict[str, set[str]]) ->
         source = (item.get("source") or "").strip().lower()
         if not source:
             continue
-        if source not in all_allowed and not any(source in allowed for allowed in all_allowed):
-            violations.append(f"citation source {source!r} not found in evidence")
+        # Skip generic meta-references — the LLM cited the prompt structure, not actual evidence
+        if any(source.startswith(prefix) for prefix in _CITATION_META_PREFIXES):
+            continue
+        # Fuzzy match: source contains an allowed entity OR an allowed entity contains the source
+        if any(source == allowed or allowed in source or source in allowed for allowed in all_allowed):
+            continue
+        violations.append(f"citation source {source!r} not found in evidence")
     return violations[:3]
 
 
@@ -295,15 +334,22 @@ def _deterministic_support_checks(bundle: dict, response: str) -> tuple[int, lis
     if any(phrase in response_lower for phrase in ["not required", "neither of the job postings require", "does not require this skill"]):
         penalties.append("response contradicts retrieved job requirements")
 
-    if course_support:
+    if course_support and gap_skills:
+        # Only check gap-support when we have actual gaps to verify against.
+        # A course with an empty teaches list or one not in the bundle is caught
+        # by the unsupported-course-codes check above.
         course_mentions = list(re.finditer(r"\b([A-Z]{2,4}\s*\d{3})\b", response.upper()))
         for match in course_mentions:
             code = match.group(1).strip().upper()
-            supported_skills = course_support.get(code, set())
+            if code not in course_support:
+                # Already flagged as unsupported code above — skip here
+                continue
+            supported_skills = course_support[code]
             if not supported_skills:
-                penalties.append(f"course recommendation lacks gap support for {code}")
-                break
-            if gap_skills and not (supported_skills & gap_skills):
+                # Course has no teaches data; give benefit of the doubt
+                continue
+            if not (supported_skills & gap_skills):
+                # Course teaches nothing that is in the gap list
                 penalties.append(f"course recommendation lacks gap support for {code}")
                 break
             window_start = max(0, match.start() - 140)
@@ -327,6 +373,42 @@ def _deterministic_support_checks(bundle: dict, response: str) -> tuple[int, lis
     return max(0, support_score), penalties
 
 
+def _parse_critique_json(raw: str) -> dict:
+    """Multi-strategy JSON extraction for deepseek-r1 output."""
+    # Strategy 1: direct parse
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+
+    # Strategy 2: find outermost {...} block
+    brace_match = re.search(r"\{.*\}", raw, re.DOTALL)
+    if brace_match:
+        try:
+            return json.loads(brace_match.group(0))
+        except json.JSONDecodeError:
+            pass
+
+    # Strategy 3: extract individual fields with regex
+    result: dict = {}
+    for field in ("relevance", "support", "utility"):
+        m = re.search(rf'["\']?{field}["\']?\s*:\s*(\d+)', raw, re.IGNORECASE)
+        if m:
+            result[field] = int(m.group(1))
+    critique_match = re.search(
+        r'["\']?critique["\']?\s*:\s*["\']([^"\']+)["\']', raw, re.IGNORECASE
+    )
+    if critique_match:
+        result["critique"] = critique_match.group(1).strip()
+
+    if {"relevance", "support", "utility"}.issubset(result):
+        result.setdefault("critique", "")
+        result.setdefault("evidence_citations", [])
+        return result
+
+    raise ValueError(f"Cannot parse critique JSON from: {raw[:200]!r}")
+
+
 def _llm_scores_with_details(question: str, context: str, response: str, bundle: dict | None = None) -> dict:
     prompt = CRITIQUE_PROMPT.format(
         question=question,
@@ -346,14 +428,16 @@ def _llm_scores_with_details(question: str, context: str, response: str, bundle:
     payload = resp.json()
     raw = payload["message"]["content"].strip()
 
-    # Strip deepseek-r1 <think>...</think> reasoning block if present
+    # Strip deepseek-r1 <think>...</think> reasoning block
     raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
+    # Strip markdown code fences
     if raw.startswith("```"):
-        raw = raw.split("```")[1]
+        parts = raw.split("```")
+        raw = parts[1] if len(parts) > 1 else raw
         if raw.startswith("json"):
-            raw = raw[4:]
+            raw = raw[4:].strip()
 
-    scores = json.loads(raw)
+    scores = _parse_critique_json(raw)
     scores = {k.strip().strip('"').strip("'"): v for k, v in scores.items()}
 
     citation_violations: list[str] = []

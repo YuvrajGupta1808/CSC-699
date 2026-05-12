@@ -5,6 +5,8 @@ import re
 import httpx
 from langsmith import traceable
 
+from retrieval.prompts import CLASSIFY_PROMPT
+
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "llama3.2")
 
@@ -14,29 +16,6 @@ COURSE_KEYWORDS = {"course", "courses", "class", "classes", "learn", "learning",
 BROAD_ANALYSIS_KEYWORDS = {"roadmap", "plan", "path", "readiness", "prepare", "qualified", "career path"}
 SKILL_GAP_PHRASES = {"skill gap", "skill gaps", "missing skills", "close gaps", "close my gaps"}
 FOLLOWUP_REFERENCE_WORDS = {"those", "them", "that", "it", "they", "which", "these", "there", "this", "any", "do", "does"}
-
-CLASSIFY_PROMPT = """Classify a student career question into one intent. Return ONLY valid JSON, no explanation.
-
-Intents:
-- "greeting": small talk, no real question
-- "jobs": user asks about job roles, companies, or job fit
-- "skill_gap": user asks about missing skills or what to learn FOR a specific role
-- "courses": user asks about courses without referencing a specific role gap
-- "broad": user asks for a career roadmap or full readiness assessment
-- "general": unclear or mixed
-
-Rules:
-- skill_gap ALWAYS needs job context: set top_k_jobs>=3, top_k_courses>=4
-- jobs: top_k_jobs=6, top_k_courses=2
-- courses: top_k_jobs=0, top_k_courses=6
-- broad: top_k_jobs=6, top_k_courses=6
-- greeting: top_k_jobs=0, top_k_courses=0
-- general: top_k_jobs=3, top_k_courses=3
-
-Recent context: {history_summary}
-Question: {question}
-
-{{"intent": "...", "top_k_jobs": N, "top_k_courses": N, "sub_intent": "...", "reasoning": "..."}}"""
 
 _REQUIRED_INTENT_KEYS = {"intent", "top_k_jobs", "top_k_courses"}
 _VALID_INTENTS = {"greeting", "jobs", "skill_gap", "courses", "broad", "general"}

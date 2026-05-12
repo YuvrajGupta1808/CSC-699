@@ -1,6 +1,6 @@
 # Gold Question Evaluation Report
 
-**Run date:** 2026-05-11 20:00
+**Run date:** 2026-05-12 12:18
 **Total questions:** 30
 **System:** LangGraph advisor · Ollama (llama3.2) · Qdrant + Supabase
 
@@ -10,44 +10,44 @@
 |---|---|
 | Passed | 30/30 |
 | Errors | 0 |
-| Average score | 7.98/10 |
-| Average time | 48.6s |
+| Average score | 7.82/10 |
+| Average time | 45.4s |
 | Score legend | 🟢 ≥8 · 🟡 ≥6 · 🔴 <6 |
 
 ## Scores At a Glance
 
 | ID | Category | Student | Intent | Rel | Sup | Util | **Total** | Time |
 |---|---|---|---|---|---|---|---|---|
-| GQ-01 | Specific Job Fit | Alex Chen | `jobs` | 9 | 7 | 8 | 🟡 **7.95** | 38.4s |
-| GQ-02 | Specific Job Fit | Maria Gomez | `skill_gap` | 9 | 8 | 9 | 🟢 **8.6** | 46.4s |
-| GQ-03 | Specific Job Fit | Sam Patel | `jobs` | 8 | 8 | 8 | 🟢 **8.0** | 46.9s |
-| GQ-04 | Skill Gap Analysis | Alex Chen | `skill_gap` | 8 | 10 | 8 | 🟢 **8.8** | 35.9s |
-| GQ-05 | Skill Gap Analysis | Maria Gomez | `skill_gap` | 8 | 6 | 8 | 🟡 **7.2** | 60.9s |
-| GQ-06 | Skill Gap Analysis | Sam Patel | `skill_gap` | 10 | 6 | 10 | 🟢 **8.4** | 38.9s |
-| GQ-07 | Course Recommendation | Alex Chen | `courses` | 9 | 8 | 9 | 🟢 **8.6** | 44.6s |
-| GQ-08 | Course Recommendation | Sam Patel | `courses` | 6 | 10 | 8 | 🟢 **8.1** | 43.6s |
-| GQ-09 | Course Recommendation | Maria Gomez | `courses` | 10 | 8 | 9 | 🟢 **8.95** | 38.7s |
-| GQ-10 | Career Readiness | Alex Chen | `broad` | 8 | 6 | 8 | 🟡 **7.2** | 55.4s |
-| GQ-11 | Career Readiness | Maria Gomez | `broad` | 6 | 10 | 7 | 🟡 **7.85** | 61.8s |
-| GQ-12 | Career Readiness | Sam Patel | `broad` | 7 | 4 | 8 | 🟡 **6.05** | 75.0s |
-| GQ-13 | Job Comparison | Alex Chen | `jobs` | 6 | 8 | 7 | 🟡 **7.05** | 22.0s |
-| GQ-14 | Job Comparison | Maria Gomez | `jobs` | 8 | 10 | 8 | 🟢 **8.8** | 61.0s |
-| GQ-15 | Action Plan | Alex Chen | `skill_gap` | 8 | 7 | 6 | 🟡 **7.1** | 59.3s |
-| GQ-16 | Action Plan | Sam Patel | `courses` | 10 | 8 | 9 | 🟢 **8.95** | 45.4s |
-| GQ-17 | Domain Pivot | Alex Chen | `skill_gap` | 10 | 4 | 8 | 🟡 **7.1** | 66.5s |
-| GQ-18 | Domain Pivot | Maria Gomez | `jobs` | 7 | 8 | 7 | 🟡 **7.4** | 42.8s |
-| GQ-19 | Self-Assessment | Alex Chen | `skill_gap` | 4 | 8 | 7 | 🟡 **6.35** | 31.7s |
-| GQ-20 | Self-Assessment | Maria Gomez | `broad` | 7 | 8 | 8 | 🟡 **7.65** | 59.1s |
-| GQ-21 | Strong Fit | Jordan Kim | `jobs` | 8 | 6 | 8 | 🟡 **7.2** | 42.4s |
-| GQ-22 | Strong Fit | Marcus Webb | `skill_gap` | 7 | 6 | 8 | 🟡 **6.85** | 52.1s |
-| GQ-23 | Strong Fit | Taylor Reyes | `jobs` | 6 | 10 | 7 | 🟡 **7.85** | 41.1s |
-| GQ-24 | Cross-Disciplinary | Priya Sharma | `jobs` | 10 | 6 | 10 | 🟢 **8.4** | 38.8s |
-| GQ-25 | Cross-Disciplinary | Priya Sharma | `courses` | 10 | 10 | 10 | 🟢 **10.0** | 47.7s |
-| GQ-26 | Skill Gap with Job Context | Jordan Kim | `skill_gap` | 8 | 6 | 9 | 🟡 **7.45** | 54.1s |
-| GQ-27 | Skill Gap with Job Context | Marcus Webb | `skill_gap` | 10 | 10 | 10 | 🟢 **10.0** | 53.0s |
-| GQ-28 | Skill Gap with Job Context | Taylor Reyes | `skill_gap` | 10 | 9 | 10 | 🟢 **9.6** | 63.8s |
-| GQ-29 | Retrieval Precision | Alex Chen | `courses` | 8 | 8 | 8 | 🟢 **8.0** | 44.2s |
-| GQ-30 | Retrieval Precision | Sam Patel | `jobs` | 8 | 8 | 8 | 🟢 **8.0** | 45.2s |
+| GQ-01 | Specific Job Fit | Alex Chen | `jobs` | 8 | 6 | 3 | 🔴 **5.95** | 45.0s |
+| GQ-02 | Specific Job Fit | Maria Gomez | `skill_gap` | 7 | 8 | 8 | 🟡 **7.65** | 54.5s |
+| GQ-03 | Specific Job Fit | Sam Patel | `jobs` | 8 | 9 | 6 | 🟡 **7.9** | 35.1s |
+| GQ-04 | Skill Gap Analysis | Alex Chen | `skill_gap` | 8 | 10 | 7 | 🟢 **8.55** | 32.0s |
+| GQ-05 | Skill Gap Analysis | Maria Gomez | `skill_gap` | 7 | 8 | 8 | 🟡 **7.65** | 41.7s |
+| GQ-06 | Skill Gap Analysis | Sam Patel | `skill_gap` | 10 | 8 | 8 | 🟢 **8.7** | 38.1s |
+| GQ-07 | Course Recommendation | Alex Chen | `courses` | 10 | 8 | 9 | 🟢 **8.95** | 39.0s |
+| GQ-08 | Course Recommendation | Sam Patel | `courses` | 10 | 8 | 6 | 🟢 **8.2** | 34.4s |
+| GQ-09 | Course Recommendation | Maria Gomez | `courses` | 8 | 10 | 8 | 🟢 **8.8** | 33.9s |
+| GQ-10 | Career Readiness | Alex Chen | `broad` | 3 | 9 | 6 | 🟡 **6.15** | 41.6s |
+| GQ-11 | Career Readiness | Maria Gomez | `broad` | 10 | 4 | 10 | 🟡 **7.6** | 89.8s |
+| GQ-12 | Career Readiness | Sam Patel | `broad` | 3 | 6 | 5 | 🔴 **4.7** | 47.8s |
+| GQ-13 | Job Comparison | Alex Chen | `jobs` | 6 | 8 | 7 | 🟡 **7.05** | 34.2s |
+| GQ-14 | Job Comparison | Maria Gomez | `skill_gap` | 8 | 10 | 8 | 🟢 **8.8** | 50.7s |
+| GQ-15 | Action Plan | Alex Chen | `broad` | 10 | 8 | 10 | 🟢 **9.2** | 50.8s |
+| GQ-16 | Action Plan | Sam Patel | `courses` | 6 | 10 | 8 | 🟢 **8.1** | 34.2s |
+| GQ-17 | Domain Pivot | Alex Chen | `skill_gap` | 6 | 10 | 7 | 🟡 **7.85** | 44.7s |
+| GQ-18 | Domain Pivot | Maria Gomez | `jobs` | 7 | 8 | 5 | 🟡 **6.9** | 49.5s |
+| GQ-19 | Self-Assessment | Alex Chen | `skill_gap` | 9 | 8 | 10 | 🟢 **8.85** | 50.9s |
+| GQ-20 | Self-Assessment | Maria Gomez | `broad` | 10 | 8 | 9 | 🟢 **8.95** | 54.4s |
+| GQ-21 | Strong Fit | Jordan Kim | `jobs` | 9 | 5 | 10 | 🟡 **7.65** | 48.6s |
+| GQ-22 | Strong Fit | Marcus Webb | `broad` | 10 | 8 | 10 | 🟢 **9.2** | 51.1s |
+| GQ-23 | Strong Fit | Taylor Reyes | `jobs` | 8 | 6 | 7 | 🟡 **6.95** | 53.6s |
+| GQ-24 | Cross-Disciplinary | Priya Sharma | `jobs` | 9 | 8 | 7 | 🟢 **8.1** | 40.6s |
+| GQ-25 | Cross-Disciplinary | Priya Sharma | `courses` | 8 | 9 | 7 | 🟢 **8.15** | 46.1s |
+| GQ-26 | Skill Gap with Job Context | Jordan Kim | `skill_gap` | 10 | 8 | 10 | 🟢 **9.2** | 38.5s |
+| GQ-27 | Skill Gap with Job Context | Marcus Webb | `skill_gap` | 7 | 8 | 6 | 🟡 **7.15** | 56.3s |
+| GQ-28 | Skill Gap with Job Context | Taylor Reyes | `skill_gap` | 8 | 9 | 8 | 🟢 **8.4** | 39.3s |
+| GQ-29 | Retrieval Precision | Alex Chen | `courses` | 9 | 6 | 8 | 🟡 **7.55** | 36.7s |
+| GQ-30 | Retrieval Precision | Sam Patel | `jobs` | 8 | 4 | 5 | 🔴 **5.65** | 47.8s |
 
 ---
 
@@ -65,22 +65,27 @@
 
 | Field | Value |
 |---|---|
-| Intent | `jobs` (jobs=6, courses=2) |
+| Intent | `jobs` (jobs=1, courses=0) |
 | Planner reason | None |
-| Relevance | 9/10 |
-| Support | 7/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **7.95/10** |
-| Time | 38.4s |
+| Relevance | 8/10 |
+| Support | 6/10 |
+| Utility | 3/10 |
+| **Total** | 🔴 **5.95/10** |
+| Time | 45.0s |
 
 **Critique flags:**
-- ⚠️ citation source "no course or skill from leidos's job postings aligns with these gaps in the evidence context." not found in evidence
+- ⚠️ unsupported job titles: junior software engineer
+- ⚠️ company references do not align with retrieved jobs
 
-**Critique summary:** The AI advisor focused on relevance, support, and utility without addressing the weakest axis. The student is a good fit but lacks specific skills like Computer Vision, Deep Learning, etc., which are highlighted in the response.
+**Critique summary:** The response lacks specificity in identifying course codes or skills that directly address the evidence context. It merely states the gaps without providing clear, actionable recommendations.
 
 **Response:**
 
-> Based on the retrieved evidence, Applied Computer Vision Engineer (TS/SCI) at Vantor is the clearest fit in this view. You already cover: Python. Your main gaps are: Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. No retrieved courses clearly address these gaps for Applied Computer Vision Engineer (TS/SCI): Computer Vision, Deep Learning, Geospatial Intelligence, Data Engineering, Docker, Kubernetes, Linux, YOLO, Image Processing, Generative AI, Cloud Computing, Technical Writing, Data Science, Remote Sensing. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> To assess your fit for the Junior Software Engineer role at Leidos, we'll examine the job requirements. The required skills are: Java, Agile Development, IT Service Management (ITSM), Cloud Computing, Problem Solving.
+> 
+> You have Python and Java as part of your current skill set, so you cover some of the required skills. However, the gaps in the job posting remain: Agile Development, IT Service Management (ITSM), Cloud Computing, and Problem Solving.
+> 
+> No retrieved course clearly addresses the gaps for Junior Software Engineer at Leidos — you may need to look beyond this course catalog to develop these skills.
 
 ---
 
@@ -96,32 +101,27 @@
 |---|---|
 | Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 9/10 |
+| Relevance | 7/10 |
 | Support | 8/10 |
-| Utility | 9/10 |
-| **Total** | 🟢 **8.6/10** |
-| Time | 46.4s |
+| Utility | 8/10 |
+| **Total** | 🟡 **7.65/10** |
+| Time | 54.5s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: applied ai engineer, based on the
-- ⚠️ citation source 'csc 306 course description' not found in evidence
-- ⚠️ citation source 'csc 803 course description' not found in evidence
+- ⚠️ unsupported job titles: enterprise genai
 
-**Critique summary:** The response addresses the student's profile by identifying skill gaps and provides actionable recommendations. While it covers necessary gaps (e.g., debugging, generative AI), it also introduces additional skills that might be beyond the initial requirement.
+**Critique summary:** fallback critique
 
 **Response:**
 
-> Based on the job postings you provided, the Applied AI Engineer role at Scale AI is a good match for your profile. However, it appears that there are several gaps in your skills.
+> Based on your current skills and completed courses, here are two relevant job postings that match your profile:
 > 
-> The Applied AI Engineer job posting requires expertise in Cloud Technology, Data-Driven Approach, Software Engineering, Generative AI, Technical Solutions, Cybersecurity, Collaboration, Debugging, Multimodal Functionality, Tool-Calling, Business Requirements, AI Applications, Model Performance, and Research. 
+> 1. Applied AI Engineer, Enterprise GenAI at Scale AI:
+> You cover 2 out of 15 required skills: Machine Learning, Python.
+> The gaps in this role are: Cloud Technology, Data-Driven Approach, Software Engineering, Generative AI, Technical Solutions, Cybersecurity, Collaboration, Debugging, Multimodal Functionality, Tool-Calling, Business Requirements, AI Applications, Model Performance, Research.
 > 
-> You are already proficient in Machine Learning and Python, but the other required skills are not covered by your current profile.
-> 
-> To address these gaps, I recommend taking the following courses:
-> 
-> 1. CSC 306: An Interdisciplinary Approach to Computer Programming - This course addresses the gap for Debugging.
-> 2. CSC 803: Generative AI: Fundamentals and Applications - This course addresses the gap for Generative AI expertise.
-> While it covers some of the necessary gaps, it also introduces additional topics
+> 2. No retrieved job posting matches your profile exactly.
+> However, the gaps in your completed courses are addressed by CSC 306: An Interdisciplinary Approach to Computer Programming (addresses debugging skill), and CSC 803: Generative AI: Fundamentals and Applications (covers generative AI).
 
 ---
 
@@ -138,28 +138,23 @@
 | Intent | `jobs` (jobs=6, courses=2) |
 | Planner reason | None |
 | Relevance | 8/10 |
-| Support | 8/10 |
-| Utility | 8/10 |
-| **Total** | 🟢 **8.0/10** |
-| Time | 46.9s |
+| Support | 9/10 |
+| Utility | 6/10 |
+| **Total** | 🟡 **7.9/10** |
+| Time | 35.1s |
 
-**Critique flags:**
-- ⚠️ unsupported course titles: go
-
-**Critique summary:** fallback critique
+**Critique summary:** The response does not provide specific skill gaps or recommended courses for entry-level jobs beyond general problem-solving. It misses mentioning relevant job postings.
 
 **Response:**
 
-> Based on the provided information, it appears that you're looking for entry-level positions that don't require advanced technical skills like Go, JavaScript, or Kubernetes.
+> Given your current skillset, it's essential to focus on entry-level positions that align with your strengths. Since you've completed CSC 215 (which implies some problem-solving skills), let's explore job openings that might be a good fit.
 > 
-> Considering your completed courses and current skills, I'd recommend exploring roles in fields where Python is a common language. Here are two relevant courses that could help bridge gaps and prepare you for entry-level positions:
+> Considering your current skills in Programming Fundamentals, Computational Thinking, and Problem Solving, you may want to look into junior roles that require basic programming proficiency. Here are a few entry-level positions to consider:
 > 
-> 1. CSC 310: Computer Programming Lab
-> 	* Addresses gap: Debugging
-> 	* This course covers debugging techniques, which will be helpful in identifying and resolving issues in your future roles.
-> 2. CSC 306: An Interdisciplinary Approach to Computer Programming (not directly addressing gaps, but a good starting point)
-> 	* Teaches: Python, Procedural Programming, Control Flow, File I/O, Problem Solving
-> 	* While this course doesn't cover all the gaps, it will help you build your foundation in programming with Python and problem-solving skills, which can be applied to various entry-level positions.
+> 1. Junior Software Tester - You can leverage your problem-solving skills and test your knowledge of programming concepts.
+> 2. Help Desk Technician - Your technical background will be valuable in troubleshooting hardware and software issues for clients or internal teams.
+> 
+> These jobs may not directly address the gaps in the Site Reliability Engineer job posting, but they're entry-level positions that don't require extensive programming expertise. However, to become competitive for more senior roles, you'll need to exp
 
 ---
 
@@ -179,25 +174,15 @@
 | Planner reason | None |
 | Relevance | 8/10 |
 | Support | 10/10 |
-| Utility | 8/10 |
-| **Total** | 🟢 **8.8/10** |
-| Time | 35.9s |
+| Utility | 7/10 |
+| **Total** | 🟢 **8.55/10** |
+| Time | 32.0s |
 
 **Critique summary:** fallback critique
 
 **Response:**
 
-> To qualify for a full-stack engineering role, you are currently lacking:
-> 
-> 1. TypeScript
-> 2. React
-> 3. Angular
-> 4. HTML/CSS
-> 5. PostgreSQL
-> 6. Operating Systems
-> 7. Technical Communication (this course can help bridge the gap, but it's not directly applicable to this specific list of gaps)
-> 
-> Note that CSC 694 addresses a broader skill set, including Technical Communication, which is relevant to some of the gaps listed above. However, for full-stack engineering specifically, the other six skills are more critical.
+> Based on the job postings, you are missing React, Node.js, Tailwind CSS, HTML/CSS, FastAPI, WebSockets, Vector Databases, LLM APIs, UI/UX Design, Data Engineering, and Full Stack Development skills.
 
 ---
 
@@ -213,30 +198,22 @@
 |---|---|
 | Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 6/10 |
+| Relevance | 7/10 |
+| Support | 8/10 |
 | Utility | 8/10 |
-| **Total** | 🟡 **7.2/10** |
-| Time | 60.9s |
+| **Total** | 🟡 **7.65/10** |
+| Time | 41.7s |
 
 **Critique flags:**
-- ⚠️ unsupported course codes: CSC 800
-- ⚠️ course recommendation lacks gap support for CSC 220
+- ⚠️ unsupported skill mentions: csc
 
 **Critique summary:** fallback critique
 
 **Response:**
 
-> Based on the relevant job posting and courses you've completed, it appears that Cloud Technology is a significant gap for you to address in order to pursue Cloud Engineering roles.
+> Based on the job postings, you have gaps in Cloud Technology, Data-Driven Approach, Software Engineering, Generative AI, Technical Solutions, Cybersecurity, Collaboration, Debugging, Multimodal Functionality, Tool-Calling, Business Requirements, AI Applications, Model Performance, and Research. 
 > 
-> While you have a solid foundation in Machine Learning (CSC 220, CSC 415, CSC 510, CSC 667) and Deep Learning (CSC 415, CSC 510, CSC 667), the job posting highlights Cloud Technology as a required skill for this role. 
-> 
-> Considering your current skills and completed courses, I recommend adding:
-> 
-> - CSC 603: Generative AI: Fundamentals and Applications
->   This course covers Generative AI, which is not directly relevant to cloud engineering. However, it might help you understand some of the concepts that could be applicable in other fields like data science or applications development, but not particularly cloud.
-> 
-> As for gaps related to Cloud Technology specifically, I couldn't find any courses that cover it from your list of completed courses, and there isn't a course called "CSC 800: Cloud Computing" in the pro
+> A course that addresses some of these gaps is CSC 603: Generative AI: Fundamentals and Applications, which covers Generative AI.
 
 ---
 
@@ -253,26 +230,19 @@
 | Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
 | Relevance | 10/10 |
-| Support | 6/10 |
-| Utility | 10/10 |
-| **Total** | 🟢 **8.4/10** |
-| Time | 38.9s |
+| Support | 8/10 |
+| Utility | 8/10 |
+| **Total** | 🟢 **8.7/10** |
+| Time | 38.1s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: based on the
-- ⚠️ unsupported skill mentions: next is
-- ⚠️ citation source 'student_profile: product engineer 1 - customization and framework at esri (required: python, java, javascript, rust, testing, agile/scrum, technical communication; gaps: python, javascript, rust, testing, agile/scrum, technical communication)' not found in evidence
-- ⚠️ citation source 'evidence context used: csu 1348250097575 - csu 671: deep learning. teaching: python, pytorch, deep neural networks, convolutional neural networks, rnns, transformer architecture...' not found in evidence
+- ⚠️ unsupported skill mentions: next to
 
-**Critique summary:** unsupported job titles: based on the; unsupported skill mentions: next is
+**Critique summary:** The response provides actionable insights, but it could have been more concise.
 
 **Response:**
 
-> Based on the job postings, the single most important skill you should learn next is **Python**.
-> 
-> Two of the top job postings (Product Engineer and AI Engineer) specifically require Python as a core skill. Additionally, two relevant courses (CSC 411: Intermediate Machine Learning for Interdisciplinary Data Scientists and CSC 671: Deep Learning) teach Python as a fundamental skill.
-> 
-> Learning Python will help you bridge the gaps in your current skills and make yourself more competitive for these roles.
+> Based on the provided job posting, Python is the single most important skill you can learn next to become more employable. You are currently covering Java, but the job posting requires and highlights Python as a key skill for this role. Additionally, two courses (CSC 411: Intermediate Machine Learning for Interdisciplinary Data Scientists and CSC 871: Deep Learning) also address Python as a gap skill that you can fill by taking these courses.
 
 ---
 
@@ -288,29 +258,26 @@
 
 | Field | Value |
 |---|---|
-| Intent | `courses` (jobs=6, courses=2) |
+| Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 9/10 |
+| Relevance | 10/10 |
 | Support | 8/10 |
 | Utility | 9/10 |
-| **Total** | 🟢 **8.6/10** |
-| Time | 44.6s |
+| **Total** | 🟢 **8.95/10** |
+| Time | 39.0s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: based on the
-- ⚠️ citation source 'csc 317: introduction to web software development' not found in evidence
+- ⚠️ unsupported course titles: html and css
 
-**Critique summary:** The AI correctly identified the missing skills in the evidence context while addressing the relevance of the claim. However, it should have more precisely connected the skill gap to the specific evidence context from the job postings.
+**Critique summary:** unsupported course titles: html and css
 
 **Response:**
 
-> Based on the job posting you provided, it appears that JavaScript is required, but only partially covered by CSC 317.
+> To become competitive for web development jobs, you should consider taking CSC 317: Introduction to Web Software Development and CSC 307: An Interdisciplinary Approach to Web Programming, with a focus on CSC 317. 
 > 
-> To address this gap and gain more expertise in web development, I recommend taking CSC 412: Advanced Software Lab. It covers JavaScript/Node.js Basics, which will help fill in your skills gap.
+> CSC 317 addresses essential skills such as JavaScript, HTML5 and CSS3, Node.js, Express.js, SQL and MySQL, Client-Server Architecture, RESTful APIs, Form Validation and Sanitization, Session Management and Cookies, Git/GitHub, Responsive Web Design, and Web Security. 
 > 
-> Additionally, while not explicitly stated as a requirement, gaining experience with REST API Development, Web Technologies, and Database Integration would be beneficial for any web development role. These topics are covered in CSC 412, so taking this course would address these gaps and provide you with more well-rounded knowledge in the field.
-> 
-> Note that while CSC 317 covers JavaScript, it's only a partial match to the requirements listed in the job posting. Taking CSC 412 will help fill in your skills gap and make you more competitive for web development jobs.
+> CSC 307 also covers important topics like HTML and CSS, PHP, Python, SQL and MySQL, Database Design, Client-Server Architecture, Form Validation, Web Security, Web Debugging, and Database Querying.
 
 ---
 
@@ -326,23 +293,22 @@
 |---|---|
 | Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 6/10 |
-| Support | 10/10 |
-| Utility | 8/10 |
-| **Total** | 🟢 **8.1/10** |
-| Time | 43.6s |
+| Relevance | 10/10 |
+| Support | 8/10 |
+| Utility | 6/10 |
+| **Total** | 🟢 **8.2/10** |
+| Time | 34.4s |
 
-**Critique summary:** fallback critique
+**Critique flags:**
+- ⚠️ citation source 'course code' not found in evidence
+
+**Critique summary:** No evidence of explicitly citing skill names, only job titles and course codes where applicable.
 
 **Response:**
 
-> Based on your current skills and completed courses, CSC 694: Cooperative Education: Computer Science appears to be a highly relevant course that addresses multiple gaps in your profile.
+> Based on your current skills and completed courses, CSC 306: An Interdisciplinary Approach to Computer Programming appears to be a relevant course that addresses several gaps in your skillset. It covers Python programming, procedural programming, scientific computing, data analysis, problem-solving, and control flow, which are valuable skills for a wide range of job options.
 > 
-> This course covers Industry Development, Project Management, Technical Communication, Agile Practices, Team Collaboration and Code Review, Problem Solving in Business Context, Career Development, Industry Tools, Technical Report Writing, Self-Direction and Initiative, Quality Assurance in Industry, and Time Management. These skills are highly valued by employers across various industries.
-> 
-> By taking this course, you can gain practical experience working in an industry position, develop essential soft skills, and expand your professional network. This course also addresses the gap between theoretical knowledge and real-world applications.
-> 
-> While CSC 310: Computer Programming Lab focuses on Python programming and lab work, it does not cover business context or industry development, which are addressed in
+> Additionally, this course may also enhance your computational thinking and problem-solving skills, which are essential for many roles in the computer science field.
 
 ---
 
@@ -358,23 +324,20 @@
 |---|---|
 | Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 8/10 |
-| Utility | 9/10 |
-| **Total** | 🟢 **8.95/10** |
-| Time | 38.7s |
+| Relevance | 8/10 |
+| Support | 10/10 |
+| Utility | 8/10 |
+| **Total** | 🟢 **8.8/10** |
+| Time | 33.9s |
 
-**Critique summary:** The critique should note that while the AI advisor effectively highlights how CSC 865 builds on CSC 415 and 510, additional evidence of practical application would reinforce utility. However, all claims are supported by specific course sources.
+**Critique summary:** fallback critique
 
 **Response:**
 
-> Since you've already completed CSC 415 (Operating System Principles) and CSC 510 (Analysis of Algorithms I), I recommend the following advanced course that builds upon these foundations:
+> Since you've completed CSC 415 (Operating System Principles) and CSC 510 (Analysis of Algorithms I), here are a few relevant advanced courses that can help build on your foundation for AI roles:
 > 
-> CSC 865: Artificial Intelligence
-> 
-> This course covers fundamental concepts in artificial intelligence, including machine learning fundamentals, neural networks, and AI search algorithms. It provides hands-on experience with programming exercises and assignments to gain a deeper understanding of these concepts.
-> 
-> By taking CSC 865 after CSC 510, you'll be well-prepared for roles involving advanced AI techniques, as it builds upon the algorithm design principles learned in Analysis of Algorithms I.
+> - CSC 865: Artificial Intelligence 
+>   Teaches: AI Search Algorithms, Heuristic Search, Adversarial Search, Machine Learning Fundamentals, Neural Networks, Knowledge Representation, Bayesian Networks, Constraint Satisfaction, Evolutionary Algorithms, Reinforcement Learning, Python, Agent Architectures, Natural Language Processing
 
 ---
 
@@ -392,29 +355,21 @@
 |---|---|
 | Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 6/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **7.2/10** |
-| Time | 55.4s |
+| Relevance | 3/10 |
+| Support | 9/10 |
+| Utility | 6/10 |
+| **Total** | 🟡 **6.15/10** |
+| Time | 41.6s |
 
-**Critique flags:**
-- ⚠️ unsupported course titles: python
-- ⚠️ course recommendation lacks gap support for CSC 101
-
-**Critique summary:** fallback critique
+**Critique summary:** The response inaccurately states that there are no gaps in the student
 
 **Response:**
 
-> Based on the information provided, I can give you an honest assessment of your job market readiness.
+> Based on the provided information, it appears that you have a strong foundation in programming languages (Python, Java) and fundamental computer science concepts (Data Structures, Algorithms). However, your current skills list doesn't include any gaps in areas like Automation, Cloud Computing, or Data Science, which are increasingly in demand.
 > 
-> You've completed four relevant courses in Computer Science: CSC 101, CSC 220, CSC 315, and CSC 340. However, none of these courses cover the specific gaps mentioned in the job postings that you're interested in. For example, the Senior Site Reliability Engineer role at iManage requires Automation, Kubernetes, Azure, AKS, Terraform, Chef, Docker, Prometheus, Grafana, ELK/EFK, CI/CD, and Go, but your course list doesn't include any courses on these topics.
+> The job postings you've been matched with highlight the importance of skills in these areas. For example, the Senior Site Reliability Engineer role at iManage requires expertise in automation, cloud computing, and containerization. While your completed courses (CSC 101, CSC 220, CSC 315, CSC 340) are relevant to computer science, they may not directly address the gaps mentioned in the job postings.
 > 
-> Additionally, you've taken a Cloud and Distributed Computing course (CSC 847), which addresses one of the gaps mentioned in the job postings. However, it's not sufficient to fill all the gaps.
-> 
-> You also have some relevant skills, such as Python, Java, Data Structures, Algorithms, Object-Oriented Programming, but they're not specifically tailored to the required technologies and tools mentioned in the job postings.
-> 
-> Overall, I would sa
+> Your current skills list only covers Java, Python, and some fundamental CS concepts, but it lacks a broad range of technologies and skills that would make you more competitive in the job market.
 
 ---
 
@@ -430,17 +385,39 @@
 |---|---|
 | Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 6/10 |
-| Support | 10/10 |
-| Utility | 7/10 |
-| **Total** | 🟡 **7.85/10** |
-| Time | 61.8s |
+| Relevance | 10/10 |
+| Support | 4/10 |
+| Utility | 10/10 |
+| **Total** | 🟡 **7.6/10** |
+| Time | 89.8s |
 
-**Critique summary:** fallback critique
+**Critique flags:**
+- ⚠️ unsupported course codes: CSC 720, CSC 725, CSC 730
+- ⚠️ unsupported course titles: coursera or
+- ⚠️ response suggests non-retrieved learning resources
+
+**Critique summary:** unsupported course codes: CSC 720, CSC 725, CSC 730; unsupported course titles: coursera or
 
 **Response:**
 
-> Based on the retrieved evidence, New Grad Software Engineer at Color is the clearest fit in this view. You already cover: Python, SQL. Your main gaps are: React, Django, AWS, LLMs, Code Review. No retrieved courses clearly address these gaps for New Grad Software Engineer: React, Django, AWS, LLMs, Code Review. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> To create a comprehensive plan, let's focus on the gaps you have in your skillset. You need to develop skills in:
+> 
+> React, Django, AWS, LLMs, and Code Review.
+> 
+> Here is a suggested plan to help you build these skills over two semesters:
+> 
+> Semester 1:
+> - Take CSC 720: Data Science with Deep Learning — this course covers LLMs.
+> - Enroll in an online React bootcamp or take CSC 725: Frontend Development with React — address the React gap skill.
+> - Complete a bootcamp or enroll in CSC 730: Django for Web Development — this addresses Django's gap skill.
+> - Begin learning AWS fundamentals through online resources like Coursera or edX (since no retrieved course directly covers AWS).
+> 
+> Semester 2:
+> - Take CSC 750: Cloud Computing with AWS — directly addresses the AWS gap skill.
+> - Enroll in an online bootcamp or take CSC 740: Code Review and Version Control — this addresses Code Review's gap skill.
+> - Continue learning React, Django, and AWS through self-study or additional courses.
+> 
+> By following this pla
 
 ---
 
@@ -456,43 +433,22 @@
 |---|---|
 | Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 7/10 |
-| Support | 4/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **6.05/10** |
-| Time | 75.0s |
+| Relevance | 3/10 |
+| Support | 6/10 |
+| Utility | 5/10 |
+| **Total** | 🔴 **4.7/10** |
+| Time | 47.8s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: senior software engineer
-- ⚠️ unsupported course titles: backend engineering, csc
-- ⚠️ unsupported skill mentions: particularly concerning
+- ⚠️ unsupported job titles: senior software engineer, voltai. the
 
-**Critique summary:** fallback critique
+**Critique summary:** The AI Career Advisor
 
 **Response:**
 
-> Based on the provided information, it's challenging to make a definitive assessment of your competitiveness for industry jobs. However, there are several gaps in your skills that suggest you may need additional training or experience.
+> Based on the provided job posting and course catalog, it appears that you may not be directly competitive for the Senior Software Engineer role at Voltai. The job posting lists a wide range of technical skills as Required, many of which are not currently covered in your completed courses or listed as gaps in your skillset.
 > 
-> Your current skill set includes Java and Programming Fundamentals, which is a good foundation for many computer science roles. However, none of the top 2 retrieved job postings (Senior Software Engineer at Voltai and Sr. Embedded Systems Engineer at Trane Technologies) require or mention Java as a required skill. This could indicate that your skills are not directly aligned with the most in-demand technologies in these industries.
-> 
-> Additionally, you have significant gaps in areas such as:
-> 
-> 1. Backend Engineering
-> 2. Full-stack Development
-> 3. Infrastructure
-> 4. DevOps
-> 5. Agent Development
-> 6. Retrieval-Augmented Generation
-> 7. Systems Design
-> 8. Debugging
-> 9. Docker
-> 10. AWS
-> 11. Azure
-> 12. GCP
-> 13. IaC
-> 14. On-prem Deployment
-> 15. Field Engineering
-> 16. Solutions Eng
+> However, it's worth noting that CSC 859 and CSC 803 cover some of the key areas mentioned in the job posting (Explainable AI, Retrieval-Augmented Generation). While these courses are a good starting point, they may not provide comprehensive coverage of all required skills.
 
 ---
 
@@ -514,7 +470,7 @@
 | Support | 8/10 |
 | Utility | 7/10 |
 | **Total** | 🟡 **7.05/10** |
-| Time | 22.0s |
+| Time | 34.2s |
 
 **Critique flags:**
 - ⚠️ unsupported job titles: university grad
@@ -523,7 +479,7 @@
 
 **Response:**
 
-> Based on the retrieved evidence, Software Engineer, University Grad at Glean is the clearest fit in this view. You already cover: Python, Java, Data Structures, Algorithms. Your main gaps are: JavaScript, Natural Language Processing, Distributed Systems. No retrieved courses clearly address these gaps for Software Engineer, University Grad: JavaScript, Natural Language Processing, Distributed Systems. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> Considering your current skills and completed courses, neither option directly aligns with the gaps in the job posting for Software Engineer, University Grad at Glean. No retrieved course clearly addresses these gaps: JavaScript, Natural Language Processing, Distributed Systems.
 
 ---
 
@@ -537,25 +493,25 @@
 
 | Field | Value |
 |---|---|
-| Intent | `jobs` (jobs=6, courses=2) |
+| Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
 | Relevance | 8/10 |
 | Support | 10/10 |
 | Utility | 8/10 |
 | **Total** | 🟢 **8.8/10** |
-| Time | 61.0s |
+| Time | 50.7s |
 
 **Critique summary:** fallback critique
 
 **Response:**
 
-> Based on the provided job posting, it appears that both options are relevant to the role of AI Engineer at HAVI. However, the gaps in your current skills suggest a potential need for training in certain areas.
+> Based on the job postings, Site Reliability Engineer at Qlik requires a broader range of skills that cover not just programming languages like Python but also infrastructure management and security. The salary implications suggest that this role tends to be higher paying.
 > 
-> Given the skills you already possess (Machine Learning and Deep Learning), taking more ML courses might not directly address the gap in Artificial Intelligence, which is also listed as a required skill for this job. Therefore, while ML courses can help enhance your existing capabilities, it's uncertain whether they would directly contribute to filling the broader AI-related gaps.
+> In contrast, AI Engineer at HAVI focuses more on Artificial Intelligence, Machine Learning, and Deep Learning-specific technologies. While the job posting does mention Azure Databricks and Apache Spark, which are cloud-based platforms, they are not necessarily considered a primary skillset for the role.
 > 
-> On the other hand, pivoting towards cloud/DevOps skills seems more likely to address some of the gaps in your current skills set, particularly Azure Databricks, Apache Spark, Scala, and DevOps. Since both CSC 874 and CSC 878 cover aspects of Big Data Platforms and Systems, which is closely related to cloud and DevOps, taking one or both of these courses could help bridge this gap.
+> Pivoting to cloud/DevOps would require taking courses that cover Kubernetes, Terraform, AWS, or Azure, among others. These skills can be valuable across various industries, including IT and software development.
 > 
-> Considering the prov
+> Considering your current skill set includes Machine Learning, Python, Databases, Operating Systems, Deep Learning, and SQL, there is a moderate gap in the cloud/DevOps domain that could benefit from courses 
 
 ---
 
@@ -571,33 +527,22 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=3, courses=6) |
+| Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 7/10 |
-| Utility | 6/10 |
-| **Total** | 🟡 **7.1/10** |
-| Time | 59.3s |
+| Relevance | 10/10 |
+| Support | 8/10 |
+| Utility | 10/10 |
+| **Total** | 🟢 **9.2/10** |
+| Time | 50.8s |
 
 **Critique flags:**
-- ⚠️ unsupported course titles: csc, react.js
-- ⚠️ citation source "equifax's job posting on site reliability engineering" not found in evidence
-- ⚠️ citation source 'the course description mentions aws, gcp, etc.' not found in evidence
-- ⚠️ citation source "alex chen's resume shows these skills" not found in evidence
+- ⚠️ unsupported skill mentions: these topics
 
-**Critique summary:** The AI response identifies three courses that address relevant skills and provide actionable steps, but it could better tie in the courses to specific industry needs or job roles. For example, while CSC 317 covers JavaScript and Node.js, it might not directly address cloud infrastructure gaps, which are critical for reliability engineering roles.
+**Critique summary:** unsupported skill mentions: these topics
 
 **Response:**
 
-> Based on the retrieved course and job postings, here are the top 3 most impactful things you can do this semester to improve your job prospects:
-> 
-> 1. **Take CSC 847: Cloud and Distributed Computing: Concepts and Applications**.
-> 
-> This course addresses a significant gap in your skill set, specifically in Kubernetes and Infrastructure as Code. By taking this course, you will gain hands-on experience with cloud computing concepts, containerization, and infrastructure management, which are highly sought after skills in the industry. This course will not only help you fill the gap but also provide valuable knowledge that can enhance your chances of landing a Site Reliability Engineer role at Equifax or other similar positions.
-> 
-> 2. **Take CSC 317: Introduction to Web Software Development** or **CSC 667/867: Internet Application Design and Development** (choose one).
-> 
-> Both of these courses cover JavaScript, Node.js, and related skills that are essential for web development. By taking one of the
+> You should focus on improving your skills in AWS and Infrastructure as Code, which are significant gaps mentioned in the Site Reliability Engineer job posting. You could take advantage of CSC 847: Cloud and Distributed Computing: Concepts and Applications to learn these topics comprehensively. Additionally, reviewing and practicing Terraform would help bridge another gap.
 
 ---
 
@@ -613,29 +558,17 @@
 |---|---|
 | Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 8/10 |
-| Utility | 9/10 |
-| **Total** | 🟢 **8.95/10** |
-| Time | 45.4s |
+| Relevance | 6/10 |
+| Support | 10/10 |
+| Utility | 8/10 |
+| **Total** | 🟢 **8.1/10** |
+| Time | 34.2s |
 
-**Critique flags:**
-- ⚠️ unsupported course titles: project management
-- ⚠️ citation source "csc 694's source excerpt mentions project management in a business context." not found in evidence
-
-**Critique summary:** The AI advisor provides excellent relevance by emphasizing industry-specific skills, but offers support by noting that foundational Python skills from CSC 310 and project management experience from CSC 694 are more directly applicable. Utility is good as both courses offer valuable skills, with the focus on project management being key for job prospects.
+**Critique summary:** fallback critique
 
 **Response:**
 
-> Based on your current skills and completed courses, I would recommend taking CSC 694: Cooperative Education: Computer Science.
-> 
-> This course covers various industry-specific topics such as Project Management, Technical Communication, Agile Practices, Team Collaboration, and Problem Solving in Business Context. These skills are highly valued by employers, especially in the field of computer science.
-> 
-> Additionally, this course provides hands-on experience with projects in a business, government, or industrial position, which can give you an edge when it comes to getting hired.
-> 
-> While CSC 310: Computer Programming Lab is also relevant, it focuses more on Python programming and software development tools. While these skills are essential for a computer science career, they might not be as directly applicable to the job market as the industry-specific topics covered in CSC 694.
-> 
-> CSC 686: Experiences in Computer Science Teaching is unlikely to have an immediate impact on your job prospects, a
+> Considering your current skills and completed courses, CSC 306: An Interdisciplinary Approach to Computer Programming would give you a strong foundation in programming and problem-solving. As it teaches Python, procedural programming, and scientific computing, this course addresses the gap for "Procedural Programming" and introduces relevant problem-solving approaches.
 
 ---
 
@@ -651,34 +584,19 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=6, courses=4) |
+| Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 4/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **7.1/10** |
-| Time | 66.5s |
+| Relevance | 6/10 |
+| Support | 10/10 |
+| Utility | 7/10 |
+| **Total** | 🟡 **7.85/10** |
+| Time | 44.7s |
 
-**Critique flags:**
-- ⚠️ unsupported course titles: apache spark, aws or azure
-- ⚠️ unsupported skill mentions: 1, about big, about data
-- ⚠️ course recommendation lacks gap support for CSC 101
-
-**Critique summary:** There's no mention of specific evidence for cloud platforms or big data technologies in the AI advisor's response. They address SQL and statistical analysis but lack courses on cloud platforms, ETL/ELT tools, and big data technologies like Apache Spark or Hadoop,
+**Critique summary:** fallback critique
 
 **Response:**
 
-> You're currently proficient in Python, Data Structures, Algorithms, Object-Oriented Programming, and have completed courses CSC 101, CSC 220, CSC 315, and CSC 340.
-> 
-> To bridge the gap to data science jobs, you'll need to address the following skills:
-> 
-> 1. **SQL**: You don't have proficiency in SQL, which is a fundamental skill for data scientists.
-> 2. **Data Visualization**: You're missing data visualization skills, which are essential for communicating insights effectively.
-> 3. **Statistical Analysis**: While you have Data Structures and Algorithms, you lack statistical analysis expertise.
-> 4. **Machine Learning**: As a future data scientist, it's crucial to have basic machine learning knowledge.
-> 5. **Cloud Platforms**: Data science often involves working with cloud-based tools; you don't have exposure to cloud platforms like AWS or Azure.
-> 6. **Data Engineering**: Data scientists need to understand data engineering concepts, such as ETL/ELT, data modeling, and data warehousing.
-> 7. **Big Da
+> You have a solid foundation in programming languages like Python, Java, and experience with data structures and algorithms. However, several gaps need to be addressed to align with typical data scientist job requirements. The key gaps include SQL, PowerBI/Tableau, Data Visualization, Statistical Analysis, Data Cleaning, Feature Engineering, and HIPAA Compliance.
 
 ---
 
@@ -696,18 +614,18 @@
 | Planner reason | None |
 | Relevance | 7/10 |
 | Support | 8/10 |
-| Utility | 7/10 |
-| **Total** | 🟡 **7.4/10** |
-| Time | 42.8s |
+| Utility | 5/10 |
+| **Total** | 🟡 **6.9/10** |
+| Time | 49.5s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: embedded systems engineer
+- ⚠️ unsupported course titles: c or c++
 
 **Critique summary:** fallback critique
 
 **Response:**
 
-> Based on the retrieved evidence, Associate Staff - Embedded Systems Engineer at MIT Lincoln Laboratory is the clearest fit in this view. You already cover: Python, Operating Systems. Your main gaps are: MATLAB, Linux, Cybersecurity. No retrieved courses clearly address these gaps for Associate Staff - Embedded Systems Engineer: MATLAB, Linux, Cybersecurity. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> You have a strong foundation in computer science with experience in machine learning, Python, databases, and operating systems. While your current skills might not be directly applicable to systems or embedded software, they can still provide a solid base for exploration. Your experience with Python could help you adapt to languages like C or C++, which are commonly used in embedded systems development.
 
 ---
 
@@ -723,22 +641,21 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=6, courses=0) |
+| Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 4/10 |
+| Relevance | 9/10 |
 | Support | 8/10 |
-| Utility | 7/10 |
-| **Total** | 🟡 **6.35/10** |
-| Time | 31.7s |
+| Utility | 10/10 |
+| **Total** | 🟢 **8.85/10** |
+| Time | 50.9s |
 
-**Critique flags:**
-- ⚠️ unsupported job titles: id52365
-
-**Critique summary:** fallback critique
+**Critique summary:** The response mentions Python but does not explicitly cite any course codes or skill names beyond what is in the evidence context. While it connects Data Structures to generative AI, which might be an oversight if no specific source is given, all other points are supported by evidence.
 
 **Response:**
 
-> Based on the retrieved evidence, Senior Backend Engineer (AdTech) ID52365 at AgileEngine is the clearest fit in this view. You already cover: Python, Java. Your main gaps are: Django, Kubernetes, PostgreSQL, AWS, AdTech, Distributed Systems, API Design, OpenRTB, Data Pipelines, System Architecture, .NET, Node.js, Google Ad Manager, Prebid. No retrieved courses clearly address these gaps for Senior Backend Engineer (AdTech) ID52365: Django, Kubernetes, PostgreSQL, AWS, AdTech, Distributed Systems, API Design, OpenRTB, Data Pipelines, System Architecture, .NET, Node.js, Google Ad Manager, Prebid. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> Based on the provided job postings, your strongest marketable skills are Python, Data Structures, Algorithms, and Object-Oriented Programming. These skills are present in both job postings and can be directly related to the roles of AI Engineer at Doosan Corp and Senior Backend Engineer (AdTech) ID52365 at AgileEngine.
+> 
+> Both jobs require strong programming skills, with a focus on developing and deploying sophisticated software systems. Your proficiency in Python, Data Structures, Algorithms, and Object-Oriented Programming demonstrates your ability to design, develop, and maintain complex software applications, which is highly valued in both roles.
 
 ---
 
@@ -754,29 +671,25 @@
 |---|---|
 | Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 7/10 |
+| Relevance | 10/10 |
 | Support | 8/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **7.65/10** |
-| Time | 59.1s |
+| Utility | 9/10 |
+| **Total** | 🟢 **8.95/10** |
+| Time | 54.4s |
 
-**Critique flags:**
-- ⚠️ unsupported course titles: csc, react and node.js. additionally
-
-**Critique summary:** fallback critique
+**Critique summary:** Focus on React, Node.js, WebSockets; data engineering; full stack development; UI/UX design. Use courses like CSC 867, 667, and 317 to strengthen your profile for AI positions.
 
 **Response:**
 
-> Based on the information provided, it appears that you are becoming a Full Stack developer with a focus on Front-End development, particularly in the context of AI and Machine Learning applications. This is evident from the job postings where React, Node.js, Python, and other related technologies are required.
+> Based on the job posting for Full Stack AI Engineer (Front-End Learning) at Inception Point AI, it appears that you are becoming a Full Stack Developer with expertise in machine learning. You have already covered some key skills like Python, but there are significant gaps in your skillset.
 > 
-> However, there are some gaps in your skillset:
+> To double down on, I recommend focusing on the following areas:
 > 
-> * Java: You don't have sufficient experience in Java, which is a critical language for many Full Stack roles.
-> * TypeScript: Although you're familiar with JavaScript, you don't have specific experience with TypeScript, which is widely used in modern web development.
-> * React Native: This is another technology you don't cover, and it's essential for mobile app development.
-> * Prisma: While you have a solid grasp of SQL and Python, Prisma is a popular ORM solution that can help you work more efficiently with databases.
+> React, Node.js, and WebSockets: These skills appear to be critical for the job posting and are currently unaddressed in your skillset.
+> Data Engineering and Full Stack Development: The job posting mentions "Data Engineering" as a required skill, indicating that you need more depth in this area. Additionally, being proficient in full stack development will help you integrate machine learning with front-end development.
+> UI/UX Design: Although not directly listed as a gap, UI/UX design is mentioned as part of the role, suggesting that you should consider developing your skills in this area to complement your machine learning expertise.
 > 
-> Considering your interests and strengths, I would recommend doubleing down on Full Stack Development, focusing on Fron
+> By
 
 ---
 
@@ -794,30 +707,23 @@
 |---|---|
 | Intent | `jobs` (jobs=6, courses=2) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 6/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **7.2/10** |
-| Time | 42.4s |
+| Relevance | 9/10 |
+| Support | 5/10 |
+| Utility | 10/10 |
+| **Total** | 🟡 **7.65/10** |
+| Time | 48.6s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: based on the, for the front-end software engineer
-- ⚠️ unsupported course titles: angular and ember, javascript
+- ⚠️ unsupported job titles: customer portal
+- ⚠️ course recommendation lacks gap support for CSC 307
 
-**Critique summary:** fallback critique
+**Critique summary:** The AI career advisor
 
 **Response:**
 
-> Based on the job postings you provided and your current skills, here are some full stack or web engineering roles where you may be competitive:
+> Based on the job posting of Software Engineer - Customer Portal at Applied Intuition, you appear to be competitive for this role due to your proficiency in Python, TypeScript, React, and PostgreSQL. However, considering the top combined gaps mentioned in the job posting, it seems that full stack development skills are a notable gap. 
 > 
-> 1. **Full Stack Engineer at Fidelity Investments**: This role is a good fit since it covers many of your skills, such as JavaScript, HTML5, Git, REST, SQL, and Tomcat.
-> 2. **Front-End Software Engineer at IXL Product**: Although this role requires additional skills like Angular and Ember, you already have experience with React and JavaScript, which are essential for this position.
-> 3. **Full Stack AI Engineer (Front-End Learning) at Inception Point AI**: As a full stack engineer in this role, you will need to develop UI/UX design skills, but your proficiency in React, Node.js, Python is a good foundation.
-> 
-> To become more competitive for these roles, consider addressing the gaps mentioned in the job postings:
-> 
-> * For the Full Stack Engineer at Fidelity Investments, focus on learning Java, Spring Boot, and Oracle.
-> * For the Front-End Software Engin
+> You may want to explore courses that address web infrastructure, software architecture, and system design as these seem to be areas where you have some gaps. CSC 307 and CSC 317 cover more general topics but do not directly address the specific skills required for this role.
 
 ---
 
@@ -831,27 +737,19 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=6, courses=4) |
+| Intent | `broad` (jobs=6, courses=6) |
 | Planner reason | None |
-| Relevance | 7/10 |
-| Support | 6/10 |
-| Utility | 8/10 |
-| **Total** | 🟡 **6.85/10** |
-| Time | 52.1s |
+| Relevance | 10/10 |
+| Support | 8/10 |
+| Utility | 10/10 |
+| **Total** | 🟢 **9.2/10** |
+| Time | 51.1s |
 
-**Critique flags:**
-- ⚠️ unsupported job titles: from the cloud engineer, leidos
-- ⚠️ unsupported skill mentions: azure experience, azure expertise
-
-**Critique summary:** fallback critique
+**Critique summary:** The response is good in relevance, utility, and support but lacks direct evidence for Azure expertise beyond Docker and Kubernetes,
 
 **Response:**
 
-> Based on your current skills and completed courses, you appear to have a solid foundation in cloud and DevOps concepts. However, a more thorough analysis of the job postings reveals some gaps that might impact your readiness for these roles.
-> 
-> From the Cloud Engineer at Leidos posting, you're missing Azure expertise, DevSecOps knowledge, virtualization experience, network security understanding, identity and access management skills, root cause analysis expertise, cloud scaling capabilities, hybrid cloud infrastructure familiarity, monitoring tools proficiency, and compliance auditing knowledge. Addressing these gaps would be essential to fill.
-> 
-> The Site Reliability Engineer at Qlik posting also presents some challenges. You're missing Azure experience, Prometheus expertise, Open Telemetry knowledge, Helm proficiency, MongoDB understanding, microservices awareness, networking security skills, and observability expertise. Some of these gaps may overlap with those from the Leidos role, bu
+> Based on the provided job posting and your current skills, you have some gaps in Azure expertise, DevSecOps knowledge, Virtualization understanding, Network Security awareness, Identity and Access Management skill, Root Cause Analysis expertise, Cloud Scaling experience, Hybrid Cloud Infrastructure knowledge, Monitoring Tools application, and Compliance Auditing practices. While you're proficient in many relevant areas like Terraform, Ansible, Kubernetes, Docker, and CI/CD, the gaps suggest that further education and hands-on experience are necessary to be a competitive candidate for these roles.
 
 ---
 
@@ -867,17 +765,17 @@
 |---|---|
 | Intent | `jobs` (jobs=6, courses=2) |
 | Planner reason | None |
-| Relevance | 6/10 |
-| Support | 10/10 |
+| Relevance | 8/10 |
+| Support | 6/10 |
 | Utility | 7/10 |
-| **Total** | 🟡 **7.85/10** |
-| Time | 41.1s |
+| **Total** | 🟡 **6.95/10** |
+| Time | 53.6s |
 
-**Critique summary:** fallback critique
+**Critique summary:** The AI career advisor's response focuses on Taylor's strengths and gaps, suggesting she should take additional courses in R, Java, etc. However, the evidence context doesn't provide these course codes or skill names from job postings.
 
 **Response:**
 
-> Based on the retrieved evidence, Research and Development Computer Vision Engineer at Penn State University is the clearest fit in this view. You already cover: Computer Vision, Python, Machine Learning, Data analysis. Your main gaps are: R, Java, C++, MATLAB, Object detection, Tracking, Recognition, Scene understanding, Geospatial data, High performance computing, Algorithm development. No retrieved courses clearly address these gaps for Research and Development Computer Vision Engineer: R, Java, C++, MATLAB, Object detection, Tracking, Recognition, Scene understanding, Geospatial data, High performance computing, Algorithm development. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> Based on your skills, you are closest to qualifying for Research and Development Computer Vision Engineer at Penn State University, considering your experience in Computer Vision (covered) and Machine Learning (covered). Additionally, you have a strong foundation in Python, which is also required by the job. Your gap in Geospatial data might be addressed with further study or project work, but it does not appear to be directly related to this specific job posting.
 
 ---
 
@@ -895,34 +793,23 @@
 |---|---|
 | Intent | `jobs` (jobs=6, courses=2) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 6/10 |
-| Utility | 10/10 |
-| **Total** | 🟢 **8.4/10** |
-| Time | 38.8s |
+| Relevance | 9/10 |
+| Support | 8/10 |
+| Utility | 7/10 |
+| **Total** | 🟢 **8.1/10** |
+| Time | 40.6s |
 
 **Critique flags:**
-- ⚠️ unsupported course titles: csc
-- ⚠️ course recommendation lacks gap support for CSC 657
-- ⚠️ citation source 'the course description mentions a broad range of computational biology topics, including protein modeling and gene expression analysis.' not found in evidence
-- ⚠️ citation source 'the course includes phylogenetic analysis and research literature review, which are relevant to job postings.' not found in evidence
+- ⚠️ unsupported job titles: computational biologist. this
+- ⚠️ citation source 'csp1982' not found in evidence
 
-**Critique summary:** unsupported course titles: csc; course recommendation lacks gap support for CSC 657
+**Critique summary:** The AI career advisor provides a comprehensive response that clearly connects both the student's background and skills to specific job opportunities. The advice is actionable and offers clear connections between course codes and job requirements.
 
 **Response:**
 
-> Based on your background in Computer Science and Biology, you have a strong foundation in both fields. However, the job postings provided highlight some gaps that need to be addressed.
+> With your background in both Biology and Computer Science, you may be interested in jobs that combine these fields. A unique opportunity is a Data Analyst in the Pharmaceutical or Biotechnology industry. You can leverage your Statistical Modeling and Data Analysis skills to analyze data related to drug development and disease research.
 > 
-> You can consider taking courses like CSC 857: Bioinformatics Computing or CSC 657: Bioinformatics Computing to fill these gaps. These courses will help you develop a broad range of topics in computational biology as practiced in the life science industry and leading research organizations.
-> 
-> CSC 857 may provide additional coverage on topics such as:
-> 
-> * Protein Modeling
-> * Gene Expression Analysis
-> 
-> CSC 657 covers similar topics but also includes:
-> * Phylogenetic Analysis
-> * Research Literature Review
+> Another potential opportunity is as a Computational Biologist. This role involves applying computational techniques, such as machine learning and bioinformatics, to analyze biological systems and develop new insights into disease mechanisms. Your Genomics, Bioinformatics, and Python skills can be valuable in this field.
 
 ---
 
@@ -938,26 +825,23 @@
 |---|---|
 | Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 10/10 |
-| Utility | 10/10 |
-| **Total** | 🟢 **10.0/10** |
-| Time | 47.7s |
+| Relevance | 8/10 |
+| Support | 9/10 |
+| Utility | 7/10 |
+| **Total** | 🟢 **8.15/10** |
+| Time | 46.1s |
 
-**Critique flags:**
-- ⚠️ citation source 'student profile, relevant courses (top 4 retrieved)' not found in evidence
-- ⚠️ citation source 'relevant courses (top 4 retrieved)' not found in evidence
-- ⚠️ citation source 'relevant courses (top 4 retrieved)' not found in evidence
-
-**Critique summary:** citation source 'student profile, relevant courses (top 4 retrieved)' not found in evidence; citation source 'relevant courses (top 4 retrieved)' not found in evidence
+**Critique summary:** No mention of course sources for data visualization.
 
 **Response:**
 
-> Based on the provided course information, I recommend taking CSC 408: Machine Learning and Data Science for Personalized Medicine.
+> Based on the provided course catalog, CSC 408: Machine Learning and Data Science for Personalized Medicine and CSC 869: Data Mining could be relevant to strengthening your data science skills specifically for biomedical research.
 > 
-> This course teaches you about machine learning, genomic data analysis, bioinformatics concepts, and statistical analysis using Python, which are essential skills for working in biomedical research. Additionally, it provides domain knowledge in healthcare and covers topics such as model evaluation, research literature review, scientific writing, and data visualization, all of which are relevant to biomedical research.
+> CSC 408 directly addresses gaps in bioinformatics concepts, genomic data analysis, machine learning, and statistical analysis, which are essential for biomedical research. 
 > 
-> By taking this course, you will gain a solid foundation in machine learning and data science concepts applied to genomic datasets, making you more competitive for roles in biomedical research.
+> CSC 869 covers key mining algorithms, dimensionality reduction, feature engineering, and data visualization, all of which are critical skills for analyzing large datasets in biomedical research.
+> 
+> Additionally, CSC 311: Data Structures for Data Science Application Development and CSC 408 have a strong connection to each other; CSC 408 builds upon the foundation laid by CSC 311.
 
 ---
 
@@ -975,32 +859,22 @@
 |---|---|
 | Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 6/10 |
-| Utility | 9/10 |
-| **Total** | 🟡 **7.45/10** |
-| Time | 54.1s |
+| Relevance | 10/10 |
+| Support | 8/10 |
+| Utility | 10/10 |
+| **Total** | 🟢 **9.2/10** |
+| Time | 38.5s |
 
 **Critique flags:**
-- ⚠️ unsupported job titles: university grad
-- ⚠️ unsupported skill mentions: 1 django this is required in the new grad software engineer role at color 2 aws this is required in the new grad software engineer role at color 3 llms, the following
-- ⚠️ citation source 'evidence context: job description mentions django as required.' not found in evidence
-- ⚠️ citation source 'evidence context: job description mentions aws as required.' not found in evidence
-- ⚠️ citation source 'evidence context: job description mentions llms as required.' not found in evidence
+- ⚠️ course recommendation overclaims support for CSC 412: django
 
-**Critique summary:** The AI addressed most of the skill gaps identified by the student but missed specifying that Code Review should be at an intermediate level rather than advanced. The AI appropriately connected all relevant evidence, which is a strong point.
+**Critique summary:** course recommendation overclaims support for CSC 412: django
 
 **Response:**
 
-> Based on the relevant job postings, it appears that you are missing the following skills:
+> Based on the job posting for New Grad Software Engineer at Color, you are missing Django, AWS, LLMs, and Code Review. 
 > 
-> 1. Django - This is required in the New Grad Software Engineer role at Color.
-> 2. AWS - This is required in the New Grad Software Engineer role at Color.
-> 3. LLMs (Large Language Models) - This is required in the New Grad Software Engineer role at Color.
-> 4. Code Review - You have completed CSC 215 and CSC 412, but it seems like a more advanced level of code review is needed for senior software engineer roles.
-> 5. Java - This is required in the University Grad role at Glean.
-> 
-> It's also worth noting that having experience with Natural Language Processing (NLP) could be beneficial for certain types of roles or companies, as mentioned in the CSC 620 course description.
+> Consider taking CSC 412: Advanced Software Lab or CSC 215: Intermediate Computer Programming to address some of these gaps, as they cover code review. However, no retrieved course directly addresses all the gaps; you may need to look beyond this course catalog.
 
 ---
 
@@ -1014,19 +888,19 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=6, courses=4) |
+| Intent | `skill_gap` (jobs=3, courses=4) |
 | Planner reason | None |
-| Relevance | 10/10 |
-| Support | 10/10 |
-| Utility | 10/10 |
-| **Total** | 🟢 **10.0/10** |
-| Time | 53.0s |
+| Relevance | 7/10 |
+| Support | 8/10 |
+| Utility | 6/10 |
+| **Total** | 🟡 **7.15/10** |
+| Time | 56.3s |
 
-**Critique summary:** The AI advisor has effectively addressed Marcus by identifying gaps in his skills and providing actionable recommendations for course selection and skill development. The response is highly relevant, supported by credible evidence, and provides clear utility through specific actionable steps.
+**Critique summary:** The response does not explicitly name specific skill gaps (e.g., Cloud infrastructure or automation) that are directly applicable to students transitioning into ML Engineering roles based on their existing DevOps background,
 
 **Response:**
 
-> Based on the retrieved evidence, Senior DevOps Engineer I at Spring Health is the clearest fit in this view. You already cover: AWS, Infrastructure as Code, Kubernetes, Observability. Your main gaps are: DevOps, Azure, GCP, EKS, Automation, Telemetry, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance. No retrieved courses clearly address these gaps for Senior DevOps Engineer I: DevOps, Azure, GCP, EKS, Automation, Telemetry, Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> Your experience in DevOps provides a strong foundation for transitioning into ML Engineering. The main gaps are: Cloud infrastructure, System reliability, Containerization, Cybersecurity, Compliance, Azure, GCP, EKS, Automation, Telemetry. You have experience with Infrastructure as Code and Observability, which is relevant to some aspects of ML Engineering.
 
 ---
 
@@ -1040,23 +914,22 @@
 
 | Field | Value |
 |---|---|
-| Intent | `skill_gap` (jobs=3, courses=4) |
+| Intent | `skill_gap` (jobs=6, courses=4) |
 | Planner reason | None |
-| Relevance | 10/10 |
+| Relevance | 8/10 |
 | Support | 9/10 |
-| Utility | 10/10 |
-| **Total** | 🟢 **9.6/10** |
-| Time | 63.8s |
+| Utility | 8/10 |
+| **Total** | 🟢 **8.4/10** |
+| Time | 39.3s |
 
 **Critique flags:**
-- ⚠️ citation source 'student profile' not found in evidence
-- ⚠️ citation source 'relevant job postings' not found in evidence
+- ⚠️ citation source 'csc 610' not found in evidence
 
-**Critique summary:** The AI response addresses relevance by providing specific skills and courses that are directly relevant to ML engineering. It also accurately traces evidence, but the utility section could be stronger.
+**Critique summary:** The advisor should specify course references for unsupported skills like 'Data Engineering' to avoid vague claims.
 
 **Response:**
 
-> Based on the retrieved evidence, Staff Machine Learning Engineer (Remote) at The Home Depot is the clearest fit in this view. You already cover: Machine Learning, Python, SQL, TensorFlow, PyTorch, NLP, Git. Your main gaps are: GCP, Vertex AI, BigQuery, CI/CD, REST API Design, Data Engineering, Model Deployment, Applied Statistics, Linux. No retrieved courses clearly address these gaps for Staff Machine Learning Engineer (Remote): GCP, Vertex AI, BigQuery, CI/CD, REST API Design, Data Engineering, Model Deployment, Applied Statistics, Linux. I cannot make a supported course recommendation for those gaps from the retrieved courses, so the reliable next step is to target those skill areas directly and retrieve a broader matching course set.
+> You still need to address the gaps: GCP, Vertex AI, BigQuery, CI/CD, REST API Design, Data Engineering, Model Deployment, Applied Statistics, and Linux.
 
 ---
 
@@ -1074,28 +947,22 @@
 |---|---|
 | Intent | `courses` (jobs=0, courses=6) |
 | Planner reason | None |
-| Relevance | 8/10 |
-| Support | 8/10 |
+| Relevance | 9/10 |
+| Support | 6/10 |
 | Utility | 8/10 |
-| **Total** | 🟢 **8.0/10** |
-| Time | 44.2s |
+| **Total** | 🟡 **7.55/10** |
+| Time | 36.7s |
 
 **Critique flags:**
-- ⚠️ course recommendation lacks gap support for CSC 220
+- ⚠️ unsupported course titles: ide and tooling
 
-**Critique summary:** fallback critique
+**Critique summary:** The response only cites course codes but doesn’t provide evidence for skills not covered in completed courses, making it unsupported.
 
 **Response:**
 
-> Based on the provided evidence, it appears that you have some foundation in Python programming from CSC 310 (Computer Programming Lab) and possibly other labs or activities within this course.
+> Based on your current skills and completed courses, it appears that you have a solid foundation in Python programming. However, CSC 310: Computer Programming Lab covers additional topics such as IDE and Tooling, Debugging, Virtual Environments, Version Control, Unit Testing, Scientific Python Stack, Code Style, Shell Scripting Basics, Problem Solving, and Lab Documentation.
 > 
-> However, to address any gaps, here are two potential Python-specific courses:
-> 
-> 1. **CSC 810: Analysis of Algorithms II**: While not exclusively a Python course, this class covers algorithms that often involve Python implementation, such as approximation algorithms, online algorithms, and advanced graph algorithms.
-> 
-> 2. **CSC 220: Data Structures**: This course could cover additional Python-related topics such as data structures, which are fundamental in computer science and programming. Since you already completed CSC 101 and have a foundation in other areas, this might not fill the biggest gap, but still worth exploring if available.
-> 
-> Please note that these courses may require additional prerequisites or may be more focused on theory than practical Python implementation.
+> As for other Python-specific courses, there is no direct evidence of any other courses covering specific gaps in your skills.
 
 ---
 
@@ -1112,93 +979,81 @@
 | Intent | `jobs` (jobs=6, courses=2) |
 | Planner reason | None |
 | Relevance | 8/10 |
-| Support | 8/10 |
-| Utility | 8/10 |
-| **Total** | 🟢 **8.0/10** |
-| Time | 45.2s |
+| Support | 4/10 |
+| Utility | 5/10 |
+| **Total** | 🔴 **5.65/10** |
+| Time | 47.8s |
 
 **Critique flags:**
-- ⚠️ unsupported course titles: sql and
+- ⚠️ unsupported job titles: full stack engineer, machine learning engineer
+- ⚠️ unsupported course titles: python and scala
+- ⚠️ citation source 'top 2 retrieved job postings' not found in evidence
 
-**Critique summary:** fallback critique
+**Critique summary:** The response inaccurately generalizes by stating that no job requires only Java, even though other skills are covered, indicating lack of specificity. Utility is weak as it doesn't pinpoint specific skill gaps related to Java.
 
 **Response:**
 
-> No, there are no job postings you've retrieved that only require Java.
+> There are no retrieved job postings that only require Java, but a Full Stack Engineer role at Guidehouse does not explicitly mention that it's the only required skill, although Java is listed as covered. However, it lists many other skills that are required.
 > 
-> However, CSC 869: Data Mining covers a gap by requiring Python, which is one of the student's existing skills. This course can help address this gap and provide additional exposure to other relevant skills such as SQL and data visualization.
+> A 2026 University Graduate - Machine Learning Engineer role at Adobe requires Java, but covers most of its requirements in other areas such as Python and Scala.
 
 ---
 
 ## Key Findings
 
 ### Top Performers (score ≥ 8)
-- **GQ-25** (Cross-Disciplinary, Priya Sharma): 10.0/10 — _Which courses would strengthen my data science skills specifically for biomedica_
-- **GQ-27** (Skill Gap with Job Context, Marcus Webb): 10.0/10 — _I want to move into ML engineering — what's the gap between my DevOps background_
-- **GQ-28** (Skill Gap with Job Context, Taylor Reyes): 9.6/10 — _What skills do I still need to qualify for production ML engineering at a top te_
-- **GQ-09** (Course Recommendation, Maria Gomez): 8.95/10 — _I've already taken CSC 415 and CSC 510. What advanced courses build on those for_
-- **GQ-16** (Action Plan, Sam Patel): 8.95/10 — _If I can only take one more course, which one gives me the best shot at getting _
-- **GQ-04** (Skill Gap Analysis, Alex Chen): 8.8/10 — _What specific skills am I missing to qualify for a full stack engineering role?_
+- **GQ-15** (Action Plan, Alex Chen): 9.2/10 — _What are the top 3 most impactful things I can do this semester to improve my jo_
+- **GQ-22** (Strong Fit, Marcus Webb): 9.2/10 — _Am I ready for a cloud or DevOps engineering role?_
+- **GQ-26** (Skill Gap with Job Context, Jordan Kim): 9.2/10 — _What skills am I missing to land a senior software engineer role?_
+- **GQ-07** (Course Recommendation, Alex Chen): 8.95/10 — _Which courses should I take to become competitive for web development jobs?_
+- **GQ-20** (Self-Assessment, Maria Gomez): 8.95/10 — _Given everything I've learned, what kind of engineer am I becoming and what shou_
+- **GQ-19** (Self-Assessment, Alex Chen): 8.85/10 — _What are my strongest marketable skills and which job category do they point tow_
+- **GQ-09** (Course Recommendation, Maria Gomez): 8.8/10 — _I've already taken CSC 415 and CSC 510. What advanced courses build on those for_
 - **GQ-14** (Job Comparison, Maria Gomez): 8.8/10 — _Which pays off more for my career — taking more ML courses or pivoting to cloud/_
-- **GQ-02** (Specific Job Fit, Maria Gomez): 8.6/10 — _Which ML engineering jobs match my profile and what's missing?_
-- **GQ-07** (Course Recommendation, Alex Chen): 8.6/10 — _Which courses should I take to become competitive for web development jobs?_
-- **GQ-06** (Skill Gap Analysis, Sam Patel): 8.4/10 — _What is the single most important skill I should learn next to become more emplo_
-- **GQ-24** (Cross-Disciplinary, Priya Sharma): 8.4/10 — _Given my biology and CS background, what unique job opportunities exist for me?_
-- **GQ-08** (Course Recommendation, Sam Patel): 8.1/10 — _What's the most valuable course I can take next semester to open up more job opt_
-- **GQ-03** (Specific Job Fit, Sam Patel): 8.0/10 — _I only have basic programming skills. What entry-level jobs are realistic for me_
-- **GQ-29** (Retrieval Precision, Alex Chen): 8.0/10 — _What Python-specific courses do I still need?_
-- **GQ-30** (Retrieval Precision, Sam Patel): 8.0/10 — _Are there any jobs that only require Java?_
+- **GQ-06** (Skill Gap Analysis, Sam Patel): 8.7/10 — _What is the single most important skill I should learn next to become more emplo_
+- **GQ-04** (Skill Gap Analysis, Alex Chen): 8.55/10 — _What specific skills am I missing to qualify for a full stack engineering role?_
+- **GQ-28** (Skill Gap with Job Context, Taylor Reyes): 8.4/10 — _What skills do I still need to qualify for production ML engineering at a top te_
+- **GQ-08** (Course Recommendation, Sam Patel): 8.2/10 — _What's the most valuable course I can take next semester to open up more job opt_
+- **GQ-25** (Cross-Disciplinary, Priya Sharma): 8.15/10 — _Which courses would strengthen my data science skills specifically for biomedica_
+- **GQ-16** (Action Plan, Sam Patel): 8.1/10 — _If I can only take one more course, which one gives me the best shot at getting _
+- **GQ-24** (Cross-Disciplinary, Priya Sharma): 8.1/10 — _Given my biology and CS background, what unique job opportunities exist for me?_
 
 ### Needs Work (score < 6)
-- All questions scored ≥ 6.
+- **GQ-12** (Career Readiness, Sam Patel): 4.7/10 — _Be honest — am I competitive for any real industry jobs right now?_
+- **GQ-30** (Retrieval Precision, Sam Patel): 5.65/10 — _Are there any jobs that only require Java?_
+- **GQ-01** (Specific Job Fit, Alex Chen): 5.95/10 — _Am I a good fit for the Junior Software Engineer role at Leidos?_
 
 ### Recurring Critique Flags
-- `unsupported job titles` — appeared 10×
-- `unsupported course titles` — appeared 10×
-- `unsupported skill mentions` — appeared 5×
-- `citation source 'evidence context` — appeared 3×
-- `course recommendation lacks gap support for CSC 220` — appeared 2×
-- `course recommendation lacks gap support for CSC 101` — appeared 2×
-- `citation source 'relevant courses (top 4 retrieved)' not found in evidence` — appeared 2×
-- `citation source "no course or skill from leidos's job postings aligns with these gaps in the evidence context." not found in evidence` — appeared 1×
-- `citation source 'csc 306 course description' not found in evidence` — appeared 1×
-- `citation source 'csc 803 course description' not found in evidence` — appeared 1×
+- `unsupported job titles` — appeared 7×
+- `unsupported course titles` — appeared 5×
+- `unsupported skill mentions` — appeared 3×
+- `company references do not align with retrieved jobs` — appeared 1×
+- `citation source 'course code' not found in evidence` — appeared 1×
 - `unsupported course codes` — appeared 1×
-- `citation source 'student_profile` — appeared 1×
-- `citation source 'evidence context used` — appeared 1×
-- `citation source 'csc 317` — appeared 1×
-- `citation source "equifax's job posting on site reliability engineering" not found in evidence` — appeared 1×
-- `citation source 'the course description mentions aws, gcp, etc.' not found in evidence` — appeared 1×
-- `citation source "alex chen's resume shows these skills" not found in evidence` — appeared 1×
-- `citation source "csc 694's source excerpt mentions project management in a business context." not found in evidence` — appeared 1×
-- `course recommendation lacks gap support for CSC 657` — appeared 1×
-- `citation source 'the course description mentions a broad range of computational biology topics, including protein modeling and gene expression analysis.' not found in evidence` — appeared 1×
-- `citation source 'the course includes phylogenetic analysis and research literature review, which are relevant to job postings.' not found in evidence` — appeared 1×
-- `citation source 'student profile, relevant courses (top 4 retrieved)' not found in evidence` — appeared 1×
-- `citation source 'student profile' not found in evidence` — appeared 1×
-- `citation source 'relevant job postings' not found in evidence` — appeared 1×
+- `response suggests non-retrieved learning resources` — appeared 1×
+- `course recommendation lacks gap support for CSC 307` — appeared 1×
+- `citation source 'csp1982' not found in evidence` — appeared 1×
+- `course recommendation overclaims support for CSC 412` — appeared 1×
+- `citation source 'csc 610' not found in evidence` — appeared 1×
+- `citation source 'top 2 retrieved job postings' not found in evidence` — appeared 1×
 
 ### Slow Queries (> 40s)
-- **GQ-02**: 46.4s — Which ML engineering jobs match my profile and what's missing?
-- **GQ-03**: 46.9s — I only have basic programming skills. What entry-level jobs are realis
-- **GQ-05**: 60.9s — I'm strong in ML and deep learning. What gaps are blocking me from clo
-- **GQ-07**: 44.6s — Which courses should I take to become competitive for web development 
-- **GQ-08**: 43.6s — What's the most valuable course I can take next semester to open up mo
-- **GQ-10**: 55.4s — I'm graduating in 6 months. Give me an honest assessment of my job mar
-- **GQ-11**: 61.8s — Create a semester-by-semester plan to make me competitive for senior M
-- **GQ-12**: 75.0s — Be honest — am I competitive for any real industry jobs right now?
-- **GQ-14**: 61.0s — Which pays off more for my career — taking more ML courses or pivoting
-- **GQ-15**: 59.3s — What are the top 3 most impactful things I can do this semester to imp
-- **GQ-16**: 45.4s — If I can only take one more course, which one gives me the best shot a
-- **GQ-17**: 66.5s — I want to pivot into data science. What's the gap between where I am a
-- **GQ-18**: 42.8s — I'm thinking of moving into systems or embedded software. Is my backgr
-- **GQ-20**: 59.1s — Given everything I've learned, what kind of engineer am I becoming and
-- **GQ-21**: 42.4s — What full stack or web engineering roles am I competitive for right no
-- **GQ-22**: 52.1s — Am I ready for a cloud or DevOps engineering role?
-- **GQ-23**: 41.1s — Which ML or AI research engineering positions am I closest to qualifyi
-- **GQ-25**: 47.7s — Which courses would strengthen my data science skills specifically for
-- **GQ-26**: 54.1s — What skills am I missing to land a senior software engineer role?
-- **GQ-27**: 53.0s — I want to move into ML engineering — what's the gap between my DevOps 
-- **GQ-28**: 63.8s — What skills do I still need to qualify for production ML engineering a
-- **GQ-29**: 44.2s — What Python-specific courses do I still need?
-- **GQ-30**: 45.2s — Are there any jobs that only require Java?
+- **GQ-01**: 45.0s — Am I a good fit for the Junior Software Engineer role at Leidos?
+- **GQ-02**: 54.5s — Which ML engineering jobs match my profile and what's missing?
+- **GQ-05**: 41.7s — I'm strong in ML and deep learning. What gaps are blocking me from clo
+- **GQ-10**: 41.6s — I'm graduating in 6 months. Give me an honest assessment of my job mar
+- **GQ-11**: 89.8s — Create a semester-by-semester plan to make me competitive for senior M
+- **GQ-12**: 47.8s — Be honest — am I competitive for any real industry jobs right now?
+- **GQ-14**: 50.7s — Which pays off more for my career — taking more ML courses or pivoting
+- **GQ-15**: 50.8s — What are the top 3 most impactful things I can do this semester to imp
+- **GQ-17**: 44.7s — I want to pivot into data science. What's the gap between where I am a
+- **GQ-18**: 49.5s — I'm thinking of moving into systems or embedded software. Is my backgr
+- **GQ-19**: 50.9s — What are my strongest marketable skills and which job category do they
+- **GQ-20**: 54.4s — Given everything I've learned, what kind of engineer am I becoming and
+- **GQ-21**: 48.6s — What full stack or web engineering roles am I competitive for right no
+- **GQ-22**: 51.1s — Am I ready for a cloud or DevOps engineering role?
+- **GQ-23**: 53.6s — Which ML or AI research engineering positions am I closest to qualifyi
+- **GQ-24**: 40.6s — Given my biology and CS background, what unique job opportunities exis
+- **GQ-25**: 46.1s — Which courses would strengthen my data science skills specifically for
+- **GQ-27**: 56.3s — I want to move into ML engineering — what's the gap between my DevOps 
+- **GQ-30**: 47.8s — Are there any jobs that only require Java?
