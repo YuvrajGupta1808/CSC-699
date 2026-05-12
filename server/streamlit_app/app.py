@@ -21,6 +21,7 @@ from retrieval.context_builder import (
     get_student_profile,
 )
 from retrieval.graph import run_advisor_turn
+from retrieval.record_utils import student_completed_courses_value, student_skill_profile_value
 
 load_dotenv()
 
@@ -76,9 +77,9 @@ with st.sidebar:
 
     profile = st.session_state.student_profile
     st.markdown(f"**Major:** {profile.get('major', '—')}")
-    completed = profile.get("completed_courses_json") or []
+    completed = student_completed_courses_value(profile)
     st.markdown(f"**Courses:** {', '.join(completed) or 'none'}")
-    skills = [s["skill"] for s in (profile.get("skill_profile_json") or [])]
+    skills = [s for s in student_skill_profile_value(profile) if isinstance(s, str)]
     st.markdown(f"**Skills:** {', '.join(skills) or 'none'}")
 
     st.divider()
@@ -204,6 +205,8 @@ if user_input:
                     f"R:`{sc['relevance']}` S:`{sc['support']}` U:`{sc['utility']}` "
                     f"total:`{sc['total']}`  \n_{sc['critique']}_"
                 )
+                if sc.get("support_findings"):
+                    st.caption("Support checks: " + "; ".join(sc["support_findings"]))
             if runner_up and score_gap < 1.0:
                 st.markdown("---")
                 st.markdown(f"**Runner-up ({runner_up['view']['label']}) full response:**")
