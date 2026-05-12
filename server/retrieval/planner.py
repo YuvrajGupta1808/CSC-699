@@ -19,6 +19,14 @@ FOLLOWUP_REFERENCE_WORDS = {"those", "them", "that", "it", "they", "which", "the
 
 _REQUIRED_INTENT_KEYS = {"intent", "top_k_jobs", "top_k_courses"}
 _VALID_INTENTS = {"greeting", "jobs", "skill_gap", "courses", "broad", "general"}
+_DEFAULT_INTENT_REASON = {
+    "greeting":   "small talk or no career question detected",
+    "jobs":       "job-fit or role recommendation question",
+    "skill_gap":  "skill-gap question requires job context",
+    "courses":    "learning or upskill question",
+    "broad":      "broad readiness or roadmap question",
+    "general":    "general advisory question",
+}
 
 
 def _llm_classify_intent(question: str, history_summary: str) -> dict | None:
@@ -44,6 +52,8 @@ def _llm_classify_intent(question: str, history_summary: str) -> dict | None:
             return None
         result["top_k_jobs"] = max(0, int(result["top_k_jobs"]))
         result["top_k_courses"] = max(0, int(result["top_k_courses"]))
+        reason = result.get("reason") or result.get("reasoning") or ""
+        result["reason"] = reason.strip() or _DEFAULT_INTENT_REASON.get(result["intent"], "llm classified")
         return result
     except Exception:
         return None

@@ -1,3 +1,4 @@
+import atexit
 import os
 
 import weaviate
@@ -18,3 +19,15 @@ def get_weaviate() -> weaviate.WeaviateClient:
         port = int(port_str) if port_str else 8080
         _client = weaviate.connect_to_local(host=host, port=port, grpc_port=50051)
     return _client
+
+
+def close_weaviate() -> None:
+    global _client
+    if _client is not None:
+        try:
+            _client.close()
+        finally:
+            _client = None
+
+
+atexit.register(close_weaviate)
