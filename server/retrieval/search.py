@@ -1,16 +1,66 @@
 import os
-from qdrant_client.models import Filter, FieldCondition, MatchValue
-from db.qdrant_client import get_qdrant
+
+from weaviate.classes.query import MetadataQuery
+from weaviate.classes.query import Filter
+
+from db.weaviate_client import get_weaviate
 from retrieval.embedder import embed
+from retrieval.skills import count_skill_overlap, normalize_skill_name
+from retrieval.text_utils import query_terms as extract_query_terms
 from dotenv import load_dotenv
 from langsmith import traceable
 
 load_dotenv()
 
-JOBS_COLLECTION = "jobs_collection"
-COURSES_COLLECTION = "courses_collection"
+JOB_CLASS = "Job"
+COURSE_CLASS = "Course"
 TOP_K_JOBS = int(os.environ.get("RETRIEVAL_TOP_K_JOBS", 5))
 TOP_K_COURSES = int(os.environ.get("RETRIEVAL_TOP_K_COURSES", 5))
+MIN_JOB_SCORE = float(os.environ.get("RETRIEVAL_MIN_JOB_SCORE", 0.05))
+MIN_COURSE_SCORE = float(os.environ.get("RETRIEVAL_MIN_COURSE_SCORE", 0.05))
+HYBRID_ALPHA = float(os.environ.get("HYBRID_ALPHA", 0.6))
+RRF_K = 60
+
+
+def _max_pool_by_record(weaviate_objects, id_key: str) -> list[dict]:
+    """Group chunk-level Weaviate hits by record ID, keep the max hybrid score per record."""
+    by_record: dict[str, dict] = {}
+    for obj in weaviate_objects:
+        props = obj.properties
+        record_id = props.get(id_key)
+        if not record_id:
+            continue
+        score = obj.metadata.score or 0.0
+        if record_id not in by_record or score > by_record[record_id]["_raw_score"]:
+            by_record[record_id] = {
+                id_key: record_id,
+                **{k: v for k, v in props.items() if k != id_key},
+                "_raw_score": score,
+            }
+            by_record[record_id][id_key] = record_id
+    return list(by_record.values())
+
+
+def _rrf_rerank(hits: list[dict], rank_keys: list[str], k: int = RRF_K) -> list[dict]:
+    """Fuse multiple ranking signals via Reciprocal Rank Fusion."""
+    for key in rank_keys:
+        sorted_by_key = sorted(hits, key=lambda h: h.get(key, 0.0), reverse=True)
+        rank_field = f"_rank_{key}"
+        for rank, hit in enumerate(sorted_by_key):
+            hit[rank_field] = rank
+
+    for hit in hits:
+        rrf_score = sum(
+            1.0 / (k + hit.get(f"_rank_{key}", len(hits)))
+            for key in rank_keys
+        )
+        hit["rrf_score"] = round(rrf_score, 6)
+
+    for hit in hits:
+        for key in rank_keys:
+            hit.pop(f"_rank_{key}", None)
+
+    return sorted(hits, key=lambda h: h["rrf_score"], reverse=True)
 
 
 @traceable(name="search_jobs", run_type="retriever")
@@ -19,82 +69,120 @@ def search_jobs(
     top_k: int = 5,
     job_id_filter: str | None = None,
     student_skills: list[str] | None = None,
+    raw_query: str | None = None,
 ) -> list[dict]:
     """
-    Semantic search over jobs_collection.
-    Optionally filter to a specific job_id.
-    Returns list of { job_id, title, company, skills, score }.
+    Hybrid search (BM25 + semantic) over the Job Weaviate collection with RRF reranking.
+    Returns list of { job_id, title, company, skills, score, semantic_score, skill_overlap, rrf_score }.
     """
-    client = get_qdrant()
+    client = get_weaviate()
     query_vector = embed(query)
+    collection = client.collections.get(JOB_CLASS)
 
-    qdrant_filter = None
+    weaviate_filter = None
     if job_id_filter:
-        qdrant_filter = Filter(
-            must=[FieldCondition(key="job_id", match=MatchValue(value=job_id_filter))]
-        )
+        weaviate_filter = Filter.by_property("job_id").equal(job_id_filter)
 
-    results = client.query_points(
-        collection_name=JOBS_COLLECTION,
-        query=query_vector,
-        limit=max(top_k * 3, top_k),
-        query_filter=qdrant_filter,
-        with_payload=True,
+    response = collection.query.hybrid(
+        query=query,
+        vector=query_vector,
+        alpha=HYBRID_ALPHA,
+        limit=max(top_k * 5, 20),
+        filters=weaviate_filter,
+        return_metadata=MetadataQuery(score=True),
     )
 
-    hits = []
-    student_skill_set = {s.strip().lower() for s in (student_skills or []) if s}
-    for r in results.points:
-        job_skills = r.payload.get("skills", []) or []
+    # Collapse multiple chunk-hits per job down to the best hybrid score.
+    pooled = _max_pool_by_record(response.objects, "job_id")
+
+    student_skill_set = {normalize_skill_name(s) for s in (student_skills or []) if s}
+    lexical_source = raw_query or query
+    terms = extract_query_terms(lexical_source)
+
+    candidates = []
+    for hit in pooled:
+        semantic_score = round(hit["_raw_score"], 4)
+        if semantic_score < MIN_JOB_SCORE and not job_id_filter:
+            continue
+        job_skills = hit.get("skills", []) or []
         overlap = 0
         if student_skill_set and job_skills:
-            overlap = len({s.lower() for s in job_skills} & student_skill_set)
-        # Blend semantic score with student-skill overlap for personalization.
-        personalized_score = round((r.score or 0.0) + overlap * 0.02, 4)
-        hits.append({
-            "job_id": r.payload.get("job_id"),
-            "title": r.payload.get("title"),
-            "company": r.payload.get("company"),
+            overlap = len({normalize_skill_name(s) for s in job_skills} & student_skill_set)
+        lexical_overlap = count_skill_overlap(list(terms), job_skills)
+        title = hit.get("title") or ""
+        title_terms = extract_query_terms(title)
+        title_overlap = len(terms & title_terms)
+        candidates.append({
+            "job_id": hit.get("job_id"),
+            "title": title,
+            "company": hit.get("company"),
             "skills": job_skills,
-            "score": personalized_score,
-            "semantic_score": round(r.score, 4),
+            "semantic_score": semantic_score,
             "skill_overlap": overlap,
+            "query_skill_overlap": lexical_overlap,
+            "query_title_overlap": title_overlap,
         })
-    hits.sort(key=lambda x: x["score"], reverse=True)
-    return hits[:top_k]
+
+    reranked = _rrf_rerank(candidates, ["semantic_score", "skill_overlap", "query_skill_overlap"])
+    for hit in reranked:
+        hit["score"] = hit["rrf_score"]
+
+    return reranked[:top_k]
 
 
 @traceable(name="search_courses", run_type="retriever")
 def search_courses(query: str, top_k: int = 5) -> list[dict]:
     """
-    Semantic search over courses_collection.
-    Returns list of { course_id, course_code, title, skills, score }.
+    Hybrid search (BM25 + semantic) over the Course Weaviate collection with RRF reranking.
+    Returns list of { course_id, course_code, title, skills, score, semantic_score, rrf_score }.
     """
-    client = get_qdrant()
+    client = get_weaviate()
     query_vector = embed(query)
+    collection = client.collections.get(COURSE_CLASS)
 
-    results = client.query_points(
-        collection_name=COURSES_COLLECTION,
-        query=query_vector,
-        limit=max(top_k * 3, top_k),
-        with_payload=True,
+    response = collection.query.hybrid(
+        query=query,
+        vector=query_vector,
+        alpha=HYBRID_ALPHA,
+        limit=max(top_k * 5, 20),
+        return_metadata=MetadataQuery(score=True),
     )
 
-    hits = []
+    # Collapse multiple chunk-hits per course down to the best hybrid score.
+    pooled = _max_pool_by_record(response.objects, "course_id")
+
+    terms = extract_query_terms(query)
+    normalized_terms = {normalize_skill_name(t) for t in terms}
+
     seen_course_codes: set[str] = set()
-    for r in results.points:
-        code = (r.payload.get("course_code") or "").strip()
+    candidates = []
+    for hit in pooled:
+        semantic_score = round(hit["_raw_score"], 4)
+        if semantic_score < MIN_COURSE_SCORE:
+            continue
+        code = (hit.get("course_code") or "").strip()
         if code and code in seen_course_codes:
             continue
         if code:
             seen_course_codes.add(code)
-        hits.append({
-            "course_id": r.payload.get("course_id"),
+        course_skills = hit.get("skills", []) or []
+        title = hit.get("title") or ""
+        title_terms = extract_query_terms(title)
+        skill_overlap = count_skill_overlap(list(normalized_terms), course_skills)
+        title_overlap = len(terms & title_terms)
+        candidates.append({
+            "course_id": hit.get("course_id"),
             "course_code": code,
-            "title": r.payload.get("title"),
-            "skills": r.payload.get("skills", []),
-            "score": round(r.score, 4),
+            "title": title,
+            "skills": course_skills,
+            "semantic_score": semantic_score,
+            "skill_overlap": skill_overlap,
+            "query_skill_overlap": skill_overlap,
+            "query_title_overlap": title_overlap,
         })
-        if len(hits) >= top_k:
-            break
-    return hits
+
+    reranked = _rrf_rerank(candidates, ["semantic_score", "skill_overlap", "query_skill_overlap"])
+    for hit in reranked:
+        hit["score"] = hit["rrf_score"]
+
+    return reranked[:top_k]
