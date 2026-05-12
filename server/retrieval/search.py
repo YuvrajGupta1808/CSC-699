@@ -1,3 +1,4 @@
+import logging
 import os
 
 from weaviate.classes.query import MetadataQuery
@@ -11,6 +12,8 @@ from dotenv import load_dotenv
 from langsmith import traceable
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 JOB_CLASS = "Job"
 COURSE_CLASS = "Course"
@@ -83,26 +86,34 @@ def search_jobs(
     if job_id_filter:
         weaviate_filter = Filter.by_property("job_id").equal(job_id_filter)
 
+    fetch_limit = max(top_k * 5, 20)
     response = collection.query.hybrid(
         query=query,
         vector=query_vector,
         alpha=HYBRID_ALPHA,
-        limit=max(top_k * 5, 20),
+        limit=fetch_limit,
         filters=weaviate_filter,
         return_metadata=MetadataQuery(score=True),
     )
+    raw_chunks = len(response.objects)
 
     # Collapse multiple chunk-hits per job down to the best hybrid score.
     pooled = _max_pool_by_record(response.objects, "job_id")
+    logger.debug(
+        "search_jobs stage=weaviate query=%r fetch_limit=%d raw_chunks=%d pooled_records=%d",
+        query[:80], fetch_limit, raw_chunks, len(pooled),
+    )
 
     student_skill_set = {normalize_skill_name(s) for s in (student_skills or []) if s}
     lexical_source = raw_query or query
     terms = extract_query_terms(lexical_source)
 
     candidates = []
+    score_filtered = 0
     for hit in pooled:
         semantic_score = round(hit["_raw_score"], 4)
         if semantic_score < MIN_JOB_SCORE and not job_id_filter:
+            score_filtered += 1
             continue
         job_skills = hit.get("skills", []) or []
         overlap = 0
@@ -123,11 +134,21 @@ def search_jobs(
             "query_title_overlap": title_overlap,
         })
 
+    logger.debug(
+        "search_jobs stage=score_filter min_score=%.3f dropped=%d candidates=%d",
+        MIN_JOB_SCORE, score_filtered, len(candidates),
+    )
+
     reranked = _rrf_rerank(candidates, ["semantic_score", "skill_overlap", "query_skill_overlap"])
     for hit in reranked:
         hit["score"] = hit["rrf_score"]
 
-    return reranked[:top_k]
+    results = reranked[:top_k]
+    logger.debug(
+        "search_jobs stage=rrf_rerank top_k=%d returned=%d top_titles=%s",
+        top_k, len(results), [h.get("title", "?") for h in results[:3]],
+    )
+    return results
 
 
 @traceable(name="search_courses", run_type="retriever")
@@ -140,28 +161,38 @@ def search_courses(query: str, top_k: int = 5) -> list[dict]:
     query_vector = embed(query)
     collection = client.collections.get(COURSE_CLASS)
 
+    fetch_limit = max(top_k * 5, 20)
     response = collection.query.hybrid(
         query=query,
         vector=query_vector,
         alpha=HYBRID_ALPHA,
-        limit=max(top_k * 5, 20),
+        limit=fetch_limit,
         return_metadata=MetadataQuery(score=True),
     )
+    raw_chunks = len(response.objects)
 
     # Collapse multiple chunk-hits per course down to the best hybrid score.
     pooled = _max_pool_by_record(response.objects, "course_id")
+    logger.debug(
+        "search_courses stage=weaviate query=%r fetch_limit=%d raw_chunks=%d pooled_records=%d",
+        query[:80], fetch_limit, raw_chunks, len(pooled),
+    )
 
     terms = extract_query_terms(query)
     normalized_terms = {normalize_skill_name(t) for t in terms}
 
     seen_course_codes: set[str] = set()
     candidates = []
+    score_filtered = 0
+    deduped = 0
     for hit in pooled:
         semantic_score = round(hit["_raw_score"], 4)
         if semantic_score < MIN_COURSE_SCORE:
+            score_filtered += 1
             continue
         code = (hit.get("course_code") or "").strip()
         if code and code in seen_course_codes:
+            deduped += 1
             continue
         if code:
             seen_course_codes.add(code)
@@ -181,8 +212,18 @@ def search_courses(query: str, top_k: int = 5) -> list[dict]:
             "query_title_overlap": title_overlap,
         })
 
+    logger.debug(
+        "search_courses stage=score_filter min_score=%.3f dropped=%d deduped=%d candidates=%d",
+        MIN_COURSE_SCORE, score_filtered, deduped, len(candidates),
+    )
+
     reranked = _rrf_rerank(candidates, ["semantic_score", "skill_overlap", "query_skill_overlap"])
     for hit in reranked:
         hit["score"] = hit["rrf_score"]
 
-    return reranked[:top_k]
+    results = reranked[:top_k]
+    logger.debug(
+        "search_courses stage=rrf_rerank top_k=%d returned=%d top_codes=%s",
+        top_k, len(results), [h.get("course_code", "?") for h in results[:3]],
+    )
+    return results
