@@ -1,14 +1,10 @@
 import json
-import os
 import re
 
-import httpx
 from langsmith import traceable
 
 from retrieval.prompts import CLASSIFY_PROMPT
-
-OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "llama3.2")
+from retrieval.providers import chat_complete as provider_chat_complete, planner_model
 
 GREETING_KEYWORDS = {"hi", "hello", "hey", "thanks", "thank you"}
 JOB_KEYWORDS = {"job", "jobs", "role", "roles", "position", "positions", "intern", "internship", "career", "hiring"}
@@ -32,13 +28,12 @@ _DEFAULT_INTENT_REASON = {
 def _llm_classify_intent(question: str, history_summary: str) -> dict | None:
     prompt = CLASSIFY_PROMPT.format(question=question, history_summary=history_summary)
     try:
-        resp = httpx.post(
-            f"{OLLAMA_URL}/api/chat",
-            json={"model": CHAT_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False},
+        raw = provider_chat_complete(
+            [{"role": "user", "content": prompt}],
+            model_role="planner",
             timeout=10,
+            temperature=0.0,
         )
-        resp.raise_for_status()
-        raw = resp.json()["message"]["content"].strip()
         raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
         if raw.startswith("```"):
             raw = raw.split("```")[1]

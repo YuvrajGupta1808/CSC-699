@@ -10,23 +10,16 @@ Support is enforced with deterministic evidence checks before any LLM score is u
 """
 
 import json
-import os
 import re
 
-import httpx
 from dotenv import load_dotenv
 
 from retrieval.observability import ollama_timing_metadata, ollama_usage_metadata
 from retrieval.prompts import CRITIQUE_PROMPT
+from retrieval.providers import chat_complete as provider_chat_complete, critique_model
 from retrieval.skills import normalize_skill_name
 
 load_dotenv()
-
-OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-CHAT_MODEL = os.environ.get("OLLAMA_CHAT_MODEL", "llama3.2")
-# Critique uses a separate model to avoid self-evaluation bias.
-# deepseek-r1 is a reasoning model with a different architecture than llama3.2.
-CRITIQUE_MODEL = os.environ.get("OLLAMA_CRITIQUE_MODEL", "deepseek-r1:1.5b")
 
 TITLE_CONNECTORS = (
     "and|or|of|for|to|in|on|with|the|a|an|vs|via|through|from"
@@ -416,20 +409,12 @@ def _llm_scores_with_details(question: str, context: str, response: str, bundle:
         response=response[:1800],
         intent=intent,
     )
-    resp = httpx.post(
-        f"{OLLAMA_URL}/api/chat",
-        json={
-            "model": CRITIQUE_MODEL,
-            "messages": [{"role": "user", "content": prompt}],
-            "stream": False,
-        },
+    raw = provider_chat_complete(
+        [{"role": "user", "content": prompt}],
+        model_role="critique",
         timeout=60,
+        temperature=0.0,
     )
-    resp.raise_for_status()
-    payload = resp.json()
-    raw = payload["message"]["content"].strip()
-
-    # Strip deepseek-r1 <think>...</think> reasoning block
     raw = re.sub(r"<think>.*?</think>", "", raw, flags=re.DOTALL).strip()
     # Strip markdown code fences
     if raw.startswith("```"):
