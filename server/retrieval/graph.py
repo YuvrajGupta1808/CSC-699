@@ -122,7 +122,14 @@ def _build_course_query(state: AdvisorState, job_hits: list[dict[str, Any]]) -> 
     deduped_missing_skills = list(dict.fromkeys(missing_skills))
     parts = [state["user_message"]]
     if deduped_missing_skills:
+        # Job-derived gaps — strong signal
         parts.append(f"Prioritize courses that teach: {', '.join(deduped_missing_skills[:12])}")
+    elif student_skills:
+        # No job context — anchor query on the student's actual skills so retrieval
+        # finds courses that extend their existing profile, not just generic CS courses
+        parts.append(
+            f"Find advanced courses that build on or extend these skills: {', '.join(student_skills[:10])}"
+        )
     return "\n".join(part for part in parts if part)
 
 
@@ -320,12 +327,29 @@ def search_courses_node(state: AdvisorState) -> dict[str, Any]:
         return {"course_hits": [], "status_log": ["Skipped course search."]}
 
     course_query = _build_course_query(state, state.get("job_hits", []))
-    course_hits = search_courses(course_query, top_k=plan["top_k_courses"])
+
+    # Fetch extra results so filtering completed courses doesn't leave us short
+    profile = state.get("student_profile", {})
+    completed = {
+        c.strip().upper().replace(" ", "")
+        for c in student_completed_courses_value(profile)
+        if c
+    }
+    fetch_k = plan["top_k_courses"] + len(completed) + 5
+    raw_hits = search_courses(course_query, top_k=fetch_k)
+
+    # Filter out courses the student has already completed
+    course_hits = [
+        h for h in raw_hits
+        if (h.get("course_code") or "").strip().upper().replace(" ", "") not in completed
+    ][: plan["top_k_courses"]]
+
     attach_run_metadata(
         metadata={
             "course_search": {
                 "query": course_query,
                 "top_k_courses": plan["top_k_courses"],
+                "completed_filtered": len(raw_hits) - len(course_hits),
                 "hits": summarize_course_hits(course_hits),
             }
         },
@@ -333,7 +357,7 @@ def search_courses_node(state: AdvisorState) -> dict[str, Any]:
     )
     return {
         "course_hits": course_hits,
-        "status_log": [f"Course search returned `{len(course_hits)}` hit(s)."],
+        "status_log": [f"Course search returned `{len(course_hits)}` hit(s) (filtered {len(raw_hits) - len(course_hits)} already completed)."],
     }
 
 
