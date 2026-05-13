@@ -80,6 +80,7 @@ Score the response on exactly these 3 axes (0–10 each):
 - relevance: Does the response directly answer the student's question without drifting off-topic? A response that answers the wrong question scores ≤4 regardless of quality.
 - support: Are ALL claims traceable to the evidence context? Penalize unsupported course codes, invented job titles, and overclaimed skills. Each unsupported claim reduces this score by 2.
 - utility: Is the response actionable? Does it name specific skill gaps and recommend specific courses by code with a clear reason for each recommendation?
+- For "broad" or "general" intent (career readiness, roadmaps): a response that names only one unachievable role without addressing the student's overall market position scores ≤4 on utility, regardless of accuracy.
 
 For evidence_citations: cite ONLY verifiable facts — job titles, course codes, or skill names that appear word-for-word in the evidence context.
 STRICT citation source rules:
@@ -88,6 +89,7 @@ STRICT citation source rules:
 - Skill source: use ONLY the skill name, e.g. "Python" — never a sentence.
 - NEVER cite "student profile", "evidence context", "relevant job postings", or any phrase that is not a specific entity.
 
+Intent: {intent}
 STUDENT QUESTION:
 {question}
 

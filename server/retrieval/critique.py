@@ -409,11 +409,12 @@ def _parse_critique_json(raw: str) -> dict:
     raise ValueError(f"Cannot parse critique JSON from: {raw[:200]!r}")
 
 
-def _llm_scores_with_details(question: str, context: str, response: str, bundle: dict | None = None) -> dict:
+def _llm_scores_with_details(question: str, context: str, response: str, bundle: dict | None = None, intent: str = "general") -> dict:
     prompt = CRITIQUE_PROMPT.format(
         question=question,
         context=context[:4000],
         response=response[:1800],
+        intent=intent,
     )
     resp = httpx.post(
         f"{OLLAMA_URL}/api/chat",
@@ -460,7 +461,7 @@ def _llm_scores_with_details(question: str, context: str, response: str, bundle:
     }
 
 
-def critique_candidate_details(question: str, bundle: dict, context: str, response: str) -> dict:
+def critique_candidate_details(question: str, bundle: dict, context: str, response: str, intent: str = "general") -> dict:
     """
     Returns: { "relevance": int, "support": int, "utility": int,
                "critique": str, "total": float, "support_findings": list[str] }
@@ -471,7 +472,7 @@ def critique_candidate_details(question: str, bundle: dict, context: str, respon
     raw_response = None
 
     try:
-        llm_result = _llm_scores_with_details(question, context, response, bundle=bundle)
+        llm_result = _llm_scores_with_details(question, context, response, bundle=bundle, intent=intent)
         llm_scores = llm_result["scores"]
         usage_metadata = llm_result["usage_metadata"]
         timing_metadata = llm_result["timing_metadata"]
