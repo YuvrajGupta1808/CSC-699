@@ -5,7 +5,7 @@ CREATE TABLE "jobs" (
   "company" text,
   "location" text,
   "description" text,
-  "skills_jobs_json" jsonb,
+  "skills_jobs" text[],
   "posted_at" timestamptz,
   "ingested_at" timestamptz
 );
@@ -14,9 +14,9 @@ CREATE TABLE "students" (
   "student_id" uuid PRIMARY KEY,
   "name" text,
   "major" text,
-  "completed_courses_json" jsonb,
-  "skill_profile_json" jsonb,
-  "last_recommendations_json" jsonb,
+  "completed_courses" text[],
+  "skill_profile" text[],
+  "last_recommendations" text[],
   "updated_at" timestamptz
 );
 
@@ -25,6 +25,6 @@ CREATE TABLE "courses" (
   "course_code" text UNIQUE,
   "title" text,
   "description" text,
-  "skills_courses_json" jsonb,
+  "skills_courses" text[],
   "updated_at" timestamptz
 );

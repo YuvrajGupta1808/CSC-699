@@ -1,0 +1,52 @@
+[
+  {
+    "name": "greeting",
+    "question": "hello",
+    "expects_retrieval": false
+  },
+  {
+    "name": "job-fit",
+    "question": "What jobs fit my background right now?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "backend-fit",
+    "question": "What backend or software engineering roles fit me best?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "skill-gaps",
+    "question": "What skills am I missing for those roles?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "course-next",
+    "question": "What courses should I take next?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "completed-course-relevance",
+    "question": "Which of my completed courses are most relevant to those roles?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "ml-gaps",
+    "question": "What gaps matter most if I want machine learning roles?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "ai-target-roles",
+    "question": "What entry-level roles should I target if I want AI-related work?",
+    "expects_retrieval": true
+  },
+  {
+    "name": "strengths-weaknesses",
+    "question": "Summarize my strongest skills and weakest gaps in a short answer.",
+    "expects_retrieval": true
+  },
+  {
+    "name": "semester-plan",
+    "question": "Give me a short action plan for the next semester.",
+    "expects_retrieval": true
+  }
+]

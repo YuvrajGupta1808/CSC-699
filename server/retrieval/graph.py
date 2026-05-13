@@ -46,6 +46,7 @@ from retrieval.planner import plan_retrieval
 from retrieval.record_utils import job_skills_value, student_completed_courses_value, student_skill_profile_value
 from retrieval.search import search_courses, search_jobs
 from retrieval.skills import compute_skill_overlap, extract_skill_names, normalize_skill_name
+from retrieval.text_utils import query_terms as extract_query_terms
 
 
 class AdvisorState(TypedDict, total=False):
@@ -94,7 +95,17 @@ def _direct_response_text(state: AdvisorState) -> str:
 
 
 def _build_job_query(state: AdvisorState) -> str:
-    return state["user_message"]
+    msg = state["user_message"]
+    terms = extract_query_terms(msg)
+    profile = state.get("student_profile", {})
+    student_skills = {
+        normalize_skill_name(s)
+        for s in extract_skill_names(student_skill_profile_value(profile))
+    }
+    query_skills = [t for t in sorted(terms) if t in student_skills]
+    if query_skills:
+        return f"{msg} {' '.join(query_skills)}"
+    return msg
 
 
 def _build_course_query(state: AdvisorState, job_hits: list[dict[str, Any]]) -> str:
@@ -138,6 +149,7 @@ def _selected_job_fallback_hit(selected_job_id: str) -> dict[str, Any] | None:
         "score": 0.0,
         "semantic_score": 0.0,
         "skill_overlap": 0,
+        "coverage_ratio": 0.0,
     }
 
 
@@ -257,6 +269,12 @@ def search_jobs_node(state: AdvisorState) -> dict[str, Any]:
             job_hits = [fallback_hit] if fallback_hit else []
 
     job_hits = _hydrate_job_hits(job_hits, student_skill_names)
+
+    job_hits = sorted(
+        job_hits,
+        key=lambda h: len(h.get("covered") or []) / max(len(h.get("required_skills") or h.get("skills") or []), 1),
+        reverse=True,
+    )
 
     attach_run_metadata(
         metadata={
@@ -509,12 +527,14 @@ def _critique_candidate_branch(
     candidate: dict[str, Any],
 ) -> dict[str, Any]:
     view = candidate["view"]
+    intent = state.get("plan", {}).get("intent", "general")
     if parent_run is None:
         critique_result = critique_candidate_details(
             question=state["user_message"],
             bundle=view.get("bundle") or state["bundle"],
             context=view["context"],
             response=candidate["text"],
+            intent=intent,
         )
         enriched_candidate = dict(candidate)
         enriched_candidate["scores"] = critique_result["scores"]
@@ -562,6 +582,7 @@ def _critique_candidate_branch(
                 bundle=view.get("bundle") or state["bundle"],
                 context=view["context"],
                 response=candidate["text"],
+                intent=intent,
             )
             scores = critique_result["scores"]
             critique_run.end(outputs={"label": view["label"], "scores": scores})

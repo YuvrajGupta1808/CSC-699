@@ -1,6 +1,21 @@
 from db.supabase_client import get_supabase
 from langsmith import traceable
 
+from retrieval.record_utils import (
+    course_skills_value,
+    job_skills_value,
+    student_completed_courses_value,
+    student_skill_profile_value,
+)
+from retrieval.skills import compute_skill_overlap, extract_skill_names
+
+
+def _trim_evidence_text(value: str, limit: int = 500) -> str:
+    compact = " ".join((value or "").split())
+    if len(compact) <= limit:
+        return compact
+    return compact[: limit - 3] + "..."
+
 
 def get_student_profile(student_id: str) -> dict:
     """Fetch full student row from Supabase."""
@@ -23,6 +38,22 @@ def get_all_jobs() -> list[dict]:
     return result.data
 
 
+def _fetch_rows_by_ids(sb, table: str, key: str, ids: list[str]) -> dict[str, dict]:
+    clean_ids = [value for value in ids if value]
+    if not clean_ids:
+        return {}
+    rows = sb.table(table).select("*").in_(key, clean_ids).execute().data or []
+    return {row[key]: row for row in rows if row.get(key)}
+
+
+def _fetch_rows_by_codes(sb, table: str, key: str, codes: list[str]) -> dict[str, dict]:
+    clean_codes = [value for value in codes if value]
+    if not clean_codes:
+        return {}
+    rows = sb.table(table).select("*").in_(key, clean_codes).execute().data or []
+    return {row[key]: row for row in rows if row.get(key)}
+
+
 @traceable(name="build_evidence_bundle", run_type="chain")
 def build_evidence_bundle(
     student_id: str,
@@ -37,32 +68,26 @@ def build_evidence_bundle(
 
     # --- Student ---
     student = get_student_profile(student_id)
-    student_skills: list[str] = _extract_skill_names(student.get("skill_profile_json") or [])
-    completed_courses: list[str] = student.get("completed_courses_json") or []
+    student_skills: list[str] = extract_skill_names(student_skill_profile_value(student))
+    completed_courses: list[str] = student_completed_courses_value(student)
 
     # --- Jobs: enrich from Supabase ---
+    job_rows_by_id = _fetch_rows_by_ids(
+        sb,
+        "jobs",
+        "job_id",
+        [hit.get("job_id") for hit in job_hits],
+    )
+    warnings: list[str] = []
     enriched_jobs = []
     for hit in job_hits:
-        job_row = None
-        job_id = hit.get("job_id")
-        if job_id:
-            rows = (
-                sb.table("jobs")
-                .select("job_id, title, company, skills_jobs_json, description")
-                .eq("job_id", job_id)
-                .limit(1)
-                .execute()
-                .data
-                or []
-            )
-            if rows:
-                job_row = rows[0]
+        job_row = job_rows_by_id.get(hit.get("job_id"))
 
         # Fallback: if job_id is stale/missing, try matching by title+company.
         if not job_row and hit.get("title") and hit.get("company"):
             rows = (
                 sb.table("jobs")
-                .select("job_id, title, company, skills_jobs_json, description")
+                .select("*")
                 .eq("title", hit["title"])
                 .eq("company", hit["company"])
                 .limit(1)
@@ -74,12 +99,11 @@ def build_evidence_bundle(
                 job_row = rows[0]
 
         if not job_row:
-            # Skip stale vector hit instead of crashing the whole response.
+            warnings.append(f"[WARN] job_id {hit.get('job_id')!r} not found in Supabase after vector hit")
             continue
 
-        job_skills = _extract_skill_names(job_row.get("skills_jobs_json") or [])
-        covered = [s for s in job_skills if s in student_skills]
-        gaps = [s for s in job_skills if s not in student_skills]
+        job_skills = extract_skill_names(job_skills_value(job_row))
+        covered, gaps = compute_skill_overlap(job_skills, student_skills)
         enriched_jobs.append({
             **hit,
             "job_id": job_row.get("job_id", hit.get("job_id")),
@@ -88,45 +112,37 @@ def build_evidence_bundle(
             "required_skills": job_skills,
             "covered": covered,
             "gaps": gaps,
+            "description_excerpt": _trim_evidence_text(job_row.get("description", "")),
         })
 
     # --- Courses: enrich from Supabase ---
+    course_rows_by_id = _fetch_rows_by_ids(
+        sb,
+        "courses",
+        "course_id",
+        [hit.get("course_id") for hit in course_hits],
+    )
+    course_rows_by_code = _fetch_rows_by_codes(
+        sb,
+        "courses",
+        "course_code",
+        [(hit.get("course_code") or "").strip() for hit in course_hits],
+    )
     enriched_courses = []
     seen_courses: set[str] = set()
     for hit in course_hits:
-        course_row = None
         course_id = hit.get("course_id")
         course_code = (hit.get("course_code") or "").strip()
-
-        if course_id:
-            rows = (
-                sb.table("courses")
-                .select("course_id, course_code, title, skills_courses_json")
-                .eq("course_id", course_id)
-                .limit(1)
-                .execute()
-                .data
-                or []
-            )
-            if rows:
-                course_row = rows[0]
+        course_row = course_rows_by_id.get(course_id)
 
         # Fallback lookup for stale course_id values from old vector payloads.
         if not course_row and course_code:
-            rows = (
-                sb.table("courses")
-                .select("course_id, course_code, title, skills_courses_json")
-                .eq("course_code", course_code)
-                .limit(1)
-                .execute()
-                .data
-                or []
-            )
-            if rows:
-                course_row = rows[0]
+            course_row = course_rows_by_code.get(course_code)
 
         if not course_row:
-            # Skip stale vector hit instead of crashing the whole response.
+            warnings.append(
+                f"[WARN] course_id {hit.get('course_id')!r} / course_code {hit.get('course_code')!r} not found in Supabase after vector hit"
+            )
             continue
 
         dedup_key = course_row.get("course_id") or course_row.get("course_code") or course_code
@@ -134,14 +150,22 @@ def build_evidence_bundle(
             continue
         seen_courses.add(dedup_key)
 
-        course_skills = _extract_skill_names(course_row.get("skills_courses_json") or [])
+        course_skills = extract_skill_names(course_skills_value(course_row))
         enriched_courses.append({
             **hit,
             "course_id": course_row.get("course_id", hit.get("course_id")),
             "course_code": course_row.get("course_code", hit.get("course_code")),
             "title": course_row.get("title", hit.get("title")),
             "teaches": course_skills,
+            "description_excerpt": _trim_evidence_text(course_row.get("description", "")),
         })
+
+    stale_job_count = len(job_hits) - len(enriched_jobs)
+    stale_course_count = len(course_hits) - len(enriched_courses)
+    if stale_job_count > 0 or stale_course_count > 0:
+        warnings.append(
+            f"[HEALTH] {stale_job_count} stale job hit(s), {stale_course_count} stale course hit(s) dropped during enrichment"
+        )
 
     return {
         "student": {
@@ -152,6 +176,7 @@ def build_evidence_bundle(
         },
         "jobs": enriched_jobs,
         "courses": enriched_courses,
+        "retrieval_warnings": warnings,
     }
 
 
@@ -171,39 +196,31 @@ def bundle_to_context_string(bundle: dict) -> str:
     ]
 
     if bundle["jobs"]:
-        lines.append("RELEVANT JOB POSTINGS")
+        lines.append(f"RELEVANT JOB POSTINGS (top {len(bundle['jobs'])} retrieved — not an exhaustive list)")
         for j in bundle["jobs"]:
-            lines.append(f"- {j['title']} at {j['company']} (relevance: {j['score']})")
+            lines.append(f"- {j['title']} at {j['company']}")
             lines.append(f"  Required: {', '.join(j['required_skills'])}")
             lines.append(f"  Student covers: {', '.join(j['covered']) or 'none'}")
             lines.append(f"  Gaps: {', '.join(j['gaps']) or 'none'}")
+            if j.get("description_excerpt"):
+                lines.append(f"  Source excerpt (job description): {j['description_excerpt']}")
+        lines.append("")
+
+    if bundle.get("notes"):
+        lines.append("RETRIEVAL NOTES")
+        for note in bundle["notes"]:
+            lines.append(f"- {note}")
         lines.append("")
 
     if bundle["courses"]:
-        lines.append("RELEVANT COURSES")
+        lines.append(f"RELEVANT COURSES (top {len(bundle['courses'])} retrieved — not an exhaustive list)")
         for c in bundle["courses"]:
-            lines.append(f"- {c['course_code']}: {c['title']} (relevance: {c['score']})")
+            lines.append(f"- {c['course_code']}: {c['title']}")
             lines.append(f"  Teaches: {', '.join(c['teaches'])}")
+            if c.get("addresses_gaps"):
+                lines.append(f"  Addresses gaps: {', '.join(c['addresses_gaps'])}")
+            if c.get("description_excerpt"):
+                lines.append(f"  Source excerpt (course description): {c['description_excerpt']}")
         lines.append("")
 
     return "\n".join(lines)
-
-
-def _extract_skill_names(skills_json) -> list[str]:
-    """
-    Normalize skills field — handles both:
-      [{"skill": "Python", "weight": 40}, ...]   (jobs format)
-      [["Python", 40], ...]                       (courses format)
-      ["Python", ...]                             (plain list)
-    """
-    if not skills_json:
-        return []
-    names = []
-    for item in skills_json:
-        if isinstance(item, dict):
-            names.append(item.get("skill") or item.get("name") or "")
-        elif isinstance(item, (list, tuple)) and len(item) >= 1:
-            names.append(str(item[0]))
-        elif isinstance(item, str):
-            names.append(item)
-    return [n.strip() for n in names if n.strip()]
