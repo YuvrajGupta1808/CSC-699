@@ -50,3 +50,7 @@ syllabus/
 
 # Generated outputs (presentations, reports)
 outputs/
+output/
+
+# LaTeX paper sources and local build artifacts (published PDF lives in docs/)
+paper/
